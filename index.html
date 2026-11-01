@@ -893,7 +893,7 @@
           <input type="text" name="회사" id="partner_company" maxlength="120" autocomplete="organization" />
         </label>
         <label class="partner_field">
-          <span>이메일</span>
+          <span>답장 받을 이메일</span>
           <input type="email" name="email" id="partner_email" required maxlength="120" autocomplete="email" inputmode="email" />
         </label>
         <label class="partner_field">
@@ -3432,7 +3432,7 @@
       form_data.set("문의", message_value);
       form_data.set("회사", String(form_data.get("회사") || "").trim());
       if (!name_value || !email_value || !message_value || !partner_form.checkValidity()) {
-        set_partner_status("이름, 이메일, 문의 내용을 입력한 뒤 다시 보내 주세요.", true);
+        set_partner_status("이름, 답장 받을 이메일, 문의 내용을 입력한 뒤 다시 보내 주세요.", true);
         partner_form.reportValidity();
         return;
       }
