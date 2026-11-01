@@ -455,6 +455,29 @@
       margin-top: 6px;
     }
 
+    /* 카메라가 꺼져 있을 때는 자리를 차지하지 않는다. */
+    .camera_row {
+      display: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    /* 안내 문장 아래는 촬영, 그 다음 줄은 전환과 닫기, 맨 아래는 사진 올리기다. */
+    .actions.is_live {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .actions.is_live .camera_row {
+      display: flex;
+    }
+
+    .actions.is_live #button_shutter {
+      width: min(100%, 280px);
+      flex-basis: auto;
+    }
+
     button {
       min-height: 48px;
       padding: 12px 18px;
@@ -867,12 +890,14 @@
 
     <p id="status_text" class="status_text" role="status" data-i18n="loading" data-i18n-live="true">동물 도감을 펼치는 중이에요. 처음 한 번은 몇 초 걸려요.</p>
 
-    <div class="actions">
+    <div class="actions" id="action_bar">
       <button type="button" class="button_ghost" id="button_camera" data-i18n="button_camera">카메라로 찍기</button>
-      <button type="button" class="button_ghost" id="button_upload" data-i18n="button_upload">사진 올리기</button>
       <button type="button" class="button_primary button_wide" id="button_shutter" data-i18n="button_shutter" hidden disabled>촬영</button>
-      <button type="button" class="button_ghost" id="button_flip_camera" hidden>후면 카메라</button>
-      <button type="button" class="button_ghost" id="button_close_camera" data-i18n="button_close_camera" hidden>카메라 닫기</button>
+      <div class="camera_row">
+        <button type="button" class="button_ghost" id="button_flip_camera" hidden>후면 카메라</button>
+        <button type="button" class="button_ghost" id="button_close_camera" data-i18n="button_close_camera" hidden>카메라 닫기</button>
+      </div>
+      <button type="button" class="button_ghost" id="button_upload" data-i18n="button_upload">사진 올리기</button>
       <button type="button" class="button_primary button_wide" id="button_analyze" data-i18n="button_analyze" hidden disabled>고른 얼굴 모두 분석하기</button>
       <button type="button" class="button_ghost" id="button_retake" data-i18n="button_retake" hidden>다른 얼굴로 다시</button>
       <input id="photo_input" type="file" accept="image/*" hidden aria-hidden="true" tabindex="-1" />
@@ -1903,6 +1928,7 @@
     const camera_guide = require_element("camera_guide");
     const display_canvas = require_element("display_canvas");
     const status_text = require_element("status_text");
+    const action_bar = require_element("action_bar");
     const button_camera = require_element("button_camera");
     const button_upload = require_element("button_upload");
     const button_shutter = require_element("button_shutter");
@@ -2077,6 +2103,7 @@
       stop_camera();
       app_state.photo_canvas = null;
       app_state.has_photo = false;
+      action_bar.classList.remove("is_live");
       photo_stage.classList.remove("is_camera", "is_photo", "is_front");
       photo_stage.setAttribute("aria-label", t("stage_aria"));
       empty_message.hidden = false;
@@ -2097,8 +2124,9 @@
       sync_analyze_button();
     }
 
-    // 카메라가 켜진 동안 촬영 버튼만 앞에 둔다.
+    // 카메라가 켜지면 촬영을 안내 문장 바로 아래에 두고, 전환과 닫기는 그 다음 줄에 둔다.
     function show_live_mode() {
+      action_bar.classList.add("is_live");
       photo_stage.classList.add("is_camera");
       photo_stage.classList.remove("is_photo");
       empty_message.hidden = true;
@@ -2129,6 +2157,7 @@
       app_state.pan = null;
       paint_display(canvas, null);
       reset_photo_view();
+      action_bar.classList.remove("is_live");
       photo_stage.classList.remove("is_camera", "is_front");
       photo_stage.classList.add("is_photo");
       photo_stage.setAttribute("aria-label", t("stage_photo_aria"));
