@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <script>
+    // 첫 그림이 그려지기 전에 저장된 화면 모드와 언어를 적용한다.
+    (function () {
+      try {
+        var saved_theme = localStorage.getItem("theme_mode");
+        document.documentElement.setAttribute("data-theme", saved_theme === "dark" ? "dark" : "light");
+        var saved_language = localStorage.getItem("language_code") || "";
+        var browser_language = (navigator.language || "").toLowerCase();
+        var language_code = "ko";
+        if (saved_language === "en" || saved_language === "ja" || saved_language === "ko") {
+          language_code = saved_language;
+        } else if (browser_language.indexOf("ja") === 0) {
+          language_code = "ja";
+        } else if (browser_language.indexOf("en") === 0) {
+          language_code = "en";
+        }
+        document.documentElement.lang = language_code;
+        document.documentElement.setAttribute("data-language", language_code);
+      } catch (error) {
+        document.documentElement.setAttribute("data-theme", "light");
+        document.documentElement.lang = "ko";
+        document.documentElement.setAttribute("data-language", "ko");
+      }
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="google-adsense-account" content="ca-pub-8803401825336300" />
+  <meta name="theme-color" content="#f4f1ea" />
+  <meta name="description" data-i18n-content="deer_meta" content="얼굴이 길고 눈은 크며 턱과 턱끝이 가는 기준입니다." />
+  <title data-i18n="deer_title">사슴상 — 동물상 도감</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8803401825336300" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="../guide.css" />
+</head>
+<body data-title-key="deer_title">
+  <main class="sheet">
+    <div class="theme_bar">
+      <div class="language_switch theme_switch" role="group" data-i18n-aria="language_group" aria-label="언어">
+        <button type="button" class="theme_button" id="button_language_ko" data-language="ko">한국어</button>
+        <button type="button" class="theme_button" id="button_language_en" data-language="en">English</button>
+        <button type="button" class="theme_button" id="button_language_ja" data-language="ja">日本語</button>
+      </div>
+      <div class="theme_switch" role="group" data-i18n-aria="theme_group" aria-label="화면 모드">
+        <button type="button" class="theme_button is_selected" id="button_theme_light" data-i18n="theme_light" aria-pressed="true">화이트</button>
+        <button type="button" class="theme_button" id="button_theme_dark" data-i18n="theme_dark" aria-pressed="false">다크</button>
+      </div>
+    </div>
+    <nav class="site_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
+      <a href="../index.html" data-i18n="nav_tool">얼굴 재기</a>
+      <a href="../method.html" data-i18n="nav_method">측정 방법</a>
+      <a href="../about.html" data-i18n="nav_about">소개</a>
+      <a href="../privacy.html" data-i18n="nav_privacy">개인정보</a>
+      <a href="../contact.html" data-i18n="nav_contact">문의</a>
+    </nav>
+    <article class="prose">
+      <p class="eyebrow">Face Field Notes</p>
+      <h1 data-i18n="deer_h1">사슴상</h1>
+      <p data-i18n="deer_p1">사슴상은 얼굴이 길고 눈은 크며 턱이 가늘어 선이 가늘고 순해 보이는 인상입니다. 긴 얼굴 가운데서 눈이 큰 쪽을 사슴으로 봅니다.</p>
+      <h2 data-i18n="animal_ratio_heading">이 동물로 기울어지는 비율</h2>
+      <p data-i18n="deer_p2">얼굴 세로는 길고, 눈은 크며, 코는 좁고, 턱과 턱끝은 가늘고, 중안부는 긴 쪽입니다. 눈매 자체는 여우처럼 가늘지 않아도 됩니다.</p>
+      <h2 data-i18n="animal_score_heading">점수가 가깝다는 뜻</h2>
+      <p data-i18n="deer_p3">여우와 늑대도 긴 얼굴입니다. 사슴은 눈이 크고 턱이 가는 조합이고, 늑대는 눈이 가늘고 중안부가 긴 조합입니다.</p>
+      <h2 data-i18n="animal_photo_heading">사진에서 흔들리는 경우</h2>
+      <p data-i18n="deer_p4">위에서 내려다보는 각도는 턱을 짧게 만듭니다. 카메라와 눈이 같은 높이일 때 얼굴 세로가 덜 왜곡됩니다.</p>
+      <p class="page_cta_row"><a class="button_primary" href="../index.html" data-i18n="try_tool">이 기준으로 얼굴 재기</a></p>
+      <p><a href="../method.html" data-i18n="read_method">열 가지 비율이 어떻게 재는지 보기</a></p>
+      <h2 data-i18n="other_animals">다른 동물 기준</h2>
+      <ul class="text_links">
+        <li><a href="cat.html" data-i18n="name_cat">고양이상</a></li>
+        <li><a href="dog.html" data-i18n="name_dog">강아지상</a></li>
+        <li><a href="fox.html" data-i18n="name_fox">여우상</a></li>
+        <li><a href="rabbit.html" data-i18n="name_rabbit">토끼상</a></li>
+        <li><a href="owl.html" data-i18n="name_owl">부엉이상</a></li>
+        <li><a href="bear.html" data-i18n="name_bear">곰상</a></li>
+        <li><a href="lion.html" data-i18n="name_lion">사자상</a></li>
+        <li><a href="deer.html" data-i18n="name_deer" aria-current="page">사슴상</a></li>
+        <li><a href="wolf.html" data-i18n="name_wolf">늑대상</a></li>
+      </ul>
+    </article>
+    <nav class="site_nav footer_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
+      <a href="../index.html" data-i18n="nav_tool">얼굴 재기</a>
+      <a href="../method.html" data-i18n="nav_method">측정 방법</a>
+      <a href="../about.html" data-i18n="nav_about">소개</a>
+      <a href="../privacy.html" data-i18n="nav_privacy">개인정보</a>
+      <a href="../contact.html" data-i18n="nav_contact">문의</a>
+    </nav>
+    <p class="footer_note" data-i18n="footer">사진은 이 브라우저 안에서만 처리되고 서버로 전송되지 않습니다. 결과는 얼굴 비율을 동물별 기준과 견준 재미있는 비교이며, 과학적 판별이나 성격 테스트가 아닙니다. 표정, 고개 각도, 안경, 조명에 따라 순위가 달라질 수 있어요.</p>
+  </main>
+  <script src="../guide.js"></script>
+</body>
+</html>

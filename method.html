@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <script>
+    // 첫 그림이 그려지기 전에 저장된 화면 모드와 언어를 적용한다.
+    (function () {
+      try {
+        var saved_theme = localStorage.getItem("theme_mode");
+        document.documentElement.setAttribute("data-theme", saved_theme === "dark" ? "dark" : "light");
+        var saved_language = localStorage.getItem("language_code") || "";
+        var browser_language = (navigator.language || "").toLowerCase();
+        var language_code = "ko";
+        if (saved_language === "en" || saved_language === "ja" || saved_language === "ko") {
+          language_code = saved_language;
+        } else if (browser_language.indexOf("ja") === 0) {
+          language_code = "ja";
+        } else if (browser_language.indexOf("en") === 0) {
+          language_code = "en";
+        }
+        document.documentElement.lang = language_code;
+        document.documentElement.setAttribute("data-language", language_code);
+      } catch (error) {
+        document.documentElement.setAttribute("data-theme", "light");
+        document.documentElement.lang = "ko";
+        document.documentElement.setAttribute("data-language", "ko");
+      }
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="google-adsense-account" content="ca-pub-8803401825336300" />
+  <meta name="theme-color" content="#f4f1ea" />
+  <meta name="description" data-i18n-content="method_meta" content="얼굴 가로와 세로, 눈, 코, 입, 턱의 길이 비율을 어떻게 재고 아홉 동물 기준과 비교하는지 설명합니다." />
+  <title data-i18n="method_title">측정 방법 — 동물상 도감</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8803401825336300" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="guide.css" />
+</head>
+<body data-title-key="method_title">
+  <main class="sheet">
+    <div class="theme_bar">
+      <div class="language_switch theme_switch" role="group" data-i18n-aria="language_group" aria-label="언어">
+        <button type="button" class="theme_button" id="button_language_ko" data-language="ko">한국어</button>
+        <button type="button" class="theme_button" id="button_language_en" data-language="en">English</button>
+        <button type="button" class="theme_button" id="button_language_ja" data-language="ja">日本語</button>
+      </div>
+      <div class="theme_switch" role="group" data-i18n-aria="theme_group" aria-label="화면 모드">
+        <button type="button" class="theme_button is_selected" id="button_theme_light" data-i18n="theme_light" aria-pressed="true">화이트</button>
+        <button type="button" class="theme_button" id="button_theme_dark" data-i18n="theme_dark" aria-pressed="false">다크</button>
+      </div>
+    </div>
+    <nav class="site_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
+      <a href="index.html" data-i18n="nav_tool">얼굴 재기</a>
+      <a href="method.html" data-i18n="nav_method" aria-current="page">측정 방법</a>
+      <a href="about.html" data-i18n="nav_about">소개</a>
+      <a href="privacy.html" data-i18n="nav_privacy">개인정보</a>
+      <a href="contact.html" data-i18n="nav_contact">문의</a>
+    </nav>
+    <article class="prose">
+      <p class="eyebrow">Face Field Notes</p>
+      <h1 data-i18n="method_h1">측정 방법</h1>
+      <p data-i18n="method_lead">이 도감은 머리카락, 귀, 옷차림을 보지 않습니다. 사진 속 얼굴에서 길이를 읽고, 그 길이를 얼굴 크기로 나눈 비율만 비교합니다. 같은 사람이라도 거리가 다르면 픽셀 수는 달라지므로, 픽셀 그 자체를 점수로 쓰지 않습니다.</p>
+      <p data-i18n="method_measure">분석은 이 브라우저 안에서 이루어집니다. 사진을 서버로 보내지 않습니다. 얼굴이 여러 개면 고른 영역 안에서 가장 크게 보이는 얼굴을 기준으로 합니다. 아래 평균 자리는 이 도감이 정면 사진에서 흔하다고 잡아 둔 출발점이며, 의학적인 정상 범위가 아닙니다.</p>
+      <h2 data-i18n="method_ratios_heading">열 가지 비율</h2>
+      <ul class="ratio_list">
+        <li data-i18n="method_r1">얼굴형. 얼굴 가로를 얼굴 세로로 나눕니다. 수가 크면 가로로 넓은 얼굴이고, 작으면 세로로 긴 얼굴입니다. 이 도감의 평균 자리는 0.82입니다.</li>
+        <li data-i18n="method_r2">눈 크기. 눈 가로를 얼굴 가로로 나눕니다. 0.20이면 눈 가로가 얼굴 가로의 20%라는 뜻입니다.</li>
+        <li data-i18n="method_r3">눈매. 눈 세로를 눈 가로로 나눕니다. 크면 둥근 눈이고, 작으면 가늘고 날카로운 눈입니다. 평균 자리는 0.33입니다.</li>
+        <li data-i18n="method_r4">눈 사이. 두 눈 사이 거리를 얼굴 가로로 나눕니다. 평균 자리는 0.25에 가깝습니다.</li>
+        <li data-i18n="method_r5">코 너비. 코 가로를 얼굴 가로로 나눕니다. 평균 자리는 0.28에 가깝습니다.</li>
+        <li data-i18n="method_r6">코 길이. 코 길이를 얼굴 세로로 나눕니다. 평균 자리는 0.30입니다.</li>
+        <li data-i18n="method_r7">입 너비. 입 가로를 얼굴 가로로 나눕니다. 평균 자리는 0.40에 가깝습니다.</li>
+        <li data-i18n="method_r8">턱 너비. 턱이 넓은 위치의 가로를 얼굴 가로로 나눕니다. 평균 자리는 0.80입니다.</li>
+        <li data-i18n="method_r9">턱끝. 턱끝의 가로를 얼굴 가로로 나눕니다. 평균 자리는 0.32입니다.</li>
+        <li data-i18n="method_r10">중안부. 눈에서 코끝까지의 길이를 얼굴 세로로 나눕니다. 평균 자리는 0.25입니다.</li>
+      </ul>
+      <h2 data-i18n="method_score_heading">점수가 나오는 방식</h2>
+      <p data-i18n="method_score">열 가지 비율을 평균에서 얼마나 떨어졌는지로 바꾼 뒤, 동물마다 정해 둔 기준과 거리를 잽니다. 눈 크기처럼 인상에 큰 항목은 조금 더 무겁게 보고, 턱끝처럼 사진마다 잘 흔들리는 항목은 가볍게 봅니다. 가장 가까운 동물에 높은 점수를 줍니다. 점수는 최대 94입니다. 100을 주지 않는 이유는, 사진 한 장의 오차를 완전한 일치처럼 보이게 하지 않기 위해서입니다.</p>
+      <h2 data-i18n="method_photo_heading">같은 사람도 순위가 달라질 때</h2>
+      <p data-i18n="method_photo">고개를 돌리거나, 눈을 세게 감기, 활짝 웃기, 너무 어두운 조명, 얼굴이 아주 작게 찍힌 사진은 순위가 달라질 수 있습니다. 가능하면 눈이 카메라와 같은 높이인 정면에서, 입을 다문 사진으로 비교해 보세요. 안경 테두리가 눈꼬리를 가리면 눈 길이를 잘못 읽을 수 있습니다. 광각으로 아주 가까이 찍으면 얼굴 가운데가 둥글게 부풀어 보입니다.</p>
+      <h2 data-i18n="method_animals_heading">아홉 동물의 기준</h2>
+      <p data-i18n="method_animals">동물마다 어느 비율을 크고 작게 보는지가 다릅니다. 이름을 누르면 그 동물 기준만 따로 읽을 수 있습니다. 같은 문장을 동물 이름만 바꿔 반복하지 않았습니다.</p>
+      <ul class="text_links">
+        <li><a href="animals/cat.html" data-i18n="name_cat">고양이상</a></li>
+        <li><a href="animals/dog.html" data-i18n="name_dog">강아지상</a></li>
+        <li><a href="animals/fox.html" data-i18n="name_fox">여우상</a></li>
+        <li><a href="animals/rabbit.html" data-i18n="name_rabbit">토끼상</a></li>
+        <li><a href="animals/owl.html" data-i18n="name_owl">부엉이상</a></li>
+        <li><a href="animals/bear.html" data-i18n="name_bear">곰상</a></li>
+        <li><a href="animals/lion.html" data-i18n="name_lion">사자상</a></li>
+        <li><a href="animals/deer.html" data-i18n="name_deer">사슴상</a></li>
+        <li><a href="animals/wolf.html" data-i18n="name_wolf">늑대상</a></li>
+      </ul>
+      <p class="page_cta_row"><a class="button_primary" href="index.html" data-i18n="try_tool">이 기준으로 얼굴 재기</a></p>
+    </article>
+    <nav class="site_nav footer_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
+      <a href="index.html" data-i18n="nav_tool">얼굴 재기</a>
+      <a href="method.html" data-i18n="nav_method" aria-current="page">측정 방법</a>
+      <a href="about.html" data-i18n="nav_about">소개</a>
+      <a href="privacy.html" data-i18n="nav_privacy">개인정보</a>
+      <a href="contact.html" data-i18n="nav_contact">문의</a>
+    </nav>
+    <p class="footer_note" data-i18n="footer">사진은 이 브라우저 안에서만 처리되고 서버로 전송되지 않습니다. 결과는 얼굴 비율을 동물별 기준과 견준 재미있는 비교이며, 과학적 판별이나 성격 테스트가 아닙니다. 표정, 고개 각도, 안경, 조명에 따라 순위가 달라질 수 있어요.</p>
+  </main>
+  <script src="guide.js"></script>
+</body>
+</html>

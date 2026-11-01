@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <script>
+    // 첫 그림이 그려지기 전에 저장된 화면 모드와 언어를 적용한다.
+    (function () {
+      try {
+        var saved_theme = localStorage.getItem("theme_mode");
+        document.documentElement.setAttribute("data-theme", saved_theme === "dark" ? "dark" : "light");
+        var saved_language = localStorage.getItem("language_code") || "";
+        var browser_language = (navigator.language || "").toLowerCase();
+        var language_code = "ko";
+        if (saved_language === "en" || saved_language === "ja" || saved_language === "ko") {
+          language_code = saved_language;
+        } else if (browser_language.indexOf("ja") === 0) {
+          language_code = "ja";
+        } else if (browser_language.indexOf("en") === 0) {
+          language_code = "en";
+        }
+        document.documentElement.lang = language_code;
+        document.documentElement.setAttribute("data-language", language_code);
+      } catch (error) {
+        document.documentElement.setAttribute("data-theme", "light");
+        document.documentElement.lang = "ko";
+        document.documentElement.setAttribute("data-language", "ko");
+      }
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="google-adsense-account" content="ca-pub-8803401825336300" />
+  <meta name="theme-color" content="#f4f1ea" />
+  <meta name="description" data-i18n-content="privacy_meta" content="얼굴 사진, 언어 설정, 광고, 댓글, 문의 폼이 각각 어떤 정보를 다루는지 적습니다." />
+  <title data-i18n="privacy_title">개인정보 — 동물상 도감</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8803401825336300" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="guide.css" />
+</head>
+<body data-title-key="privacy_title">
+  <main class="sheet">
+    <div class="theme_bar">
+      <div class="language_switch theme_switch" role="group" data-i18n-aria="language_group" aria-label="언어">
+        <button type="button" class="theme_button" id="button_language_ko" data-language="ko">한국어</button>
+        <button type="button" class="theme_button" id="button_language_en" data-language="en">English</button>
+        <button type="button" class="theme_button" id="button_language_ja" data-language="ja">日本語</button>
+      </div>
+      <div class="theme_switch" role="group" data-i18n-aria="theme_group" aria-label="화면 모드">
+        <button type="button" class="theme_button is_selected" id="button_theme_light" data-i18n="theme_light" aria-pressed="true">화이트</button>
+        <button type="button" class="theme_button" id="button_theme_dark" data-i18n="theme_dark" aria-pressed="false">다크</button>
+      </div>
+    </div>
+    <nav class="site_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
+      <a href="index.html" data-i18n="nav_tool">얼굴 재기</a>
+      <a href="method.html" data-i18n="nav_method">측정 방법</a>
+      <a href="about.html" data-i18n="nav_about">소개</a>
+      <a href="privacy.html" data-i18n="nav_privacy" aria-current="page">개인정보</a>
+      <a href="contact.html" data-i18n="nav_contact">문의</a>
+    </nav>
+    <article class="prose">
+      <p class="eyebrow">Face Field Notes</p>
+      <h1 data-i18n="privacy_h1">개인정보</h1>
+      <h2 data-i18n="privacy_photo_heading">얼굴 사진</h2>
+      <p data-i18n="privacy_photo">카메라로 찍거나 올린 얼굴 사진은 분석을 위해 이 브라우저의 메모리에서만 다룹니다. 동물상 도감의 서버로 전송하지 않고, 계정에 저장하지도 않습니다. 페이지를 닫거나 다른 사진으로 바꾸면 이전 사진은 남지 않습니다.</p>
+      <h2 data-i18n="privacy_store_heading">이 기기에 남는 설정</h2>
+      <p data-i18n="privacy_store">고른 언어는 language_code라는 이름으로, 화이트 또는 다크 모드는 theme_mode라는 이름으로 이 브라우저의 로컬 저장소에 남습니다. 이 값은 다음 방문에 같은 화면을 보여 주기 위한 것이며, 얼굴 사진과 함께 보내지지 않습니다.</p>
+      <h2 data-i18n="privacy_ads_heading">광고</h2>
+      <p data-i18n="privacy_ads">이 사이트는 구글 애드센스 자동 광고를 사용합니다. 광고가 표시되면 구글이 쿠키와 비슷한 식별 값을 사용해 광고를 고르고 측정할 수 있습니다. 광고가 쓰는 정보에 대한 구글의 설명은 https://policies.google.com/technologies/ads 에서 볼 수 있습니다. 사이트 소유 확인을 위해 페이지 머리의 메타 태그와 루트의 ads.txt에 게시자 번호 ca-pub-8803401825336300 을 적어 두었습니다.</p>
+      <h2 data-i18n="privacy_disqus_heading">댓글</h2>
+      <p data-i18n="privacy_disqus">댓글은 얼굴 재기 페이지 아래에만 있으며 Disqus가 처리합니다. 댓글을 쓰려면 Disqus 쪽의 로그인이나 가입이 필요하고, Disqus가 자체 쿠키를 사용할 수 있습니다. 댓글 내용은 얼굴 사진과 따로 저장됩니다. Disqus의 개인정보 안내는 https://help.disqus.com/en/articles/1717103-disqus-privacy-policy 에 있습니다.</p>
+      <h2 data-i18n="privacy_form_heading">문의 폼</h2>
+      <p data-i18n="privacy_form">문의 페이지에서 보내기를 누를 때만 이름, 회사 또는 브랜드, 답장 받을 이메일, 문의 내용이 Formspree(https://formspree.io)로 전달됩니다. 얼굴 사진은 이 항목에 포함되지 않습니다. 보내지 않으면 폼에 적던 글도 저장되지 않습니다.</p>
+      <h2 data-i18n="privacy_font_heading">글꼴</h2>
+      <p data-i18n="privacy_font">화면 글꼴은 Google Fonts에서 불러옵니다. 페이지를 열 때 브라우저가 fonts.googleapis.com 과 fonts.gstatic.com 에 글꼴 파일을 요청합니다. 그 요청에는 보통 접속 중인 주소와 브라우저 정보가 포함될 수 있습니다.</p>
+      <h2 data-i18n="privacy_ask_heading">질문</h2>
+      <p data-i18n="privacy_ask">이 안내에서 빠졌거나 잘못된 부분이 있으면 문의 페이지로 알려 주세요. 얼굴 사진은 서버에 없어 되돌려 드릴 파일이 없습니다. 댓글 삭제는 Disqus에서, 이미 보낸 문의 메일의 삭제는 받은 쪽과 문의 페이지를 통해 요청할 수 있습니다.</p>
+      <p class="page_cta_row"><a class="button_primary" href="contact.html" data-i18n="nav_contact">문의</a></p>
+    </article>
+    <nav class="site_nav footer_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
+      <a href="index.html" data-i18n="nav_tool">얼굴 재기</a>
+      <a href="method.html" data-i18n="nav_method">측정 방법</a>
+      <a href="about.html" data-i18n="nav_about">소개</a>
+      <a href="privacy.html" data-i18n="nav_privacy" aria-current="page">개인정보</a>
+      <a href="contact.html" data-i18n="nav_contact">문의</a>
+    </nav>
+    <p class="footer_note" data-i18n="footer">사진은 이 브라우저 안에서만 처리되고 서버로 전송되지 않습니다. 결과는 얼굴 비율을 동물별 기준과 견준 재미있는 비교이며, 과학적 판별이나 성격 테스트가 아닙니다. 표정, 고개 각도, 안경, 조명에 따라 순위가 달라질 수 있어요.</p>
+  </main>
+  <script src="guide.js"></script>
+</body>
+</html>

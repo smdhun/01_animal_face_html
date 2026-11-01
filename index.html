@@ -38,809 +38,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
-  <style>
-    :root,
-    html[data-theme="light"] {
-      --bg: #f4f1ea;
-      --bg-glow-a: #e4efe4;
-      --bg-glow-b: #f8efe4;
-      --paper: #ffffff;
-      --paper-sheen: rgba(255, 255, 255, 0.8);
-      --ink: #1c1915;
-      --muted: #5e564c;
-      --leaf: #234e36;
-      --on-leaf: #f7f3ea;
-      --berry: #9c2f24;
-      --line: rgba(28, 25, 21, 0.1);
-      --stage: #efe6d6;
-      --canvas: #e4d8c4;
-      --card: rgba(35, 78, 54, 0.06);
-      --track: rgba(28, 25, 21, 0.08);
-      --note: rgba(201, 133, 42, 0.16);
-      --rank-top: rgba(35, 78, 54, 0.07);
-      --ghost-line: rgba(35, 78, 54, 0.45);
-      --spinner-track: rgba(35, 78, 54, 0.25);
-      --shadow: rgba(28, 25, 21, 0.12);
-      --binding: rgba(180, 70, 55, 0.35);
-      --focus: #c9852a;
-      color-scheme: light;
-    }
-
-    html[data-theme="dark"] {
-      --bg: #101c16;
-      --bg-glow-a: #2a4636;
-      --bg-glow-b: #3a3220;
-      --paper: #1b2621;
-      --paper-sheen: rgba(255, 255, 255, 0.04);
-      --ink: #f3ead7;
-      --muted: #c9bfae;
-      --leaf: #9dceb0;
-      --on-leaf: #102018;
-      --berry: #f0a098;
-      --line: rgba(243, 234, 215, 0.14);
-      --stage: #2a3530;
-      --canvas: #24302b;
-      --card: rgba(255, 255, 255, 0.06);
-      --track: rgba(243, 234, 215, 0.12);
-      --note: rgba(201, 133, 42, 0.22);
-      --rank-top: rgba(157, 206, 176, 0.14);
-      --ghost-line: rgba(157, 206, 176, 0.55);
-      --spinner-track: rgba(157, 206, 176, 0.28);
-      --shadow: rgba(0, 0, 0, 0.45);
-      --binding: rgba(240, 160, 152, 0.4);
-      --focus: #e2b15a;
-      color-scheme: dark;
-    }
-
-    * { box-sizing: border-box; }
-
-    [hidden] { display: none !important; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--ink);
-      font-family: "Noto Sans KR", sans-serif;
-      background:
-        radial-gradient(1000px 480px at 0% -10%, var(--bg-glow-a) 0%, transparent 55%),
-        radial-gradient(800px 420px at 100% 0%, var(--bg-glow-b) 0%, transparent 50%),
-        var(--bg);
-    }
-
-    .sheet {
-      width: min(640px, calc(100% - 28px));
-      margin: 28px auto 40px;
-      padding: 32px 22px 28px;
-      position: relative;
-      background:
-        linear-gradient(180deg, var(--paper-sheen), transparent 120px),
-        var(--paper);
-      border-radius: 28px;
-      box-shadow: 0 24px 60px var(--shadow);
-    }
-
-    .theme_bar {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: -8px 0 12px;
-    }
-
-    .theme_switch {
-      display: flex;
-      gap: 4px;
-      padding: 4px;
-      border-radius: 999px;
-      background: var(--card);
-      box-shadow: inset 0 0 0 1px var(--line);
-    }
-
-    .theme_button {
-      min-height: 34px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: transparent;
-      color: var(--muted);
-      font-size: 0.82rem;
-      font-weight: 700;
-    }
-
-    .theme_button.is_selected {
-      background: var(--leaf);
-      color: var(--on-leaf);
-    }
-
-    .sheet::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 20px;
-      bottom: 20px;
-      width: 14px;
-      border-right: 2px solid var(--binding);
-      background: rgba(196, 92, 74, 0.08);
-    }
-
-    .header, .stage, .status_text, .actions { text-align: center; }
-
-    .eyebrow {
-      margin: 0 0 6px;
-      color: var(--leaf);
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-    }
-
-    h1, h2, .score_number {
-      font-family: "Gowun Batang", serif;
-      font-weight: 700;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2.1rem, 6vw, 3.1rem);
-      line-height: 1.2;
-    }
-
-    h2 { margin: 0; font-size: 1.15rem; }
-
-    .lead, .footer_note, .raw_help, .meter_caption {
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    .lead, .footer_note, .status_text, .result_note, .result_reason, .result_blurb {
-      text-wrap: pretty;
-    }
-
-    .lead {
-      max-width: 38em;
-      margin: 12px auto 0;
-    }
-
-    .stage {
-      width: min(100%, 440px);
-      min-height: 280px;
-      margin: 22px auto 0;
-      position: relative;
-      overflow: hidden;
-      border-radius: 24px;
-      background: var(--stage);
-      box-shadow: inset 0 0 0 1px rgba(28, 25, 21, 0.08);
-    }
-
-    .stage.is_camera { height: 440px; min-height: 440px; }
-
-    .stage.is_photo { min-height: 0; touch-action: none; }
-
-    .photo_view {
-      position: relative;
-      width: 100%;
-      transform-origin: 0 0;
-    }
-
-    .selection_layer {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      cursor: crosshair;
-      touch-action: none;
-      user-select: none;
-    }
-
-    .selection_layer.is_panning { cursor: grabbing; }
-
-    .selection_boxes {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .selection_box,
-    .selection_draft {
-      position: absolute;
-      border-radius: 10px;
-      box-shadow: 0 0 0 1px var(--paper);
-    }
-
-    .selection_box {
-      border: 2px solid var(--leaf);
-      background: rgba(35, 78, 54, 0.16);
-    }
-
-    .selection_draft {
-      border: 2px dashed var(--leaf);
-      background: rgba(35, 78, 54, 0.2);
-      pointer-events: none;
-    }
-
-    .selection_box_label {
-      position: absolute;
-      left: 4px;
-      top: 4px;
-      min-width: 1.5rem;
-      height: 1.5rem;
-      padding: 0 5px;
-      border-radius: 999px;
-      background: var(--leaf);
-      color: var(--on-leaf);
-      font-size: 0.75rem;
-      font-weight: 700;
-      line-height: 1.5rem;
-      text-align: center;
-    }
-
-    .crop_panel { margin-top: 16px; }
-
-    .crop_panel_head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .crop_title { margin: 0; }
-
-    .button_compact {
-      min-height: 36px;
-      padding: 6px 12px;
-      font-size: 0.85rem;
-    }
-
-    .crop_list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
-      gap: 12px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .crop_card {
-      min-width: 0;
-      padding: 8px;
-      border-radius: 16px;
-      background: var(--card);
-    }
-
-    .crop_card.is_active {
-      box-shadow: inset 0 0 0 2px var(--leaf);
-    }
-
-    .crop_card_head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .crop_card_title {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: 700;
-    }
-
-    .crop_pip {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--leaf);
-    }
-
-    .crop_frame {
-      overflow: hidden;
-      border-radius: 12px;
-      background: var(--stage);
-    }
-
-    .crop_frame canvas {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
-    .crop_meta {
-      min-height: 2.6em;
-      margin: 8px 0 0;
-      font-size: 0.88rem;
-      font-weight: 700;
-      line-height: 1.45;
-    }
-
-    .crop_meta.is_error {
-      color: var(--berry);
-      font-weight: 500;
-    }
-
-    .crop_result_row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .crop_winner_icon {
-      flex: 0 0 auto;
-      width: 32px;
-      height: 32px;
-    }
-
-    .crop_winner_icon svg { width: 32px; height: 32px; }
-
-    .crop_actions {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-top: 8px;
-    }
-
-    .crop_actions button {
-      width: 100%;
-      min-height: 36px;
-      padding: 6px 10px;
-      font-size: 0.85rem;
-    }
-
-    #empty_message { margin: 0; padding: 92px 24px; line-height: 1.6; }
-
-    #live_video,
-    #display_canvas { width: 100%; display: block; background: var(--canvas); }
-
-    .stage.is_camera #live_video {
-      position: absolute;
-      inset: 0;
-      height: 100%;
-      object-fit: cover;
-      transform: none;
-    }
-
-    .stage.is_camera.is_front #live_video {
-      transform: scaleX(-1);
-    }
-
-    .camera_guide {
-      position: absolute;
-      inset: 0;
-      z-index: 3;
-      display: grid;
-      place-items: center;
-      pointer-events: none;
-    }
-
-    .camera_guide_ring {
-      width: min(72%, 300px);
-      aspect-ratio: 1;
-      border: 3px solid rgba(247, 243, 234, 0.95);
-      border-radius: 50%;
-      box-shadow:
-        0 0 0 1px rgba(16, 28, 22, 0.45),
-        0 0 0 9999px rgba(16, 28, 22, 0.38);
-    }
-
-    #display_canvas { height: auto; }
-
-    .status_text {
-      min-height: 3.2em;
-      margin: 14px 0 0;
-      color: var(--leaf);
-      line-height: 1.55;
-    }
-
-    .status_text.is_error { color: var(--berry); }
-
-    .status_text.is_busy::before {
-      content: "";
-      display: inline-block;
-      width: 0.85em;
-      height: 0.85em;
-      margin-right: 0.45em;
-      border: 2px solid var(--spinner-track);
-      border-top-color: var(--leaf);
-      border-radius: 50%;
-      vertical-align: -0.12em;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 6px;
-    }
-
-    /* 카메라가 꺼져 있을 때는 자리를 차지하지 않는다. */
-    .camera_row {
-      display: none;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    /* 안내 문장 아래는 촬영, 그 다음 줄은 전환과 닫기, 맨 아래는 사진 올리기다. */
-    .actions.is_live {
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .actions.is_live .camera_row {
-      display: flex;
-    }
-
-    .actions.is_live #button_shutter {
-      width: min(100%, 280px);
-      flex-basis: auto;
-    }
-
-    button {
-      min-height: 48px;
-      padding: 12px 18px;
-      border: 0;
-      border-radius: 999px;
-      font: inherit;
-      cursor: pointer;
-    }
-
-    button:focus-visible {
-      outline: 3px solid var(--focus);
-      outline-offset: 2px;
-    }
-
-    button:disabled { opacity: 0.55; cursor: wait; }
-
-    .button_primary { background: var(--leaf); color: var(--on-leaf); }
-
-    .button_ghost {
-      background: transparent;
-      color: var(--leaf);
-      box-shadow: inset 0 0 0 1.5px var(--ghost-line);
-    }
-
-    .button_wide { flex-basis: 280px; }
-
-    .result_panel {
-      margin-top: 26px;
-      padding-top: 8px;
-    }
-
-    .specimen {
-      margin: 0 0 8px;
-      color: var(--leaf);
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: 96px 1fr;
-      gap: 14px;
-      align-items: center;
-    }
-
-    .hero svg { width: 96px; height: 96px; }
-
-    .result_name {
-      margin: 0;
-      font-size: clamp(2rem, 6vw, 2.8rem);
-      line-height: 1.15;
-    }
-
-    .score_value { margin: 4px 0 0; }
-
-    .score_label, .score_unit {
-      font-family: "Noto Sans KR", sans-serif;
-      font-size: 0.95rem;
-      font-weight: 500;
-    }
-
-    .score_number {
-      margin: 0 2px 0 6px;
-      font-size: 2.4rem;
-      line-height: 1;
-    }
-
-    .result_blurb, .result_reason { margin: 10px 0 0; line-height: 1.65; }
-
-    .result_note {
-      margin: 12px 0 0;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: var(--note);
-      line-height: 1.6;
-    }
-
-    .piece_list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
-      gap: 10px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .piece_item {
-      display: grid;
-      grid-template-columns: 56px 1fr;
-      gap: 8px;
-      align-items: center;
-      padding: 10px;
-      border-radius: 16px;
-      background: var(--card);
-      box-shadow: inset 0 0 0 1px var(--line);
-    }
-
-    .piece_icon svg { width: 56px; height: 56px; display: block; }
-
-    .piece_part {
-      margin: 0;
-      color: var(--leaf);
-      font-size: 0.78rem;
-      font-weight: 700;
-    }
-
-    .piece_animal {
-      margin: 1px 0 0;
-      font-family: "Gowun Batang", serif;
-      font-size: 1.2rem;
-      line-height: 1.2;
-    }
-
-    .piece_note {
-      margin: 2px 0 0;
-      color: var(--muted);
-      font-size: 0.82rem;
-      line-height: 1.35;
-    }
-
-    .section_title { margin: 22px 0 8px; }
-
-    .rank_list, .meter_list, .guide_list {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .rank_item {
-      display: grid;
-      grid-template-columns: 1.4rem 2.4rem 1fr;
-      gap: 8px;
-      align-items: center;
-      padding: 8px 4px;
-      border-top: 1px solid var(--line);
-    }
-
-    .rank_item.is_top {
-      border-top: 0;
-      border-radius: 14px;
-      background: var(--rank-top);
-      padding: 10px;
-    }
-
-    .rank_item svg { width: 38px; height: 38px; }
-
-    .rank_index { color: var(--muted); font-weight: 700; }
-
-    .rank_name_row {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      font-weight: 700;
-    }
-
-    .bar_track {
-      height: 8px;
-      margin-top: 6px;
-      overflow: hidden;
-      border-radius: 99px;
-      background: var(--track);
-    }
-
-    .bar_fill {
-      width: 0;
-      height: 100%;
-      border-radius: inherit;
-      transition: width 0.7s ease;
-    }
-
-    .meter_caption { margin: 0 0 10px; font-size: 0.92rem; }
-
-    .meter_list {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px 16px;
-    }
-
-    .meter_list li { min-width: 0; }
-
-    .meter_head {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 6px;
-      font-size: 0.92rem;
-    }
-
-    .meter_value {
-      color: var(--muted);
-      text-align: right;
-    }
-
-    .meter_track {
-      position: relative;
-      height: 10px;
-      border-radius: 99px;
-      background: linear-gradient(90deg, rgba(35, 78, 54, 0.16), rgba(35, 78, 54, 0.05) 50%, rgba(201, 75, 50, 0.22));
-    }
-
-    .meter_center {
-      position: absolute;
-      left: 50%;
-      top: -2px;
-      bottom: -2px;
-      width: 2px;
-      background: var(--leaf);
-    }
-
-    .meter_dot {
-      position: absolute;
-      top: 1px;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--berry);
-      transform: translateX(-50%);
-    }
-
-    .raw_panel { margin-top: 14px; }
-
-    .raw_panel summary { cursor: pointer; font-weight: 700; }
-
-    .raw_list {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 6px 12px;
-      margin: 8px 0 0;
-    }
-
-    .raw_list dt { margin: 0; }
-
-    .raw_list dd {
-      margin: 0;
-      font-variant-numeric: tabular-nums;
-      text-align: right;
-    }
-
-    .raw_formula { display: block; color: var(--muted); font-size: 0.82rem; font-weight: 400; }
-
-    .atlas { margin-top: 28px; }
-
-    .guide_list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .guide_item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 12px 4px 4px;
-      border-radius: 999px;
-      background: var(--card);
-    }
-
-    .guide_item svg { width: 34px; height: 34px; }
-
-    .guide_no {
-      color: var(--muted);
-      font-size: 0.75rem;
-      font-weight: 700;
-    }
-
-    .partner_panel {
-      margin-top: 28px;
-      padding-top: 8px;
-      border-top: 1px solid var(--line);
-      text-align: left;
-    }
-
-    .partner_form {
-      display: grid;
-      gap: 12px;
-    }
-
-    .partner_field {
-      display: grid;
-      gap: 6px;
-      color: var(--ink);
-      font-size: 0.92rem;
-      font-weight: 700;
-    }
-
-    .partner_field input,
-    .partner_field textarea {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1.5px solid var(--line);
-      border-radius: 16px;
-      background: var(--bg);
-      color: var(--ink);
-      font: inherit;
-      font-weight: 400;
-    }
-
-    .partner_field textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    .partner_field input:focus-visible,
-    .partner_field textarea:focus-visible {
-      outline: 3px solid var(--focus);
-      outline-offset: 2px;
-    }
-
-    .partner_form .button_primary {
-      justify-self: start;
-    }
-
-    .partner_status {
-      min-height: 1.4em;
-      margin: 0;
-      color: var(--leaf);
-      font-size: 0.92rem;
-    }
-
-    .partner_status.is_error { color: var(--berry); }
-
-    .partner_gotcha {
-      position: absolute;
-      left: -9999px;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-    }
-
-    .footer_note {
-      margin: 22px 0 0;
-      font-size: 0.85rem;
-    }
-
-    .disqus_panel {
-      margin-top: 28px;
-      padding-top: 8px;
-      border-top: 1px solid var(--line);
-      text-align: left;
-    }
-
-    #disqus_thread {
-      min-height: 160px;
-    }
-
-    @media (max-width: 560px) {
-      .sheet { padding-left: 16px; }
-      .sheet::before { display: none; }
-      .hero { grid-template-columns: 72px 1fr; }
-      .hero svg { width: 72px; height: 72px; }
-      .meter_list { grid-template-columns: 1fr; }
-      .stage.is_camera { height: 360px; min-height: 360px; }
-      .crop_panel_head { align-items: flex-start; flex-direction: column; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation: none !important;
-        transition: none !important;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="guide.css" />
 </head>
 <body>
     <main class="sheet">
@@ -855,13 +54,17 @@
         <button type="button" class="theme_button" id="button_theme_dark" data-i18n="theme_dark" aria-pressed="false">다크</button>
       </div>
     </div>
+    <nav class="site_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
+      <a href="index.html" data-i18n="nav_tool" aria-current="page">얼굴 재기</a>
+      <a href="method.html" data-i18n="nav_method">측정 방법</a>
+      <a href="about.html" data-i18n="nav_about">소개</a>
+      <a href="privacy.html" data-i18n="nav_privacy">개인정보</a>
+      <a href="contact.html" data-i18n="nav_contact">문의</a>
+    </nav>
     <header class="header">
       <p class="eyebrow">Face Field Notes</p>
       <h1 data-i18n="app_title">동물상 도감</h1>
-      <p class="lead" data-i18n="lead">
-        사진을 올린 뒤 휠로 확대하고, 드래그로 분석할 얼굴을 지정합니다.
-        왼쪽 버튼을 잠시 누르고 있으면 사진이 움직이고, 여러 명이면 그 부분만 잘라 원본 아래에 펼칩니다.
-      </p>
+      <p class="lead" data-i18n="lead">사진을 올린 뒤 휠로 확대하고, 드래그로 분석할 얼굴을 지정합니다. 왼쪽 버튼을 잠시 누르고 있으면 사진이 움직이고, 여러 명이면 그 부분만 잘라 원본 아래에 펼칩니다. 비교에 쓰는 값은 머리카락이나 귀가 아니라 얼굴 가로·세로와 눈, 코, 입, 턱의 길이 비율입니다. 점수는 아홉 동물 기준과의 거리이며, 성격 테스트나 과학적 판별이 아닙니다.</p>
     </header>
 
     <div class="stage" id="photo_stage" aria-label="얼굴 미리보기">
@@ -939,36 +142,23 @@
 
     <section class="atlas">
       <h2 class="section_title" data-i18n="atlas_heading">도감에 있는 동물</h2>
+      <p class="meter_caption" data-i18n="atlas_help">동물 이름을 누르면 그 기준을 글로 읽을 수 있습니다. 얼굴 사진 없이도 도감을 볼 수 있어요.</p>
       <ul class="guide_list" id="guide_list"></ul>
     </section>
 
-    <section class="partner_panel" aria-labelledby="partner_title">
-      <h2 class="section_title" id="partner_title" data-i18n="partner_title">제휴 문의</h2>
-      <p class="meter_caption" data-i18n="partner_help">함께 만들고 싶은 내용이 있으면 남겨 주세요. 답변은 적어 주신 이메일로 갑니다.</p>
-      <form id="partner_form" class="partner_form" action="https://formspree.io/f/xqppylkl" method="POST">
-        <label class="partner_field">
-          <span data-i18n="partner_name">이름</span>
-          <input type="text" name="이름" id="partner_name" required maxlength="80" autocomplete="name" />
-        </label>
-        <label class="partner_field">
-          <span data-i18n="partner_company">회사 또는 브랜드</span>
-          <input type="text" name="회사" id="partner_company" maxlength="120" autocomplete="organization" />
-        </label>
-        <label class="partner_field">
-          <span data-i18n="partner_email">답장 받을 이메일</span>
-          <input type="email" name="email" id="partner_email" required maxlength="120" autocomplete="email" inputmode="email" />
-        </label>
-        <label class="partner_field">
-          <span data-i18n="partner_message">문의 내용</span>
-          <textarea name="문의" id="partner_message" required maxlength="2000" rows="5"></textarea>
-        </label>
-        <input type="hidden" name="_subject" id="partner_subject" data-i18n-value="partner_subject" value="동물상 도감 제휴 문의" />
-        <input class="partner_gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
-        <button type="submit" class="button_primary" id="button_partner_send" data-i18n="partner_send">문의 보내기</button>
-        <p id="partner_status" class="partner_status" role="status"></p>
-      </form>
+    <section class="partner_panel" aria-labelledby="contact_teaser_title">
+      <h2 class="section_title" id="contact_teaser_title" data-i18n="contact_teaser_title">문의</h2>
+      <p class="meter_caption" data-i18n="contact_teaser">제휴, 오류, 개인정보와 관련된 질문은 문의 페이지에 남겨 주세요. 답변은 적어 주신 이메일로 갑니다. 얼굴 사진은 문의에 포함되지 않습니다.</p>
+      <p class="page_cta_row"><a class="button_primary" href="contact.html" data-i18n="nav_contact">문의</a></p>
     </section>
 
+    <nav class="site_nav footer_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
+      <a href="index.html" data-i18n="nav_tool" aria-current="page">얼굴 재기</a>
+      <a href="method.html" data-i18n="nav_method">측정 방법</a>
+      <a href="about.html" data-i18n="nav_about">소개</a>
+      <a href="privacy.html" data-i18n="nav_privacy">개인정보</a>
+      <a href="contact.html" data-i18n="nav_contact">문의</a>
+    </nav>
     <p class="footer_note" data-i18n="footer">
       사진은 이 브라우저 안에서만 처리되고 서버로 전송되지 않습니다.
       결과는 얼굴 비율을 동물별 기준과 견준 재미있는 비교이며, 과학적 판별이나 성격 테스트가 아닙니다.
@@ -1025,7 +215,7 @@
           theme_light: "화이트",
           theme_dark: "다크",
           app_title: "동물상 도감",
-          lead: "사진을 올린 뒤 휠로 확대하고, 드래그로 분석할 얼굴을 지정합니다. 왼쪽 버튼을 잠시 누르고 있으면 사진이 움직이고, 여러 명이면 그 부분만 잘라 원본 아래에 펼칩니다.",
+          lead: "사진을 올린 뒤 휠로 확대하고, 드래그로 분석할 얼굴을 지정합니다. 왼쪽 버튼을 잠시 누르고 있으면 사진이 움직이고, 여러 명이면 그 부분만 잘라 원본 아래에 펼칩니다. 비교에 쓰는 값은 머리카락이나 귀가 아니라 얼굴 가로·세로와 눈, 코, 입, 턱의 길이 비율입니다. 점수는 아홉 동물 기준과의 거리이며, 성격 테스트나 과학적 판별이 아닙니다.",
           empty_message: "정면 얼굴을 준비해 주세요. 눈이 잘 보이고, 너무 어둡지 않은 사진이 좋아요.",
           video_aria: "카메라 미리보기",
           stage_aria: "얼굴 미리보기",
@@ -1093,6 +283,15 @@
           meter_help: "가운데 막대기가 평균 자리예요. 점이 오른쪽이면 그 비율이 평균보다 크고, 왼쪽이면 평균보다 작습니다. 오른쪽 글은 그 비율이 얼굴에서 어떤 뜻인지 풀어 둔 말입니다.",
           raw_summary: "측정 숫자 보기",
           raw_help: "픽셀 길이를 얼굴 크기로 나눈 비율입니다. 예를 들어 눈 크기 0.250은 눈 가로가 얼굴 가로의 25%라는 뜻이에요.",
+          nav_label: "도감 메뉴",
+          nav_tool: "얼굴 재기",
+          nav_method: "측정 방법",
+          nav_about: "소개",
+          nav_privacy: "개인정보",
+          nav_contact: "문의",
+          contact_teaser_title: "문의",
+          contact_teaser: "제휴, 오류, 개인정보와 관련된 질문은 문의 페이지에 남겨 주세요. 답변은 적어 주신 이메일로 갑니다. 얼굴 사진은 문의에 포함되지 않습니다.",
+          atlas_help: "동물 이름을 누르면 그 기준을 글로 읽을 수 있습니다. 얼굴 사진 없이도 도감을 볼 수 있어요.",
           atlas_heading: "도감에 있는 동물",
           crop_title: "얼굴 {index}",
           crop_remove_aria: "얼굴 {index} 영역 지우기",
@@ -1192,7 +391,7 @@
           theme_light: "Light",
           theme_dark: "Dark",
           app_title: "Animal Face Field Guide",
-          lead: "Upload a photo, zoom with the wheel, and drag to choose a face. Hold the left button briefly to move the photo. If there are several people, each chosen area is cropped below the original.",
+          lead: "Upload a photo, zoom with the wheel, and drag to choose a face. Hold the left button briefly to move the photo. If there are several people, each chosen area is cropped below the original. The comparison uses length ratios of the face, eyes, nose, mouth, and jaw, not hair or ears. The score is the distance from nine animal profiles. It is not a personality test or a scientific classification.",
           empty_message: "Use a front-facing photo. Eyes should be visible, and the picture should not be too dark.",
           video_aria: "Camera preview",
           stage_aria: "Face preview",
@@ -1260,6 +459,15 @@
           meter_help: "The center mark is average. A dot to the right means that proportion is larger than average, and a dot to the left means smaller. The words explain what that proportion means on a face.",
           raw_summary: "Show the measurements",
           raw_help: "Each number is a length divided by the face size. An eye size of 0.250 means the eye width is 25% of the face width.",
+          nav_label: "Guide menu",
+          nav_tool: "Measure a face",
+          nav_method: "How measuring works",
+          nav_about: "About",
+          nav_privacy: "Privacy",
+          nav_contact: "Contact",
+          contact_teaser_title: "Contact",
+          contact_teaser: "Questions about partnerships, errors, or privacy go on the contact page. The reply is sent to the email you enter. Face photos are not included in the message.",
+          atlas_help: "Select an animal name to read its profile. You can browse the guide without a face photo.",
           atlas_heading: "Animals in the guide",
           crop_title: "Face {index}",
           crop_remove_aria: "Remove face area {index}",
@@ -1359,7 +567,7 @@
           theme_light: "ライト",
           theme_dark: "ダーク",
           app_title: "動物顔図鑑",
-          lead: "写真を読み込み、ホイールで拡大して、ドラッグで顔を指定します。左ボタンを少し押し続けると写真が動きます。複数人なら、選んだ部分だけを元の写真の下に並べます。",
+          lead: "写真を読み込み、ホイールで拡大して、ドラッグで顔を指定します。左ボタンを少し押し続けると写真が動きます。複数人なら、選んだ部分だけを元の写真の下に並べます。比べる値は髪や耳ではなく、顔の縦横と目、鼻、口、顎の長さの比率です。点数は9種の動物基準との距離であり、性格テストや科学的な判定ではありません。",
           empty_message: "正面の顔を用意してください。目がよく見え、暗すぎない写真が向いています。",
           video_aria: "カメラプレビュー",
           stage_aria: "顔のプレビュー",
@@ -1427,6 +635,15 @@
           meter_help: "中央の印が平均の位置です。点が右ならその比率は平均より大きく、左なら平均より小さいです。右の言葉は、その比率が顔のどこを指すかを説明しています。",
           raw_summary: "測定の数字を見る",
           raw_help: "顔の大きさで長さを割った比率です。たとえば目の大きさ 0.250 は、目の横幅が顔の横幅の25%という意味です。",
+          nav_label: "図鑑メニュー",
+          nav_tool: "顔を測る",
+          nav_method: "測り方",
+          nav_about: "紹介",
+          nav_privacy: "個人情報",
+          nav_contact: "問い合わせ",
+          contact_teaser_title: "問い合わせ",
+          contact_teaser: "提携、不具合、個人情報についての質問は問い合わせページに残してください。返信は記入したメールへ届きます。顔写真は問い合わせに含まれません。",
+          atlas_help: "動物の名前を押すと、その基準を文章で読めます。顔写真がなくても図鑑を見られます。",
           atlas_heading: "図鑑の動物",
           crop_title: "顔 {index}",
           crop_remove_aria: "顔 {index} の範囲を消す",
@@ -1959,9 +1176,9 @@
     const button_clear_selections = require_element("button_clear_selections");
     const button_theme_light = require_element("button_theme_light");
     const button_theme_dark = require_element("button_theme_dark");
-    const partner_form = require_element("partner_form");
-    const partner_status = require_element("partner_status");
-    const button_partner_send = require_element("button_partner_send");
+    const partner_form = document.getElementById("partner_form");
+    const partner_status = document.getElementById("partner_status");
+    const button_partner_send = document.getElementById("button_partner_send");
     const PARTNER_FORM_URL = "https://formspree.io/f/xqppylkl";
     let is_partner_sending = false;
     const result_target = require_element("result_target");
@@ -3101,7 +2318,16 @@
         const no_label = document.createElement("span");
         no_label.className = "guide_no";
         no_label.textContent = animal.no_label;
-        item.append(icon, text, no_label);
+        if (!animal.id) {
+          console.error("동물 설명 주소를 만들지 못했습니다.", animal.name);
+          item.append(icon, text, no_label);
+        } else {
+          const link = document.createElement("a");
+          link.className = "guide_item_link";
+          link.href = "animals/" + animal.id + ".html";
+          link.append(icon, text, no_label);
+          item.append(link);
+        }
         guide_list.append(item);
       }
     }
@@ -4206,6 +3432,9 @@
 
     // 제휴 문의 상태 문장을 바꾸고, 실패면 붉은색으로 표시한다.
     function set_partner_status(message, is_error) {
+      if (!partner_status) {
+        return;
+      }
       partner_status.textContent = message;
       partner_status.classList.toggle("is_error", Boolean(is_error));
     }
@@ -4220,7 +3449,7 @@
     // 입력한 제휴 문의를 Formspree로 보내고, 페이지는 그대로 둔다.
     async function submit_partner_form(event) {
       event.preventDefault();
-      if (is_partner_sending) {
+      if (!partner_form || !button_partner_send || is_partner_sending) {
         return;
       }
       const form_data = new FormData(partner_form);
@@ -4309,9 +3538,11 @@
           analyze_selections(app_state.selections.slice());
         });
         button_clear_selections.addEventListener("click", clear_all_selections);
-        partner_form.addEventListener("submit", (event) => {
-          submit_partner_form(event);
-        });
+        if (partner_form) {
+          partner_form.addEventListener("submit", (event) => {
+            submit_partner_form(event);
+          });
+        }
         selection_layer.addEventListener("pointerdown", on_selection_pointer_down);
         selection_layer.addEventListener("pointermove", on_photo_pointer_move);
         selection_layer.addEventListener("pointerup", on_photo_pointer_up);
@@ -4405,7 +3636,7 @@
           );
         }
         refresh_status_sentence();
-        if (partner_state.key) {
+        if (partner_state.key && partner_status) {
           set_partner_status(t(partner_state.key), partner_state.is_error);
         }
       } catch (error) {

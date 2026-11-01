@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <script>
+    // 첫 그림이 그려지기 전에 저장된 화면 모드와 언어를 적용한다.
+    (function () {
+      try {
+        var saved_theme = localStorage.getItem("theme_mode");
+        document.documentElement.setAttribute("data-theme", saved_theme === "dark" ? "dark" : "light");
+        var saved_language = localStorage.getItem("language_code") || "";
+        var browser_language = (navigator.language || "").toLowerCase();
+        var language_code = "ko";
+        if (saved_language === "en" || saved_language === "ja" || saved_language === "ko") {
+          language_code = saved_language;
+        } else if (browser_language.indexOf("ja") === 0) {
+          language_code = "ja";
+        } else if (browser_language.indexOf("en") === 0) {
+          language_code = "en";
+        }
+        document.documentElement.lang = language_code;
+        document.documentElement.setAttribute("data-language", language_code);
+      } catch (error) {
+        document.documentElement.setAttribute("data-theme", "light");
+        document.documentElement.lang = "ko";
+        document.documentElement.setAttribute("data-language", "ko");
+      }
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="google-adsense-account" content="ca-pub-8803401825336300" />
+  <meta name="theme-color" content="#f4f1ea" />
+  <meta name="description" data-i18n-content="about_meta" content="동물상 도감이 무엇을 비교하고, 사진을 어디에 두는지, 결과를 어떻게 읽어야 하는지 적습니다." />
+  <title data-i18n="about_title">소개 — 동물상 도감</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8803401825336300" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="guide.css" />
+</head>
+<body data-title-key="about_title">
+  <main class="sheet">
+    <div class="theme_bar">
+      <div class="language_switch theme_switch" role="group" data-i18n-aria="language_group" aria-label="언어">
+        <button type="button" class="theme_button" id="button_language_ko" data-language="ko">한국어</button>
+        <button type="button" class="theme_button" id="button_language_en" data-language="en">English</button>
+        <button type="button" class="theme_button" id="button_language_ja" data-language="ja">日本語</button>
+      </div>
+      <div class="theme_switch" role="group" data-i18n-aria="theme_group" aria-label="화면 모드">
+        <button type="button" class="theme_button is_selected" id="button_theme_light" data-i18n="theme_light" aria-pressed="true">화이트</button>
+        <button type="button" class="theme_button" id="button_theme_dark" data-i18n="theme_dark" aria-pressed="false">다크</button>
+      </div>
+    </div>
+    <nav class="site_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
+      <a href="index.html" data-i18n="nav_tool">얼굴 재기</a>
+      <a href="method.html" data-i18n="nav_method">측정 방법</a>
+      <a href="about.html" data-i18n="nav_about" aria-current="page">소개</a>
+      <a href="privacy.html" data-i18n="nav_privacy">개인정보</a>
+      <a href="contact.html" data-i18n="nav_contact">문의</a>
+    </nav>
+    <article class="prose">
+      <p class="eyebrow">Face Field Notes</p>
+      <h1 data-i18n="about_h1">이 도감에 대하여</h1>
+      <p data-i18n="about_p1">동물상 도감은 얼굴 사진의 길이 비율을 고양이, 강아지, 여우, 토끼, 부엉이, 곰, 사자, 사슴, 늑대 기준과 비교하는 브라우저 프로그램입니다. 방문자에게 약속하는 일은 하나입니다. 고른 얼굴 영역의 비율을 재고, 아홉 기준 중 어디와 가까운지 보여 주는 일입니다.</p>
+      <p data-i18n="about_p2">사진 파일은 이 브라우저 안에서만 읽고, 분석 서버로 올리지 않습니다. 페이지를 닫으면 그 사진도 함께 사라집니다. 이 기기에 남는 것은 고른 언어와 화이트·다크 화면 모드뿐입니다.</p>
+      <p data-i18n="about_p3">결과는 재미있는 비교입니다. 성격을 알려 주거나, 의학·유전·신원 확인에 쓰라고 만든 도구가 아닙니다. 운영, 오류, 개인정보에 대한 연락은 문의 페이지로 받습니다.</p>
+      <p class="page_cta_row"><a class="button_primary" href="method.html" data-i18n="nav_method">측정 방법</a></p>
+    </article>
+    <nav class="site_nav footer_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
+      <a href="index.html" data-i18n="nav_tool">얼굴 재기</a>
+      <a href="method.html" data-i18n="nav_method">측정 방법</a>
+      <a href="about.html" data-i18n="nav_about" aria-current="page">소개</a>
+      <a href="privacy.html" data-i18n="nav_privacy">개인정보</a>
+      <a href="contact.html" data-i18n="nav_contact">문의</a>
+    </nav>
+    <p class="footer_note" data-i18n="footer">사진은 이 브라우저 안에서만 처리되고 서버로 전송되지 않습니다. 결과는 얼굴 비율을 동물별 기준과 견준 재미있는 비교이며, 과학적 판별이나 성격 테스트가 아닙니다. 표정, 고개 각도, 안경, 조명에 따라 순위가 달라질 수 있어요.</p>
+  </main>
+  <script src="guide.js"></script>
+</body>
+</html>

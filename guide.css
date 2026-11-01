@@ -1,0 +1,115 @@
+/* 도감 메뉴와 설명 글. 도구 화면과 안내 페이지가 같은 종이를 쓰게 한다. */
+
+.site_nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 16px;
+  margin: 0 0 18px;
+  padding: 0 8px;
+}
+
+.site_nav a {
+  color: var(--leaf);
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.site_nav a:hover,
+.site_nav a[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.site_nav a:focus-visible,
+.prose a:focus-visible,
+a.button_primary:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.footer_nav {
+  margin-top: 28px;
+}
+
+.prose h1 {
+  text-align: center;
+}
+
+.prose h2 {
+  margin: 1.45em 0 0.35em;
+  font-size: 1.35rem;
+}
+
+.prose p,
+.prose li {
+  color: var(--ink);
+  line-height: 1.75;
+}
+
+.prose ul,
+.prose ol {
+  margin: 0.4em 0 0;
+  padding-left: 1.25em;
+}
+
+.ratio_list li + li {
+  margin-top: 0.45em;
+}
+
+.text_links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin: 0.6em 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.text_links a {
+  color: var(--leaf);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.text_links a[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.page_cta_row {
+  margin: 22px 0 8px;
+  text-align: center;
+}
+
+a.button_primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: var(--leaf);
+  color: var(--on-leaf);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.guide_item_link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.contact_status {
+  min-height: 1.4em;
+  margin: 10px 0 0;
+  color: var(--leaf);
+}
+
+.contact_status.is_error {
+  color: var(--berry);
+}

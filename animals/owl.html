@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <script>
+    // 첫 그림이 그려지기 전에 저장된 화면 모드와 언어를 적용한다.
+    (function () {
+      try {
+        var saved_theme = localStorage.getItem("theme_mode");
+        document.documentElement.setAttribute("data-theme", saved_theme === "dark" ? "dark" : "light");
+        var saved_language = localStorage.getItem("language_code") || "";
+        var browser_language = (navigator.language || "").toLowerCase();
+        var language_code = "ko";
+        if (saved_language === "en" || saved_language === "ja" || saved_language === "ko") {
+          language_code = saved_language;
+        } else if (browser_language.indexOf("ja") === 0) {
+          language_code = "ja";
+        } else if (browser_language.indexOf("en") === 0) {
+          language_code = "en";
+        }
+        document.documentElement.lang = language_code;
+        document.documentElement.setAttribute("data-language", language_code);
+      } catch (error) {
+        document.documentElement.setAttribute("data-theme", "light");
+        document.documentElement.lang = "ko";
+        document.documentElement.setAttribute("data-language", "ko");
+      }
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="google-adsense-account" content="ca-pub-8803401825336300" />
+  <meta name="theme-color" content="#f4f1ea" />
+  <meta name="description" data-i18n-content="owl_meta" content="얼굴이 아주 둥글고 눈이 크며 눈 사이가 넓은 기준입니다." />
+  <title data-i18n="owl_title">부엉이상 — 동물상 도감</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8803401825336300" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="../guide.css" />
+</head>
+<body data-title-key="owl_title">
+  <main class="sheet">
+    <div class="theme_bar">
+      <div class="language_switch theme_switch" role="group" data-i18n-aria="language_group" aria-label="언어">
+        <button type="button" class="theme_button" id="button_language_ko" data-language="ko">한국어</button>
+        <button type="button" class="theme_button" id="button_language_en" data-language="en">English</button>
+        <button type="button" class="theme_button" id="button_language_ja" data-language="ja">日本語</button>
+      </div>
+      <div class="theme_switch" role="group" data-i18n-aria="theme_group" aria-label="화면 모드">
+        <button type="button" class="theme_button is_selected" id="button_theme_light" data-i18n="theme_light" aria-pressed="true">화이트</button>
+        <button type="button" class="theme_button" id="button_theme_dark" data-i18n="theme_dark" aria-pressed="false">다크</button>
+      </div>
+    </div>
+    <nav class="site_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
+      <a href="../index.html" data-i18n="nav_tool">얼굴 재기</a>
+      <a href="../method.html" data-i18n="nav_method">측정 방법</a>
+      <a href="../about.html" data-i18n="nav_about">소개</a>
+      <a href="../privacy.html" data-i18n="nav_privacy">개인정보</a>
+      <a href="../contact.html" data-i18n="nav_contact">문의</a>
+    </nav>
+    <article class="prose">
+      <p class="eyebrow">Face Field Notes</p>
+      <h1 data-i18n="owl_h1">부엉이상</h1>
+      <p data-i18n="owl_p1">부엉이상은 얼굴이 아주 둥글고 눈이 커서 이목구비가 동그랗게 띄는 인상입니다. 아홉 기준 가운데 얼굴 둥글기를 가장 크게 봅니다.</p>
+      <h2 data-i18n="animal_ratio_heading">이 동물로 기울어지는 비율</h2>
+      <p data-i18n="owl_p2">얼굴 둥글기, 눈 크기, 눈매의 둥글기, 눈 사이 간격을 모두 큰 쪽으로 봅니다. 코와 입은 작고 짧으며, 턱끝은 부드러운 넓은 쪽입니다. 중안부는 짧습니다.</p>
+      <h2 data-i18n="animal_score_heading">점수가 가깝다는 뜻</h2>
+      <p data-i18n="owl_p3">토끼와 점수가 겹치기 쉽습니다. 눈 사이가 넓고 얼굴 윤곽이 원에 가까우면 부엉이 쪽입니다. 코와 입만 작고 얼굴 길이가 남아 있으면 토끼나 고양이를 같이 봅니다.</p>
+      <h2 data-i18n="animal_photo_heading">사진에서 흔들리는 경우</h2>
+      <p data-i18n="owl_p4">광각 렌즈로 아주 가까이 찍으면 얼굴 가운데가 둥글게 왜곡됩니다. 팔을 편 거리 이상에서 찍으면 윤곽이 덜 부풀습니다.</p>
+      <p class="page_cta_row"><a class="button_primary" href="../index.html" data-i18n="try_tool">이 기준으로 얼굴 재기</a></p>
+      <p><a href="../method.html" data-i18n="read_method">열 가지 비율이 어떻게 재는지 보기</a></p>
+      <h2 data-i18n="other_animals">다른 동물 기준</h2>
+      <ul class="text_links">
+        <li><a href="cat.html" data-i18n="name_cat">고양이상</a></li>
+        <li><a href="dog.html" data-i18n="name_dog">강아지상</a></li>
+        <li><a href="fox.html" data-i18n="name_fox">여우상</a></li>
+        <li><a href="rabbit.html" data-i18n="name_rabbit">토끼상</a></li>
+        <li><a href="owl.html" data-i18n="name_owl" aria-current="page">부엉이상</a></li>
+        <li><a href="bear.html" data-i18n="name_bear">곰상</a></li>
+        <li><a href="lion.html" data-i18n="name_lion">사자상</a></li>
+        <li><a href="deer.html" data-i18n="name_deer">사슴상</a></li>
+        <li><a href="wolf.html" data-i18n="name_wolf">늑대상</a></li>
+      </ul>
+    </article>
+    <nav class="site_nav footer_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
+      <a href="../index.html" data-i18n="nav_tool">얼굴 재기</a>
+      <a href="../method.html" data-i18n="nav_method">측정 방법</a>
+      <a href="../about.html" data-i18n="nav_about">소개</a>
+      <a href="../privacy.html" data-i18n="nav_privacy">개인정보</a>
+      <a href="../contact.html" data-i18n="nav_contact">문의</a>
+    </nav>
+    <p class="footer_note" data-i18n="footer">사진은 이 브라우저 안에서만 처리되고 서버로 전송되지 않습니다. 결과는 얼굴 비율을 동물별 기준과 견준 재미있는 비교이며, 과학적 판별이나 성격 테스트가 아닙니다. 표정, 고개 각도, 안경, 조명에 따라 순위가 달라질 수 있어요.</p>
+  </main>
+  <script src="../guide.js"></script>
+</body>
+</html>
