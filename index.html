@@ -700,6 +700,70 @@
       font-weight: 700;
     }
 
+    .partner_panel {
+      margin-top: 28px;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      text-align: left;
+    }
+
+    .partner_form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .partner_field {
+      display: grid;
+      gap: 6px;
+      color: var(--ink);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .partner_field input,
+    .partner_field textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: 16px;
+      background: var(--bg);
+      color: var(--ink);
+      font: inherit;
+      font-weight: 400;
+    }
+
+    .partner_field textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .partner_field input:focus-visible,
+    .partner_field textarea:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .partner_form .button_primary {
+      justify-self: start;
+    }
+
+    .partner_status {
+      min-height: 1.4em;
+      margin: 0;
+      color: var(--leaf);
+      font-size: 0.92rem;
+    }
+
+    .partner_status.is_error { color: var(--berry); }
+
+    .partner_gotcha {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
     .footer_note {
       margin: 22px 0 0;
       font-size: 0.85rem;
@@ -814,6 +878,33 @@
     <section class="atlas">
       <h2 class="section_title">도감에 있는 동물</h2>
       <ul class="guide_list" id="guide_list"></ul>
+    </section>
+
+    <section class="partner_panel" aria-labelledby="partner_title">
+      <h2 class="section_title" id="partner_title">제휴 문의</h2>
+      <p class="meter_caption">함께 만들고 싶은 내용이 있으면 남겨 주세요. 답변은 적어 주신 이메일로 갑니다.</p>
+      <form id="partner_form" class="partner_form" action="https://formspree.io/f/xqppylkl" method="POST">
+        <label class="partner_field">
+          <span>이름</span>
+          <input type="text" name="이름" id="partner_name" required maxlength="80" autocomplete="name" />
+        </label>
+        <label class="partner_field">
+          <span>회사 또는 브랜드</span>
+          <input type="text" name="회사" id="partner_company" maxlength="120" autocomplete="organization" />
+        </label>
+        <label class="partner_field">
+          <span>이메일</span>
+          <input type="email" name="email" id="partner_email" required maxlength="120" autocomplete="email" inputmode="email" />
+        </label>
+        <label class="partner_field">
+          <span>문의 내용</span>
+          <textarea name="문의" id="partner_message" required maxlength="2000" rows="5"></textarea>
+        </label>
+        <input type="hidden" name="_subject" value="동물상 도감 제휴 문의" />
+        <input class="partner_gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button type="submit" class="button_primary" id="button_partner_send">문의 보내기</button>
+        <p id="partner_status" class="partner_status" role="status"></p>
+      </form>
     </section>
 
     <p class="footer_note">
@@ -1125,6 +1216,11 @@
     const button_clear_selections = require_element("button_clear_selections");
     const button_theme_light = require_element("button_theme_light");
     const button_theme_dark = require_element("button_theme_dark");
+    const partner_form = require_element("partner_form");
+    const partner_status = require_element("partner_status");
+    const button_partner_send = require_element("button_partner_send");
+    const PARTNER_FORM_URL = "https://formspree.io/f/xqppylkl";
+    let is_partner_sending = false;
     const result_target = require_element("result_target");
 
     // 화면 요소가 없으면 이후 로직이 조용히 깨지므로, 시작할 때 바로 알린다.
@@ -3309,6 +3405,68 @@
       }
     }
 
+    // 제휴 문의 상태 문장을 바꾸고, 실패면 붉은색으로 표시한다.
+    function set_partner_status(message, is_error) {
+      partner_status.textContent = message;
+      partner_status.classList.toggle("is_error", Boolean(is_error));
+    }
+
+    // 입력한 제휴 문의를 Formspree로 보내고, 페이지는 그대로 둔다.
+    async function submit_partner_form(event) {
+      event.preventDefault();
+      if (is_partner_sending) {
+        return;
+      }
+      const form_data = new FormData(partner_form);
+      if (String(form_data.get("_gotcha") || "").trim()) {
+        console.error("자동 입력으로 보이는 제휴 문의는 보내지 않았습니다.");
+        partner_form.reset();
+        set_partner_status("문의가 전달됐어요. 남겨 주신 메일로 답변드릴게요.", false);
+        return;
+      }
+      const name_value = String(form_data.get("이름") || "").trim();
+      const email_value = String(form_data.get("email") || "").trim();
+      const message_value = String(form_data.get("문의") || "").trim();
+      form_data.set("이름", name_value);
+      form_data.set("email", email_value);
+      form_data.set("문의", message_value);
+      form_data.set("회사", String(form_data.get("회사") || "").trim());
+      if (!name_value || !email_value || !message_value || !partner_form.checkValidity()) {
+        set_partner_status("이름, 이메일, 문의 내용을 입력한 뒤 다시 보내 주세요.", true);
+        partner_form.reportValidity();
+        return;
+      }
+      is_partner_sending = true;
+      button_partner_send.disabled = true;
+      set_partner_status("문의를 보내는 중이에요.", false);
+      try {
+        const response = await fetch(PARTNER_FORM_URL, {
+          method: "POST",
+          body: form_data,
+          headers: { Accept: "application/json" }
+        });
+        if (!response.ok) {
+          let error_detail = "";
+          try {
+            error_detail = await response.text();
+          } catch (read_error) {
+            console.error("제휴 문의 오류 내용을 읽지 못했습니다.", read_error);
+          }
+          console.error("제휴 문의를 보내지 못했습니다.", response.status, error_detail);
+          set_partner_status("문의를 보내지 못했어요. 잠시 후 다시 시도해 주세요.", true);
+          return;
+        }
+        partner_form.reset();
+        set_partner_status("문의가 전달됐어요. 남겨 주신 메일로 답변드릴게요.", false);
+      } catch (error) {
+        console.error("제휴 문의 전송 중 네트워크 오류가 났습니다.", error);
+        set_partner_status("문의를 보내지 못했어요. 인터넷 연결을 확인한 뒤 다시 시도해 주세요.", true);
+      } finally {
+        is_partner_sending = false;
+        button_partner_send.disabled = false;
+      }
+    }
+
     // 버튼을 연결하고 모델을 준비한 뒤 분석을 받을 수 있는 상태로 만든다.
     async function init() {
       try {
@@ -3345,6 +3503,9 @@
           analyze_selections(app_state.selections.slice());
         });
         button_clear_selections.addEventListener("click", clear_all_selections);
+        partner_form.addEventListener("submit", (event) => {
+          submit_partner_form(event);
+        });
         selection_layer.addEventListener("pointerdown", on_selection_pointer_down);
         selection_layer.addEventListener("pointermove", on_photo_pointer_move);
         selection_layer.addEventListener("pointerup", on_photo_pointer_up);
