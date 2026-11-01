@@ -377,6 +377,25 @@
       transform: scaleX(-1);
     }
 
+    .camera_guide {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+    }
+
+    .camera_guide_ring {
+      width: min(72%, 300px);
+      aspect-ratio: 1;
+      border: 3px solid rgba(247, 243, 234, 0.95);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 1px rgba(16, 28, 22, 0.45),
+        0 0 0 9999px rgba(16, 28, 22, 0.38);
+    }
+
     #display_canvas { height: auto; }
 
     .status_text {
@@ -720,6 +739,9 @@
     <div class="stage" id="photo_stage" aria-label="얼굴 미리보기">
       <p id="empty_message">정면 얼굴을 준비해 주세요. 눈이 잘 보이고, 너무 어둡지 않은 사진이 좋아요.</p>
       <video id="live_video" hidden playsinline autoplay muted aria-label="카메라 미리보기"></video>
+      <div id="camera_guide" class="camera_guide" hidden aria-hidden="true">
+        <div class="camera_guide_ring"></div>
+      </div>
       <div id="photo_view" class="photo_view">
         <canvas id="display_canvas" hidden></canvas>
         <div id="selection_layer" class="selection_layer" hidden aria-hidden="true">
@@ -833,7 +855,8 @@
     const THEME_STORAGE_KEY = "theme_mode";
     const READY_MESSAGE = "준비됐어요. 카메라로 찍거나 사진을 올려 주세요.";
     const LOADING_MESSAGE = "동물 도감을 펼치는 중이에요. 처음 한 번은 몇 초 걸려요.";
-    const SELECT_MESSAGE = "휠로 확대할 수 있어요. 드래그하면 얼굴을 지정하고, 왼쪽 버튼을 잠시 누르고 있으면 사진이 움직입니다.";
+    const SELECT_MESSAGE_PC = "휠로 확대 · 드래그로 얼굴 지정 · 길게 누르면 이동";
+    const SELECT_MESSAGE_MOBILE = "손가락으로 드래그해 얼굴을 지정하세요.";
     const SELECTION_COLORS = ["#234e36", "#9c2f24", "#c9852a", "#1f4e79", "#6b3f69", "#3d6b4f"];
 
     // 화면 기준이 아니라 마주 본 사람의 왼쪽/오른쪽이다. 두 눈을 평균내서 좌우가 뒤집혀도 비율은 같다.
@@ -1060,6 +1083,7 @@
     const photo_stage = require_element("photo_stage");
     const empty_message = require_element("empty_message");
     const live_video = require_element("live_video");
+    const camera_guide = require_element("camera_guide");
     const display_canvas = require_element("display_canvas");
     const status_text = require_element("status_text");
     const button_camera = require_element("button_camera");
@@ -1108,6 +1132,31 @@
       status_text.textContent = message;
       status_text.classList.toggle("is_error", Boolean(is_error));
       status_text.classList.toggle("is_busy", Boolean(is_busy) && !is_error);
+    }
+
+    // 마우스가 있는 화면인지, 손가락으로 누르는 화면인지 가른다.
+    function is_touch_input() {
+      try {
+        return window.matchMedia("(hover: none), (pointer: coarse)").matches;
+      } catch (error) {
+        console.error("입력 장치를 확인하지 못했습니다.", error);
+        return false;
+      }
+    }
+
+    // 사진 아래 안내 한 줄을 입력 장치에 맞게 고른다.
+    function select_guide_message() {
+      return is_touch_input() ? SELECT_MESSAGE_MOBILE : SELECT_MESSAGE_PC;
+    }
+
+    // 안내 문장이 떠 있을 때만, 장치를 바꿀 때 그 한 줄을 다시 고른다.
+    function refresh_select_guide() {
+      const current_message = status_text.textContent;
+      const is_guide = current_message === SELECT_MESSAGE_PC || current_message === SELECT_MESSAGE_MOBILE;
+      if (!is_guide || !app_state.has_photo || app_state.is_analyzing || app_state.selections.length > 0) {
+        return;
+      }
+      set_status(select_guide_message(), false, false);
     }
 
     // 사용자에게는 다음 행동만 안내하고, 자세한 원인은 콘솔에만 남긴다.
@@ -1168,6 +1217,7 @@
       photo_stage.setAttribute("aria-label", "얼굴 미리보기");
       empty_message.hidden = false;
       live_video.hidden = true;
+      camera_guide.hidden = true;
       display_canvas.hidden = true;
       selection_layer.hidden = true;
       button_camera.hidden = false;
@@ -1188,6 +1238,7 @@
       photo_stage.classList.remove("is_photo");
       empty_message.hidden = true;
       live_video.hidden = false;
+      camera_guide.hidden = false;
       display_canvas.hidden = true;
       button_camera.hidden = true;
       button_upload.hidden = false;
@@ -1216,6 +1267,7 @@
       photo_stage.setAttribute("aria-label", "얼굴 미리보기. 휠로 확대하고, 드래그로 영역을 지정합니다. 왼쪽 버튼을 잠시 누르면 사진이 이동합니다.");
       empty_message.hidden = true;
       live_video.hidden = true;
+      camera_guide.hidden = true;
       display_canvas.hidden = false;
       selection_layer.hidden = false;
       selection_draft.hidden = true;
@@ -1395,7 +1447,7 @@
         const canvas = fit_to_canvas(live_video, true);
         stop_camera();
         show_photo_mode(canvas);
-        set_status(app_state.is_model_ready ? SELECT_MESSAGE : LOADING_MESSAGE, false, !app_state.is_model_ready);
+        set_status(app_state.is_model_ready ? select_guide_message() : LOADING_MESSAGE, false, !app_state.is_model_ready);
       } catch (error) {
         console.error("카메라 화면을 저장하지 못했습니다.", error);
         show_user_error(USER_MESSAGE[error.code] || USER_MESSAGE.analyze_failed);
@@ -1419,7 +1471,7 @@
           return;
         }
         show_photo_mode(canvas);
-        set_status(app_state.is_model_ready ? SELECT_MESSAGE : LOADING_MESSAGE, false, !app_state.is_model_ready);
+        set_status(app_state.is_model_ready ? select_guide_message() : LOADING_MESSAGE, false, !app_state.is_model_ready);
       } catch (error) {
         console.error("사진을 불러오지 못했습니다.", error);
         if (generation !== app_state.analysis_generation) {
@@ -2420,7 +2472,7 @@
       sync_analyze_button();
       sync_selection_hint();
       if (app_state.selections.length === 0) {
-        set_status(SELECT_MESSAGE, false, false);
+        set_status(select_guide_message(), false, false);
         return;
       }
       set_status("얼굴 영역 " + app_state.selections.length + "곳이 남았어요.", false, false);
@@ -3004,7 +3056,7 @@
       render_crop_cards();
       sync_analyze_button();
       sync_selection_hint();
-      set_status(app_state.has_photo ? SELECT_MESSAGE : READY_MESSAGE, false, false);
+      set_status(app_state.has_photo ? select_guide_message() : READY_MESSAGE, false, false);
     }
 
     // 얼굴 랜드마크 모델을 내려받는다. 사진 한 장 분석이라 CPU로 충분히 빠르고 더 안정적이다.
@@ -3098,6 +3150,16 @@
         selection_layer.addEventListener("dblclick", on_photo_double_click);
         photo_stage.addEventListener("wheel", on_photo_wheel, { passive: false });
         window.addEventListener("pagehide", stop_camera);
+        try {
+          const touch_query = window.matchMedia("(hover: none), (pointer: coarse)");
+          if (typeof touch_query.addEventListener === "function") {
+            touch_query.addEventListener("change", refresh_select_guide);
+          } else if (typeof touch_query.addListener === "function") {
+            touch_query.addListener(refresh_select_guide);
+          }
+        } catch (watch_error) {
+          console.error("입력 장치 변경 감지를 시작하지 못했습니다.", watch_error);
+        }
 
         if (location.protocol === "file:") {
           show_user_error(USER_MESSAGE.file_protocol);
@@ -3116,7 +3178,7 @@
           if (app_state.has_photo) {
             ready_message = app_state.selections.length > 0
               ? "얼굴 영역 " + app_state.selections.length + "곳을 골랐어요. 분석을 눌러 주세요."
-              : SELECT_MESSAGE;
+              : select_guide_message();
           }
           set_status(ready_message, false, false);
         }
