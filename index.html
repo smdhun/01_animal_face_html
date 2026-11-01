@@ -54,6 +54,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" data-i18n-content="meta_description" content="사진에서 얼굴 영역을 드래그로 지정하면, 그 부분의 얼굴 비율로 가장 가까운 동물상을 보여주는 브라우저 프로그램" />
+  <meta property="og:title" data-i18n-content="page_title" content="동물상 도감" />
+  <meta property="og:description" data-i18n-content="meta_description" content="사진에서 얼굴 영역을 드래그로 지정하면, 그 부분의 얼굴 비율로 가장 가까운 동물상을 보여주는 브라우저 프로그램" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
   <meta name="theme-color" content="#f4f1ea" />
   <!-- 애드센스가 이 사이트의 주인 계정인지 확인하는 표식이다. -->
   <meta name="google-adsense-account" content="ca-pub-8803401825336300" />
@@ -114,6 +118,10 @@
       <a href="privacy.html" data-i18n="nav_privacy">개인정보</a>
       <a href="contact.html" data-i18n="nav_contact">문의</a>
     </nav>
+    <section id="shared_result" class="shared_result" hidden>
+      <p id="shared_result_text"></p>
+      <a class="shared_try" id="shared_result_try" href="#photo_stage" data-i18n="share_try">나도 재보기</a>
+    </section>
     <header class="header">
       <p class="eyebrow">Face Field Notes</p>
       <h1 data-i18n="app_title">동물상 도감</h1>
@@ -170,6 +178,18 @@
             <span class="score_number" id="result_score">0</span><span class="score_unit">%</span>
           </p>
         </div>
+      </div>
+      <div class="share_box" id="share_box">
+        <p class="share_caption" data-i18n="share_caption">친구에게 보내고, 누구의 점수가 더 가까운지 겨뤄 보세요. 사진은 나가지 않습니다.</p>
+        <div class="share_actions">
+          <button type="button" class="button_primary" id="button_share_native" data-i18n="share_native" hidden>카카오톡 등으로 보내기</button>
+          <button type="button" class="button_ghost" id="button_share_copy" data-i18n="share_copy">문구 복사</button>
+          <a class="share_link" id="link_share_x" href="#photo_stage" target="_blank" rel="noopener noreferrer">X</a>
+          <a class="share_link" id="link_share_facebook" href="#photo_stage" target="_blank" rel="noopener noreferrer">Facebook</a>
+          <a class="share_link" id="link_share_whatsapp" href="#photo_stage" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <a class="share_link" id="link_share_line" href="#photo_stage" target="_blank" rel="noopener noreferrer">LINE</a>
+        </div>
+        <p class="share_status" id="share_status" role="status" hidden></p>
       </div>
       <p class="result_blurb" id="result_blurb"></p>
       <p class="result_reason" id="result_reason"></p>
@@ -435,7 +455,19 @@
     "feature_midface_ratio_label": "중안부",
     "feature_midface_ratio_formula": "눈에서 코끝까지 ÷ 얼굴 세로",
     "feature_midface_ratio_high": "눈과 코 사이가 긴 편",
-    "feature_midface_ratio_low": "눈과 코 사이가 짧은 편"
+    "feature_midface_ratio_low": "눈과 코 사이가 짧은 편",
+    "share_caption": "친구에게 보내고, 누구의 점수가 더 가까운지 겨뤄 보세요. 사진은 나가지 않습니다.",
+    "share_native": "카카오톡 등으로 보내기",
+    "share_copy": "문구 복사",
+    "share_copied": "문구를 복사했어요. 카카오톡이나 원하는 곳에 붙여 넣으세요.",
+    "share_copy_fail": "문구를 복사하지 못했어요. 아래 버튼으로 보내 주세요.",
+    "share_native_fail": "공유 창을 열지 못했어요. 문구 복사를 눌러 주세요.",
+    "share_invite": "얼굴 비율로 가장 가까운 동물이에요. 당신은 어디에 가까울까요?",
+    "share_try": "나도 재보기",
+    "share_received": "이 링크의 결과는 {animal} {score}%예요. 사진은 오지 않았고, 점수만 도착했어요.",
+    "share_link_bad": "공유 링크의 결과를 읽지 못했어요. 아래에서 얼굴을 재 보세요.",
+    "share_need_result": "먼저 얼굴을 잰 뒤에 결과를 보내 주세요.",
+    "share_text": "{animal} {score}%\n{invite}\n{url}"
   },
   "en": {
     "page_title": "Animal Face Field Guide",
@@ -611,7 +643,19 @@
     "feature_midface_ratio_label": "Midface",
     "feature_midface_ratio_formula": "eyes to nose tip ÷ face height",
     "feature_midface_ratio_high": "the space between eyes and nose is long",
-    "feature_midface_ratio_low": "the space between eyes and nose is short"
+    "feature_midface_ratio_low": "the space between eyes and nose is short",
+    "share_caption": "Send this result and see whose score lands closer. The photo stays here.",
+    "share_native": "Share to an app",
+    "share_copy": "Copy message",
+    "share_copied": "Message copied. Paste it wherever you like.",
+    "share_copy_fail": "Could not copy the message. Use a share button below.",
+    "share_native_fail": "Could not open the share sheet. Copy the message instead.",
+    "share_invite": "This is the closest animal by face proportions. Where do you land?",
+    "share_try": "Measure mine",
+    "share_received": "This link says {animal} {score}%. Only the score arrived, not a photo.",
+    "share_link_bad": "This share link could not be read. Measure a face below.",
+    "share_need_result": "Measure a face first, then share the result.",
+    "share_text": "{animal} {score}%\n{invite}\n{url}"
   },
   "ja": {
     "page_title": "動物顔図鑑",
@@ -787,7 +831,19 @@
     "feature_midface_ratio_label": "中顔面",
     "feature_midface_ratio_formula": "目から鼻先まで ÷ 顔の縦",
     "feature_midface_ratio_high": "目と鼻の間が長い",
-    "feature_midface_ratio_low": "目と鼻の間が短い"
+    "feature_midface_ratio_low": "目と鼻の間が短い",
+    "share_caption": "この結果を送って、どちらが近いか比べてみてください。写真は送られません。",
+    "share_native": "アプリで送る",
+    "share_copy": "文面をコピー",
+    "share_copied": "文面をコピーしました。好きな場所に貼り付けてください。",
+    "share_copy_fail": "文面をコピーできませんでした。下のボタンから送ってください。",
+    "share_native_fail": "共有画面を開けませんでした。文面のコピーを押してください。",
+    "share_invite": "顔の比率でいちばん近い動物です。あなたはどこに近いでしょう？",
+    "share_try": "自分も測る",
+    "share_received": "このリンクの結果は{animal} {score}%です。写真は届かず、点数だけです。",
+    "share_link_bad": "共有リンクを読めませんでした。下で顔を測ってください。",
+    "share_need_result": "先に顔を測ってから共有してください。",
+    "share_text": "{animal} {score}%\n{invite}\n{url}"
   },
   "zh": {
     "page_title": "动物面相图鉴",
@@ -963,7 +1019,19 @@
     "feature_midface_ratio_label": "中面部",
     "feature_midface_ratio_formula": "眼睛到鼻尖 ÷ 脸高",
     "feature_midface_ratio_high": "眼睛到鼻子的距离偏长",
-    "feature_midface_ratio_low": "眼睛到鼻子的距离偏短"
+    "feature_midface_ratio_low": "眼睛到鼻子的距离偏短",
+    "share_caption": "把这个结果发给朋友，比比谁更接近。照片不会发出去。",
+    "share_native": "用应用发送",
+    "share_copy": "复制文字",
+    "share_copied": "文字已复制。贴到想发送的地方即可。",
+    "share_copy_fail": "没能复制文字。请用下面的按钮发送。",
+    "share_native_fail": "没能打开分享窗口。请改用复制文字。",
+    "share_invite": "这是按脸部比例最接近的动物。你会靠近哪一种？",
+    "share_try": "我也测一下",
+    "share_received": "这个链接的结果是{animal} {score}%。照片没有传来，只有分数。",
+    "share_link_bad": "无法读取这条分享链接。请在下方测量一张脸。",
+    "share_need_result": "请先测量一张脸，再分享结果。",
+    "share_text": "{animal} {score}%\n{invite}\n{url}"
   },
   "hi": {
     "page_title": "पशु चेहरा गाइड",
@@ -1139,7 +1207,19 @@
     "feature_midface_ratio_label": "मध्य चेहरा",
     "feature_midface_ratio_formula": "आँखों से नाक की नोक ÷ चेहरे की ऊँचाई",
     "feature_midface_ratio_high": "आँख और नाक के बीच की दूरी लंबी है",
-    "feature_midface_ratio_low": "आँख और नाक के बीच की दूरी छोटी है"
+    "feature_midface_ratio_low": "आँख और नाक के बीच की दूरी छोटी है",
+    "share_caption": "यह परिणाम भेजें और देखें किसका अंक अधिक निकट है। फ़ोटो नहीं जाती।",
+    "share_native": "ऐप से भेजें",
+    "share_copy": "संदेश कॉपी करें",
+    "share_copied": "संदेश कॉपी हो गया। जहाँ चाहें चिपकाएँ।",
+    "share_copy_fail": "संदेश कॉपी नहीं हुआ। नीचे के बटन से भेजें।",
+    "share_native_fail": "शेयर विंडो नहीं खुली। संदेश कॉपी करें।",
+    "share_invite": "चेहरे के अनुपात से सबसे निकट पशु यह है। आप किसके निकट होंगे?",
+    "share_try": "मैं भी नापूँ",
+    "share_received": "इस लिंक का परिणाम {animal} {score}% है। फ़ोटो नहीं, केवल अंक आया है।",
+    "share_link_bad": "यह शेयर लिंक पढ़ा नहीं जा सका। नीचे चेहरा नापें।",
+    "share_need_result": "पहले चेहरा नापें, फिर परिणाम साझा करें।",
+    "share_text": "{animal} {score}%\n{invite}\n{url}"
   },
   "zh-Hant": {
     "page_title": "動物面相圖鑑",
@@ -1315,7 +1395,19 @@
     "feature_midface_ratio_label": "中面部",
     "feature_midface_ratio_formula": "眼睛到鼻尖 ÷ 臉高",
     "feature_midface_ratio_high": "眼睛到鼻子的距離偏長",
-    "feature_midface_ratio_low": "眼睛到鼻子的距離偏短"
+    "feature_midface_ratio_low": "眼睛到鼻子的距離偏短",
+    "share_caption": "把這個結果傳給朋友，比比誰更接近。照片不會傳出去。",
+    "share_native": "用 App 傳送",
+    "share_copy": "複製文字",
+    "share_copied": "文字已複製。貼到想傳送的地方即可。",
+    "share_copy_fail": "沒能複製文字。請用下面的按鈕傳送。",
+    "share_native_fail": "沒能打開分享視窗。請改用複製文字。",
+    "share_invite": "這是按臉部比例最接近的動物。你會靠近哪一種？",
+    "share_try": "我也測一下",
+    "share_received": "這個連結的結果是{animal} {score}%。照片沒有傳來，只有分數。",
+    "share_link_bad": "無法讀取這條分享連結。請在下方測量一張臉。",
+    "share_need_result": "請先測量一張臉，再分享結果。",
+    "share_text": "{animal} {score}%\n{invite}\n{url}"
   },
   "es": {
     "page_title": "Guía de rostros animales",
@@ -1491,7 +1583,19 @@
     "feature_midface_ratio_label": "Zona media",
     "feature_midface_ratio_formula": "de los ojos a la punta de la nariz ÷ alto del rostro",
     "feature_midface_ratio_high": "el espacio entre ojos y nariz es largo",
-    "feature_midface_ratio_low": "el espacio entre ojos y nariz es corto"
+    "feature_midface_ratio_low": "el espacio entre ojos y nariz es corto",
+    "share_caption": "Envía este resultado y compara quién queda más cerca. La foto no sale.",
+    "share_native": "Enviar por una app",
+    "share_copy": "Copiar texto",
+    "share_copied": "Texto copiado. Pégalo donde quieras.",
+    "share_copy_fail": "No se pudo copiar el texto. Usa un botón de abajo.",
+    "share_native_fail": "No se abrió la ventana para compartir. Copia el texto.",
+    "share_invite": "Este es el animal más cercano por proporciones del rostro. ¿Dónde caes tú?",
+    "share_try": "Medir el mío",
+    "share_received": "Este enlace dice {animal} {score}%. Llegó solo la puntuación, sin foto.",
+    "share_link_bad": "No se pudo leer este enlace. Mide un rostro abajo.",
+    "share_need_result": "Mide un rostro antes de compartir.",
+    "share_text": "{animal} {score}%\n{invite}\n{url}"
   },
   "pt": {
     "page_title": "Guia de rostos de animais",
@@ -1667,7 +1771,19 @@
     "feature_midface_ratio_label": "Meio do rosto",
     "feature_midface_ratio_formula": "dos olhos à ponta do nariz ÷ altura do rosto",
     "feature_midface_ratio_high": "o espaço entre olhos e nariz é longo",
-    "feature_midface_ratio_low": "o espaço entre olhos e nariz é curto"
+    "feature_midface_ratio_low": "o espaço entre olhos e nariz é curto",
+    "share_caption": "Envie este resultado e compare quem fica mais perto. A foto não sai.",
+    "share_native": "Enviar por um app",
+    "share_copy": "Copiar texto",
+    "share_copied": "Texto copiado. Cole onde quiser.",
+    "share_copy_fail": "Não foi possível copiar o texto. Use um botão abaixo.",
+    "share_native_fail": "Não foi possível abrir o compartilhamento. Copie o texto.",
+    "share_invite": "Este é o animal mais próximo pelas proporções do rosto. Onde você cai?",
+    "share_try": "Medir o meu",
+    "share_received": "Este link diz {animal} {score}%. Chegou só a pontuação, sem foto.",
+    "share_link_bad": "Não foi possível ler este link. Meça um rosto abaixo.",
+    "share_need_result": "Meça um rosto antes de compartilhar.",
+    "share_text": "{animal} {score}%\n{invite}\n{url}"
   },
   "ar": {
     "page_title": "دليل وجوه الحيوانات",
@@ -1843,7 +1959,19 @@
     "feature_midface_ratio_label": "منتصف الوجه",
     "feature_midface_ratio_formula": "من العينين إلى طرف الأنف ÷ ارتفاع الوجه",
     "feature_midface_ratio_high": "المسافة بين العينين والأنف طويلة",
-    "feature_midface_ratio_low": "المسافة بين العينين والأنف قصيرة"
+    "feature_midface_ratio_low": "المسافة بين العينين والأنف قصيرة",
+    "share_caption": "أرسل هذه النتيجة وقارن من هو الأقرب. الصورة لا تُرسل.",
+    "share_native": "إرسال عبر تطبيق",
+    "share_copy": "نسخ النص",
+    "share_copied": "تم نسخ النص. الصقه حيث تريد.",
+    "share_copy_fail": "تعذّر نسخ النص. استخدم زرًا بالأسفل.",
+    "share_native_fail": "تعذّر فتح نافذة المشاركة. انسخ النص.",
+    "share_invite": "هذا أقرب حيوان حسب نسب الوجه. أين تقع أنت؟",
+    "share_try": "أقيس وجهي",
+    "share_received": "نتيجة هذا الرابط هي {animal} {score}%. وصلت الدرجة فقط، بلا صورة.",
+    "share_link_bad": "تعذّر قراءة رابط المشاركة. قس وجهًا في الأسفل.",
+    "share_need_result": "قس وجهًا أولًا، ثم شارك النتيجة.",
+    "share_text": "{animal} {score}%\n{invite}\n{url}"
   },
   "fr": {
     "page_title": "Guide des visages d'animaux",
@@ -2019,7 +2147,19 @@
     "feature_midface_ratio_label": "Milieu du visage",
     "feature_midface_ratio_formula": "des yeux à la pointe du nez ÷ hauteur du visage",
     "feature_midface_ratio_high": "l'espace entre les yeux et le nez est long",
-    "feature_midface_ratio_low": "l'espace entre les yeux et le nez est court"
+    "feature_midface_ratio_low": "l'espace entre les yeux et le nez est court",
+    "share_caption": "Envoyez ce résultat et comparez qui est le plus proche. La photo ne part pas.",
+    "share_native": "Envoyer via une app",
+    "share_copy": "Copier le texte",
+    "share_copied": "Texte copié. Collez-le où vous voulez.",
+    "share_copy_fail": "Le texte n'a pas pu être copié. Utilisez un bouton ci-dessous.",
+    "share_native_fail": "La fenêtre de partage ne s'est pas ouverte. Copiez le texte.",
+    "share_invite": "Voici l'animal le plus proche selon les proportions du visage. Et vous ?",
+    "share_try": "Mesurer le mien",
+    "share_received": "Ce lien indique {animal} {score}%. Seul le score est arrivé, sans photo.",
+    "share_link_bad": "Ce lien n'a pas pu être lu. Mesurez un visage plus bas.",
+    "share_need_result": "Mesurez un visage avant de partager.",
+    "share_text": "{animal} {score}%\n{invite}\n{url}"
   },
   "id": {
     "page_title": "Panduan Wajah Hewan",
@@ -2195,7 +2335,19 @@
     "feature_midface_ratio_label": "Bagian tengah wajah",
     "feature_midface_ratio_formula": "mata ke ujung hidung ÷ tinggi wajah",
     "feature_midface_ratio_high": "jarak mata dan hidung panjang",
-    "feature_midface_ratio_low": "jarak mata dan hidung pendek"
+    "feature_midface_ratio_low": "jarak mata dan hidung pendek",
+    "share_caption": "Kirim hasil ini dan bandingkan siapa yang lebih dekat. Fotonya tidak ikut.",
+    "share_native": "Kirim lewat aplikasi",
+    "share_copy": "Salin teks",
+    "share_copied": "Teks tersalin. Tempel di tempat yang Anda mau.",
+    "share_copy_fail": "Teks tidak tersalin. Gunakan tombol di bawah.",
+    "share_native_fail": "Jendela berbagi tidak terbuka. Salin teksnya.",
+    "share_invite": "Ini hewan terdekat menurut proporsi wajah. Anda dekat dengan yang mana?",
+    "share_try": "Ukur wajah saya",
+    "share_received": "Tautan ini berbunyi {animal} {score}%. Yang sampai hanya skor, tanpa foto.",
+    "share_link_bad": "Tautan berbagi tidak terbaca. Ukur wajah di bawah.",
+    "share_need_result": "Ukur wajah dulu, lalu bagikan hasilnya.",
+    "share_text": "{animal} {score}%\n{invite}\n{url}"
   },
   "de": {
     "page_title": "Tiergesichter-Atlas",
@@ -2371,7 +2523,19 @@
     "feature_midface_ratio_label": "Mittelgesicht",
     "feature_midface_ratio_formula": "Augen bis Nasenspitze ÷ Gesichtshöhe",
     "feature_midface_ratio_high": "der Abstand zwischen Augen und Nase ist lang",
-    "feature_midface_ratio_low": "der Abstand zwischen Augen und Nase ist kurz"
+    "feature_midface_ratio_low": "der Abstand zwischen Augen und Nase ist kurz",
+    "share_caption": "Senden Sie dieses Ergebnis und vergleichen Sie, wer näher liegt. Das Foto bleibt hier.",
+    "share_native": "Per App senden",
+    "share_copy": "Text kopieren",
+    "share_copied": "Text kopiert. Fügen Sie ihn ein, wo Sie möchten.",
+    "share_copy_fail": "Der Text ließ sich nicht kopieren. Nutzen Sie eine Schaltfläche unten.",
+    "share_native_fail": "Das Teilen-Fenster ließ sich nicht öffnen. Kopieren Sie den Text.",
+    "share_invite": "Das ist das nächste Tier nach den Gesichtsproportionen. Wo landen Sie?",
+    "share_try": "Mein Gesicht messen",
+    "share_received": "Dieser Link sagt {animal} {score}%. Angekommen ist nur die Punktzahl, ohne Foto.",
+    "share_link_bad": "Dieser Link ließ sich nicht lesen. Messen Sie unten ein Gesicht.",
+    "share_need_result": "Messen Sie zuerst ein Gesicht, dann teilen Sie das Ergebnis.",
+    "share_text": "{animal} {score}%\n{invite}\n{url}"
   },
   "ru": {
     "page_title": "Атлас звериных лиц",
@@ -2547,7 +2711,19 @@
     "feature_midface_ratio_label": "Средняя часть лица",
     "feature_midface_ratio_formula": "от глаз до кончика носа ÷ высота лица",
     "feature_midface_ratio_high": "расстояние между глазами и носом длинное",
-    "feature_midface_ratio_low": "расстояние между глазами и носом короткое"
+    "feature_midface_ratio_low": "расстояние между глазами и носом короткое",
+    "share_caption": "Отправьте этот результат и сравните, чей балл ближе. Фото никуда не уходит.",
+    "share_native": "Отправить в приложение",
+    "share_copy": "Копировать текст",
+    "share_copied": "Текст скопирован. Вставьте его куда нужно.",
+    "share_copy_fail": "Не удалось скопировать текст. Отправьте кнопкой ниже.",
+    "share_native_fail": "Окно отправки не открылось. Скопируйте текст.",
+    "share_invite": "Это ближайший зверь по пропорциям лица. А вы где окажетесь?",
+    "share_try": "Измерить своё",
+    "share_received": "По этой ссылке {animal} {score}%. Пришёл только балл, без фото.",
+    "share_link_bad": "Ссылку не удалось прочитать. Измерьте лицо ниже.",
+    "share_need_result": "Сначала измерьте лицо, потом делитесь результатом.",
+    "share_text": "{animal} {score}%\n{invite}\n{url}"
   },
   "vi": {
     "page_title": "Sổ tay khuôn mặt động vật",
@@ -2723,7 +2899,19 @@
     "feature_midface_ratio_label": "Giữa mặt",
     "feature_midface_ratio_formula": "từ mắt tới chóp mũi ÷ cao mặt",
     "feature_midface_ratio_high": "khoảng giữa mắt và mũi dài",
-    "feature_midface_ratio_low": "khoảng giữa mắt và mũi ngắn"
+    "feature_midface_ratio_low": "khoảng giữa mắt và mũi ngắn",
+    "share_caption": "Gửi kết quả này và xem ai gần hơn. Ảnh không được gửi đi.",
+    "share_native": "Gửi qua ứng dụng",
+    "share_copy": "Sao chép lời nhắn",
+    "share_copied": "Đã sao chép. Dán vào chỗ bạn muốn.",
+    "share_copy_fail": "Không sao chép được. Hãy dùng nút bên dưới.",
+    "share_native_fail": "Không mở được cửa sổ chia sẻ. Hãy sao chép lời nhắn.",
+    "share_invite": "Đây là động vật gần nhất theo tỷ lệ khuôn mặt. Bạn gần loài nào?",
+    "share_try": "Đo mặt tôi",
+    "share_received": "Liên kết này là {animal} {score}%. Chỉ có điểm số, không có ảnh.",
+    "share_link_bad": "Không đọc được liên kết chia sẻ. Hãy đo một khuôn mặt bên dưới.",
+    "share_need_result": "Hãy đo một khuôn mặt trước khi chia sẻ.",
+    "share_text": "{animal} {score}%\n{invite}\n{url}"
   }
 };
 
@@ -3752,6 +3940,16 @@
       analysis_generation: 0
     };
 
+    let share_state = {
+      animal_id: "",
+      animal_name: "",
+      score: 0,
+      text: "",
+      url: ""
+    };
+    let share_image_file = null;
+    let share_image_token = 0;
+
     const photo_stage = require_element("photo_stage");
     const empty_message = require_element("empty_message");
     const live_video = require_element("live_video");
@@ -3774,6 +3972,15 @@
     const result_blurb = require_element("result_blurb");
     const result_reason = require_element("result_reason");
     const result_note = require_element("result_note");
+    const shared_result = require_element("shared_result");
+    const shared_result_text = require_element("shared_result_text");
+    const button_share_native = require_element("button_share_native");
+    const button_share_copy = require_element("button_share_copy");
+    const link_share_x = require_element("link_share_x");
+    const link_share_facebook = require_element("link_share_facebook");
+    const link_share_whatsapp = require_element("link_share_whatsapp");
+    const link_share_line = require_element("link_share_line");
+    const share_status = require_element("share_status");
     const piece_summary = require_element("piece_summary");
     const piece_list = require_element("piece_list");
     const result_list = require_element("result_list");
@@ -4815,6 +5022,241 @@
       container.innerHTML = svg_markup;
     }
 
+    // 공유 문구의 성공·실패를 결과 칸 아래에 적는다.
+    function set_share_status(message, is_error) {
+      if (!message) {
+        share_status.hidden = true;
+        share_status.textContent = "";
+        share_status.classList.remove("is_error");
+        return;
+      }
+      share_status.hidden = false;
+      share_status.textContent = message;
+      share_status.classList.toggle("is_error", Boolean(is_error));
+    }
+
+    // 동물 번호와 점수만 담은 주소를 만든다. 얼굴 사진은 주소에 넣지 않는다.
+    function build_share_url(animal_id, score) {
+      const url = new URL(window.location.href);
+      url.hash = "";
+      url.search = "";
+      url.searchParams.set("animal", animal_id);
+      url.searchParams.set("score", String(score));
+      return url.toString();
+    }
+
+    // 주소의 동물과 점수가 도감 범위 안인지 확인한다.
+    function read_shared_query() {
+      const params = new URLSearchParams(window.location.search);
+      const animal_id = params.get("animal") || "";
+      const score = Number(params.get("score"));
+      const is_known_animal = animal_list.some((animal) => animal.id === animal_id);
+      const is_score_ok = Number.isInteger(score) && score >= 1 && score <= 94;
+      if (!is_known_animal || !is_score_ok) {
+        return null;
+      }
+      return { animal_id, score };
+    }
+
+    // 친구가 연 링크라면, 사진 없이 도착한 점수 카드를 보여 준다.
+    function render_shared_banner() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const has_share_query = params.has("animal") || params.has("score");
+        if (!has_share_query) {
+          shared_result.hidden = true;
+          return;
+        }
+        const shared = read_shared_query();
+        if (!shared) {
+          console.error("공유 링크의 동물 또는 점수를 읽지 못했습니다.");
+          shared_result_text.textContent = t("share_link_bad");
+          shared_result.hidden = false;
+          return;
+        }
+        const animal = animal_list.find((item) => item.id === shared.animal_id);
+        const animal_name = localized_animal(animal).name;
+        shared_result_text.textContent = t("share_received", { animal: animal_name, score: shared.score });
+        shared_result.hidden = false;
+      } catch (error) {
+        console.error("공유 링크 카드를 그리지 못했습니다. 새로고침 해 주세요.", error);
+        shared_result.hidden = true;
+      }
+    }
+
+    // X, Facebook, WhatsApp, LINE 주소에 이번 결과 문장을 넣는다.
+    function paint_share_links() {
+      if (!share_state.url) {
+        link_share_x.href = "#photo_stage";
+        link_share_facebook.href = "#photo_stage";
+        link_share_whatsapp.href = "#photo_stage";
+        link_share_line.href = "#photo_stage";
+        return;
+      }
+      const encoded_text = encodeURIComponent(share_state.text);
+      const encoded_url = encodeURIComponent(share_state.url);
+      const quote = encodeURIComponent(share_state.animal_name + " " + share_state.score + "%");
+      link_share_x.href = "https://twitter.com/intent/tweet?text=" + encoded_text;
+      link_share_facebook.href = "https://www.facebook.com/sharer/sharer.php?u=" + encoded_url + "&quote=" + quote;
+      link_share_whatsapp.href = "https://wa.me/?text=" + encoded_text;
+      link_share_line.href = "https://line.me/R/msg/text/?" + encoded_text;
+    }
+
+    // 글자 폭이 카드를 넘으면 글자 크기를 줄인다.
+    function fit_share_font(ctx, text, max_width, start_size) {
+      let font_size = start_size;
+      const font_family = "'Noto Sans KR', 'Noto Sans', 'Noto Sans Arabic', 'Noto Sans Devanagari', sans-serif";
+      ctx.font = "700 " + font_size + "px " + font_family;
+      while (font_size > 36 && ctx.measureText(text).width > max_width) {
+        font_size -= 4;
+        ctx.font = "700 " + font_size + "px " + font_family;
+      }
+      return font_size;
+    }
+
+    // 채팅에 붙일 점수 카드를 브라우저 안에서 그린다. 얼굴 사진은 그리지 않는다.
+    function build_share_image(animal_name, score) {
+      const canvas = document.createElement("canvas");
+      canvas.width = 900;
+      canvas.height = 900;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        throw new Error("share_canvas_missing");
+      }
+      ctx.fillStyle = "#234e36";
+      ctx.fillRect(0, 0, 900, 900);
+      ctx.fillStyle = "#f7f3ea";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      fit_share_font(ctx, animal_name, 780, 78);
+      ctx.fillText(animal_name, 450, 390);
+      ctx.font = "700 128px 'Noto Sans KR', 'Noto Sans', sans-serif";
+      ctx.fillText(String(score) + "%", 450, 540);
+      fit_share_font(ctx, t("app_title"), 780, 40);
+      ctx.fillText(t("app_title"), 450, 700);
+      return new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            reject(new Error("share_blob_missing"));
+            return;
+          }
+          resolve(new File([blob], "animal-face.png", { type: "image/png" }));
+        }, "image/png");
+      });
+    }
+
+    // 결과 문장은 바로 만들고, 이미지는 늦게 끝나도 다음 얼굴 결과를 덮지 않게 한다.
+    function prepare_share_image(animal_name, score) {
+      const token = share_image_token + 1;
+      share_image_token = token;
+      share_image_file = null;
+      const draw = async () => {
+        if (document.fonts && document.fonts.ready) {
+          await document.fonts.ready;
+        }
+        return build_share_image(animal_name, score);
+      };
+      draw().then((file) => {
+        if (token !== share_image_token) {
+          return;
+        }
+        share_image_file = file;
+      }).catch((error) => {
+        console.error("공유 이미지를 만들지 못했습니다. 글만 보냅니다.", error);
+      });
+    }
+
+    // 지금 1등 동물과 점수로 공유 문장과 링크를 다시 만든다.
+    function remember_share_result(animal) {
+      try {
+        if (!animal || !animal.id || !Number.isFinite(animal.score)) {
+          throw new Error("share_result_missing");
+        }
+        const animal_name = localized_animal(animal).name;
+        const score = Math.round(animal.score);
+        const url = build_share_url(animal.id, score);
+        const text = t("share_text", {
+          animal: animal_name,
+          score: score,
+          invite: t("share_invite"),
+          url: url
+        });
+        share_state = { animal_id: animal.id, animal_name, score, text, url };
+        paint_share_links();
+        prepare_share_image(animal_name, score);
+        set_share_status("", false);
+      } catch (error) {
+        console.error("공유 문구를 만들지 못했습니다. 분석을 한 번 더 눌러 주세요.", error);
+        share_state = { animal_id: "", animal_name: "", score: 0, text: "", url: "" };
+        share_image_file = null;
+        paint_share_links();
+        set_share_status(t("share_need_result"), true);
+      }
+    }
+
+    // 클립보드가 막혀 있으면 선택 복사로 한 번 더 시도한다.
+    async function copy_share_text(text) {
+      try {
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (error) {
+        console.error("클립보드에 공유 문구를 넣지 못했습니다.", error);
+      }
+      try {
+        const area = document.createElement("textarea");
+        area.value = text;
+        area.setAttribute("readonly", "");
+        document.body.appendChild(area);
+        area.select();
+        const is_copied = document.execCommand("copy");
+        area.remove();
+        return is_copied;
+      } catch (error) {
+        console.error("공유 문구를 선택 복사하지 못했습니다.", error);
+        return false;
+      }
+    }
+
+    // 휴대폰 공유 창으로 문구를 보내고, 가능하면 점수 카드 이미지도 함께 넣는다.
+    async function share_with_device() {
+      if (!share_state.text) {
+        set_share_status(t("share_need_result"), true);
+        return;
+      }
+      if (typeof navigator.share !== "function") {
+        set_share_status(t("share_native_fail"), true);
+        return;
+      }
+      const text_payload = { title: t("app_title"), text: share_state.text };
+      const can_attach_image = share_image_file && navigator.canShare && navigator.canShare({ files: [share_image_file] });
+      try {
+        if (can_attach_image) {
+          await navigator.share({ ...text_payload, files: [share_image_file] });
+          return;
+        }
+        await navigator.share(text_payload);
+      } catch (error) {
+        if (error && error.name === "AbortError") {
+          return;
+        }
+        if (can_attach_image) {
+          try {
+            await navigator.share(text_payload);
+            return;
+          } catch (retry_error) {
+            if (retry_error && retry_error.name === "AbortError") {
+              return;
+            }
+            console.error("글만 보내는 공유도 실패했습니다.", retry_error);
+          }
+        }
+        console.error("공유 창을 열지 못했습니다. 문구 복사를 눌러 주세요.", error);
+        set_share_status(t("share_native_fail"), true);
+      }
+    }
+
     // 1등 동물, 순위 막대, 측정 미터, 원본 비율을 한 번에 그린다.
     function render_result(ranked, user_z, ratios, notes, should_scroll) {
       const winner = ranked[0];
@@ -4911,6 +5353,7 @@
       }
 
       result_panel.hidden = false;
+      remember_share_result(winner);
       if (should_scroll === false) {
         return;
       }
@@ -6119,6 +6562,8 @@
     async function init() {
       try {
         apply_theme(current_theme());
+        button_share_native.hidden = typeof navigator.share !== "function";
+        render_shared_banner();
         button_theme_light.addEventListener("click", () => {
           choose_theme("light");
         });
@@ -6146,6 +6591,29 @@
         button_retake.addEventListener("click", () => {
           show_idle_mode();
           show_status(app_state.is_model_ready ? "ready" : "loading", {}, false, app_state.is_model_loading);
+        });
+        button_share_copy.addEventListener("click", async () => {
+          if (!share_state.text) {
+            set_share_status(t("share_need_result"), true);
+            return;
+          }
+          const is_copied = await copy_share_text(share_state.text);
+          if (is_copied) {
+            set_share_status(t("share_copied"), false);
+            return;
+          }
+          set_share_status(t("share_copy_fail"), true);
+        });
+        button_share_native.addEventListener("click", () => {
+          share_with_device();
+        });
+        [link_share_x, link_share_facebook, link_share_whatsapp, link_share_line].forEach((link) => {
+          link.addEventListener("click", (event) => {
+            if (!share_state.url) {
+              event.preventDefault();
+              set_share_status(t("share_need_result"), true);
+            }
+          });
         });
         button_analyze.addEventListener("click", () => {
           analyze_selections(app_state.selections.slice());
@@ -6237,6 +6705,7 @@
         }
         render_guide();
         render_crop_cards();
+        render_shared_banner();
         refresh_result_target();
         const active_selection = app_state.selections.find((item) => item.id === app_state.active_selection_id);
         if (active_selection && active_selection.result && active_selection.result.is_ok && !result_panel.hidden) {
