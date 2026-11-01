@@ -7,15 +7,31 @@
       try {
         var saved_theme = localStorage.getItem("theme_mode");
         document.documentElement.setAttribute("data-theme", saved_theme === "dark" ? "dark" : "light");
+        var saved_language = localStorage.getItem("language_code") || "";
+        var browser_language = (navigator.language || "").toLowerCase();
+        var language_code = "ko";
+        if (saved_language === "en" || saved_language === "ja" || saved_language === "ko") {
+          language_code = saved_language;
+        } else if (browser_language.indexOf("ja") === 0) {
+          language_code = "ja";
+        } else if (browser_language.indexOf("en") === 0) {
+          language_code = "en";
+        }
+        document.documentElement.lang = language_code;
+        document.documentElement.setAttribute("data-language", language_code);
       } catch (error) {
         document.documentElement.setAttribute("data-theme", "light");
+        document.documentElement.lang = "ko";
+        document.documentElement.setAttribute("data-language", "ko");
       }
     })();
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="사진에서 얼굴 영역을 드래그로 지정하면, 그 부분의 얼굴 비율로 가장 가까운 동물상을 보여주는 브라우저 프로그램" />
+  <meta name="description" data-i18n-content="meta_description" content="사진에서 얼굴 영역을 드래그로 지정하면, 그 부분의 얼굴 비율로 가장 가까운 동물상을 보여주는 브라우저 프로그램" />
   <meta name="theme-color" content="#f4f1ea" />
+  <!-- 애드센스가 이 사이트의 주인 계정인지 확인하는 표식이다. -->
+  <meta name="google-adsense-account" content="ca-pub-8803401825336300" />
   <title>동물상 도감</title>
   <!-- 자동 광고가 빈자리에 붙도록 애드센스 코드를 head에 둔다. -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8803401825336300" crossorigin="anonymous"></script>
@@ -106,6 +122,9 @@
     .theme_bar {
       display: flex;
       justify-content: flex-end;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
       margin: -8px 0 12px;
     }
 
@@ -803,23 +822,28 @@
 <body>
     <main class="sheet">
     <div class="theme_bar">
-      <div class="theme_switch" role="group" aria-label="화면 모드">
-        <button type="button" class="theme_button is_selected" id="button_theme_light" aria-pressed="true">화이트</button>
-        <button type="button" class="theme_button" id="button_theme_dark" aria-pressed="false">다크</button>
+      <div class="language_switch theme_switch" role="group" data-i18n-aria="language_group" aria-label="언어">
+        <button type="button" class="theme_button" id="button_language_ko" data-language="ko">한국어</button>
+        <button type="button" class="theme_button" id="button_language_en" data-language="en">English</button>
+        <button type="button" class="theme_button" id="button_language_ja" data-language="ja">日本語</button>
+      </div>
+      <div class="theme_switch" role="group" data-i18n-aria="theme_group" aria-label="화면 모드">
+        <button type="button" class="theme_button is_selected" id="button_theme_light" data-i18n="theme_light" aria-pressed="true">화이트</button>
+        <button type="button" class="theme_button" id="button_theme_dark" data-i18n="theme_dark" aria-pressed="false">다크</button>
       </div>
     </div>
     <header class="header">
       <p class="eyebrow">Face Field Notes</p>
-      <h1>동물상 도감</h1>
-      <p class="lead">
+      <h1 data-i18n="app_title">동물상 도감</h1>
+      <p class="lead" data-i18n="lead">
         사진을 올린 뒤 휠로 확대하고, 드래그로 분석할 얼굴을 지정합니다.
         왼쪽 버튼을 잠시 누르고 있으면 사진이 움직이고, 여러 명이면 그 부분만 잘라 원본 아래에 펼칩니다.
       </p>
     </header>
 
     <div class="stage" id="photo_stage" aria-label="얼굴 미리보기">
-      <p id="empty_message">정면 얼굴을 준비해 주세요. 눈이 잘 보이고, 너무 어둡지 않은 사진이 좋아요.</p>
-      <video id="live_video" hidden playsinline autoplay muted aria-label="카메라 미리보기"></video>
+      <p id="empty_message" data-i18n="empty_message">정면 얼굴을 준비해 주세요. 눈이 잘 보이고, 너무 어둡지 않은 사진이 좋아요.</p>
+      <video id="live_video" hidden playsinline autoplay muted data-i18n-aria="video_aria" aria-label="카메라 미리보기"></video>
       <div id="camera_guide" class="camera_guide" hidden aria-hidden="true">
         <div class="camera_guide_ring"></div>
       </div>
@@ -834,34 +858,34 @@
 
     <section id="crop_panel" class="crop_panel" hidden>
       <div class="crop_panel_head">
-        <h2 class="section_title crop_title">잘라 낸 얼굴</h2>
-        <button type="button" class="button_ghost button_compact" id="button_clear_selections">영역 모두 지우기</button>
+        <h2 class="section_title crop_title" data-i18n="crop_heading">잘라 낸 얼굴</h2>
+        <button type="button" class="button_ghost button_compact" id="button_clear_selections" data-i18n="clear_selections">영역 모두 지우기</button>
       </div>
-      <p class="meter_caption">드래그한 부분만 떼어 낸 것입니다. 카드에서 한 명씩 분석하거나, 아래 버튼으로 한 번에 분석할 수 있어요. 잘못 그린 칸은 지우기로 빼세요.</p>
+      <p class="meter_caption" data-i18n="crop_help">드래그한 부분만 떼어 낸 것입니다. 카드에서 한 명씩 분석하거나, 아래 버튼으로 한 번에 분석할 수 있어요. 잘못 그린 칸은 지우기로 빼세요.</p>
       <ul class="crop_list" id="crop_list"></ul>
     </section>
 
-    <p id="status_text" class="status_text" role="status">동물 도감을 펼치는 중이에요. 처음 한 번은 몇 초 걸려요.</p>
+    <p id="status_text" class="status_text" role="status" data-i18n="loading" data-i18n-live="true">동물 도감을 펼치는 중이에요. 처음 한 번은 몇 초 걸려요.</p>
 
     <div class="actions">
-      <button type="button" class="button_ghost" id="button_camera">카메라로 찍기</button>
-      <button type="button" class="button_ghost" id="button_upload">사진 올리기</button>
-      <button type="button" class="button_primary button_wide" id="button_shutter" hidden disabled>촬영</button>
+      <button type="button" class="button_ghost" id="button_camera" data-i18n="button_camera">카메라로 찍기</button>
+      <button type="button" class="button_ghost" id="button_upload" data-i18n="button_upload">사진 올리기</button>
+      <button type="button" class="button_primary button_wide" id="button_shutter" data-i18n="button_shutter" hidden disabled>촬영</button>
       <button type="button" class="button_ghost" id="button_flip_camera" hidden>후면 카메라</button>
-      <button type="button" class="button_ghost" id="button_close_camera" hidden>카메라 닫기</button>
-      <button type="button" class="button_primary button_wide" id="button_analyze" hidden disabled>고른 얼굴 모두 분석하기</button>
-      <button type="button" class="button_ghost" id="button_retake" hidden>다른 얼굴로 다시</button>
+      <button type="button" class="button_ghost" id="button_close_camera" data-i18n="button_close_camera" hidden>카메라 닫기</button>
+      <button type="button" class="button_primary button_wide" id="button_analyze" data-i18n="button_analyze" hidden disabled>고른 얼굴 모두 분석하기</button>
+      <button type="button" class="button_ghost" id="button_retake" data-i18n="button_retake" hidden>다른 얼굴로 다시</button>
       <input id="photo_input" type="file" accept="image/*" hidden aria-hidden="true" tabindex="-1" />
     </div>
 
     <section id="result_panel" class="result_panel" hidden aria-live="polite">
-      <p class="specimen" id="result_target">이번 얼굴과 가장 가까운 동물</p>
+      <p class="specimen" id="result_target" data-i18n="result_target" data-i18n-live="true">이번 얼굴과 가장 가까운 동물</p>
       <div class="hero">
         <div id="result_icon"></div>
         <div>
           <h2 class="result_name" id="result_name"></h2>
           <p class="score_value">
-            <span class="score_label">유사도</span>
+            <span class="score_label" data-i18n="score_label">유사도</span>
             <span class="score_number" id="result_score">0</span><span class="score_unit">%</span>
           </p>
         </div>
@@ -870,64 +894,64 @@
       <p class="result_reason" id="result_reason"></p>
       <p class="result_note" id="result_note" hidden></p>
 
-      <h2 class="section_title">얼굴 조각</h2>
+      <h2 class="section_title" data-i18n="piece_heading">얼굴 조각</h2>
       <p class="meter_caption" id="piece_summary"></p>
       <ul class="piece_list" id="piece_list"></ul>
 
-      <h2 class="section_title">비교 순위</h2>
+      <h2 class="section_title" data-i18n="rank_heading">비교 순위</h2>
       <ol class="rank_list" id="result_list"></ol>
 
-      <h2 class="section_title">줄자로 잰 얼굴</h2>
-      <p class="meter_caption">가운데 막대기가 평균 자리예요. 점이 오른쪽이면 그 비율이 평균보다 크고, 왼쪽이면 평균보다 작습니다. 오른쪽 글은 그 비율이 얼굴에서 어떤 뜻인지 풀어 둔 말입니다.</p>
+      <h2 class="section_title" data-i18n="meter_heading">줄자로 잰 얼굴</h2>
+      <p class="meter_caption" data-i18n="meter_help">가운데 막대기가 평균 자리예요. 점이 오른쪽이면 그 비율이 평균보다 크고, 왼쪽이면 평균보다 작습니다. 오른쪽 글은 그 비율이 얼굴에서 어떤 뜻인지 풀어 둔 말입니다.</p>
       <ul class="meter_list" id="meter_list"></ul>
 
       <details class="raw_panel">
-        <summary>측정 숫자 보기</summary>
-        <p class="raw_help">픽셀 길이를 얼굴 크기로 나눈 비율입니다. 예를 들어 눈 크기 0.250은 눈 가로가 얼굴 가로의 25%라는 뜻이에요.</p>
+        <summary data-i18n="raw_summary">측정 숫자 보기</summary>
+        <p class="raw_help" data-i18n="raw_help">픽셀 길이를 얼굴 크기로 나눈 비율입니다. 예를 들어 눈 크기 0.250은 눈 가로가 얼굴 가로의 25%라는 뜻이에요.</p>
         <dl class="raw_list" id="raw_list"></dl>
       </details>
     </section>
 
     <section class="atlas">
-      <h2 class="section_title">도감에 있는 동물</h2>
+      <h2 class="section_title" data-i18n="atlas_heading">도감에 있는 동물</h2>
       <ul class="guide_list" id="guide_list"></ul>
     </section>
 
     <section class="partner_panel" aria-labelledby="partner_title">
-      <h2 class="section_title" id="partner_title">제휴 문의</h2>
-      <p class="meter_caption">함께 만들고 싶은 내용이 있으면 남겨 주세요. 답변은 적어 주신 이메일로 갑니다.</p>
+      <h2 class="section_title" id="partner_title" data-i18n="partner_title">제휴 문의</h2>
+      <p class="meter_caption" data-i18n="partner_help">함께 만들고 싶은 내용이 있으면 남겨 주세요. 답변은 적어 주신 이메일로 갑니다.</p>
       <form id="partner_form" class="partner_form" action="https://formspree.io/f/xqppylkl" method="POST">
         <label class="partner_field">
-          <span>이름</span>
+          <span data-i18n="partner_name">이름</span>
           <input type="text" name="이름" id="partner_name" required maxlength="80" autocomplete="name" />
         </label>
         <label class="partner_field">
-          <span>회사 또는 브랜드</span>
+          <span data-i18n="partner_company">회사 또는 브랜드</span>
           <input type="text" name="회사" id="partner_company" maxlength="120" autocomplete="organization" />
         </label>
         <label class="partner_field">
-          <span>답장 받을 이메일</span>
+          <span data-i18n="partner_email">답장 받을 이메일</span>
           <input type="email" name="email" id="partner_email" required maxlength="120" autocomplete="email" inputmode="email" />
         </label>
         <label class="partner_field">
-          <span>문의 내용</span>
+          <span data-i18n="partner_message">문의 내용</span>
           <textarea name="문의" id="partner_message" required maxlength="2000" rows="5"></textarea>
         </label>
-        <input type="hidden" name="_subject" value="동물상 도감 제휴 문의" />
+        <input type="hidden" name="_subject" id="partner_subject" data-i18n-value="partner_subject" value="동물상 도감 제휴 문의" />
         <input class="partner_gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
-        <button type="submit" class="button_primary" id="button_partner_send">문의 보내기</button>
+        <button type="submit" class="button_primary" id="button_partner_send" data-i18n="partner_send">문의 보내기</button>
         <p id="partner_status" class="partner_status" role="status"></p>
       </form>
     </section>
 
-    <p class="footer_note">
+    <p class="footer_note" data-i18n="footer">
       사진은 이 브라우저 안에서만 처리되고 서버로 전송되지 않습니다.
       결과는 얼굴 비율을 동물별 기준과 견준 재미있는 비교이며, 과학적 판별이나 성격 테스트가 아닙니다.
       표정, 고개 각도, 안경, 조명에 따라 순위가 달라질 수 있어요.
     </p>
 
     <section class="disqus_panel" aria-labelledby="comment_title">
-      <h2 class="section_title" id="comment_title">댓글</h2>
+      <h2 class="section_title" id="comment_title" data-i18n="comment_title">댓글</h2>
       <div id="disqus_thread"></div>
       <noscript>댓글을 보려면 자바스크립트를 켜 주세요. <a href="https://disqus.com/?ref_noscript">Disqus 댓글</a></noscript>
     </section>
@@ -938,6 +962,7 @@
     var disqus_config = function () {
       this.page.url = window.location.origin + window.location.pathname;
       this.page.identifier = "01-animal-face";
+      this.language = document.documentElement.getAttribute("data-language") || "ko";
     };
     (function () {
       var d = document, s = d.createElement("script");
@@ -947,7 +972,11 @@
         console.error("Disqus 댓글 스크립트를 불러오지 못했습니다.");
         var thread = d.getElementById("disqus_thread");
         if (thread && !thread.childElementCount) {
-          thread.textContent = "댓글을 불러오지 못했어요. 인터넷 연결을 확인한 뒤 새로고침 해 주세요.";
+          var fail_text = "댓글을 불러오지 못했어요. 인터넷 연결을 확인한 뒤 새로고침 해 주세요.";
+          if (window.PAGE_I18N && typeof window.PAGE_I18N.t === "function") {
+            fail_text = window.PAGE_I18N.t("disqus_fail");
+          }
+          thread.textContent = fail_text;
         }
       };
       (d.head || d.body).appendChild(s);
@@ -957,6 +986,687 @@
   <noscript>
     <p>얼굴을 분석하려면 자바스크립트를 켜 주세요.</p>
   </noscript>
+
+  <script>
+    // 화면 문구를 언어별로 보관하고, 고른 언어의 글만 꺼낸다.
+    (function () {
+      var LANGUAGE_KEY = "language_code";
+      var UI_TEXT = {
+        ko: {
+          page_title: "동물상 도감",
+          meta_description: "사진에서 얼굴 영역을 드래그로 지정하면, 그 부분의 얼굴 비율로 가장 가까운 동물상을 보여주는 브라우저 프로그램",
+          language_group: "언어",
+          theme_group: "화면 모드",
+          theme_light: "화이트",
+          theme_dark: "다크",
+          app_title: "동물상 도감",
+          lead: "사진을 올린 뒤 휠로 확대하고, 드래그로 분석할 얼굴을 지정합니다. 왼쪽 버튼을 잠시 누르고 있으면 사진이 움직이고, 여러 명이면 그 부분만 잘라 원본 아래에 펼칩니다.",
+          empty_message: "정면 얼굴을 준비해 주세요. 눈이 잘 보이고, 너무 어둡지 않은 사진이 좋아요.",
+          video_aria: "카메라 미리보기",
+          stage_aria: "얼굴 미리보기",
+          stage_photo_aria: "얼굴 미리보기. 휠로 확대하고, 드래그로 영역을 지정합니다. 왼쪽 버튼을 잠시 누르면 사진이 이동합니다.",
+          crop_heading: "잘라 낸 얼굴",
+          clear_selections: "영역 모두 지우기",
+          clear_one: "지우기",
+          crop_help: "드래그한 부분만 떼어 낸 것입니다. 카드에서 한 명씩 분석하거나, 아래 버튼으로 한 번에 분석할 수 있어요. 잘못 그린 칸은 지우기로 빼세요.",
+          loading: "동물 도감을 펼치는 중이에요. 처음 한 번은 몇 초 걸려요.",
+          ready: "준비됐어요. 카메라로 찍거나 사진을 올려 주세요.",
+          guide_pc: "휠로 확대 · 드래그로 얼굴 지정 · 길게 누르면 이동",
+          guide_mobile: "손가락으로 드래그해 얼굴을 지정하세요.",
+          button_camera: "카메라로 찍기",
+          button_upload: "사진 올리기",
+          button_shutter: "촬영",
+          button_close_camera: "카메라 닫기",
+          button_analyze: "고른 얼굴 모두 분석하기",
+          button_retake: "다른 얼굴로 다시",
+          flip_to_rear: "후면 카메라",
+          flip_to_front: "전면 카메라",
+          flip_to_rear_aria: "후면 카메라로 전환",
+          flip_to_front_aria: "전면 카메라로 전환",
+          side_front: "전면",
+          side_back: "후면",
+          camera_prompt: "얼굴이 원 안에 들어오면 촬영을 눌러 주세요.",
+          camera_switched: "{side} 카메라예요. 얼굴이 원 안에 들어오면 촬영을 눌러 주세요.",
+          captured_circle: "원 안을 촬영했어요.",
+          captured_wait: "원 안을 촬영했어요. 도감이 준비되면 분석을 눌러 주세요.",
+          selection_picked: "얼굴 영역 {count}곳을 골랐어요. 더 드래그하거나 분석을 눌러 주세요.",
+          selection_left: "얼굴 영역 {count}곳이 남았어요.",
+          selection_ready: "얼굴 영역 {count}곳을 골랐어요. 분석을 눌러 주세요.",
+          view_reset: "화면을 처음 크기로 되돌렸어요. 휠로 다시 확대할 수 있어요.",
+          zoom_failed: "화면을 확대하지 못했습니다. 사진 위에서 휠을 다시 돌려 주세요.",
+          pan_hold_failed: "화면을 움직이지 못했습니다. 왼쪽 버튼을 잠시 누른 뒤 다시 끌어 주세요.",
+          pan_move_failed: "화면을 움직이지 못했습니다. 한 번 더 끌어 주세요.",
+          analyze_progress: "고른 얼굴의 비율을 재는 중이에요. ({current}/{total})",
+          analyze_done_one: "{animal}과 가장 가깝게 나왔어요.",
+          analyze_done_many: "{count}곳의 얼굴 영역을 분석했어요. 카드의 자세한 결과로 각각을 볼 수 있어요.",
+          analyze_partial: "{total}곳 중 {count}곳을 분석했어요. 실패한 영역은 카드에 이유를 적어 두었어요.",
+          analyze_none: "고른 영역에서 얼굴을 읽지 못했어요. 얼굴이 잘 보이게 다시 드래그해 주세요.",
+          analyze_need_drag: "먼저 사진 위에서 얼굴 영역을 드래그해 주세요.",
+          result_target: "이번 얼굴과 가장 가까운 동물",
+          result_target_face: "얼굴 {index} · 가장 가까운 동물",
+          score_label: "유사도",
+          piece_heading: "얼굴 조각",
+          piece_same: "{list}이 모두 {animal}입니다.",
+          piece_mixed: "{lines}입니다.",
+          piece_name_face: "얼굴형",
+          piece_name_eye: "눈",
+          piece_name_nose: "코",
+          piece_name_mouth: "입",
+          piece_name_jaw: "턱",
+          piece_line_face: "얼굴형은 {animal}",
+          piece_line_eye: "눈은 {animal}",
+          piece_line_nose: "코는 {animal}",
+          piece_line_mouth: "입은 {animal}",
+          piece_line_jaw: "턱은 {animal}",
+          piece_fail: "부위별 동물을 나누지 못했어요. 위의 전체 결과는 그대로 볼 수 있어요.",
+          reason_none: "한두 군데보다 얼굴 전체 비율을 함께 봤을 때 이 동물 기준과 가장 가깝습니다.",
+          reason_one: "{phrase}이라서 {animal} 쪽에 더 기울었습니다.",
+          reason_two: "{phrase_a}이고 {phrase_b}이라서 {animal} 쪽에 더 기울었습니다.",
+          feature_average: "평균에 가까워요",
+          rank_heading: "비교 순위",
+          meter_heading: "줄자로 잰 얼굴",
+          meter_help: "가운데 막대기가 평균 자리예요. 점이 오른쪽이면 그 비율이 평균보다 크고, 왼쪽이면 평균보다 작습니다. 오른쪽 글은 그 비율이 얼굴에서 어떤 뜻인지 풀어 둔 말입니다.",
+          raw_summary: "측정 숫자 보기",
+          raw_help: "픽셀 길이를 얼굴 크기로 나눈 비율입니다. 예를 들어 눈 크기 0.250은 눈 가로가 얼굴 가로의 25%라는 뜻이에요.",
+          atlas_heading: "도감에 있는 동물",
+          crop_title: "얼굴 {index}",
+          crop_remove_aria: "얼굴 {index} 영역 지우기",
+          crop_pending: "아직 분석 전이에요",
+          crop_analyze: "이 영역 분석",
+          crop_detail: "자세한 결과",
+          note_zoom: "얼굴이 작게 보여서 그 부분만 확대한 뒤 비율을 쟀어요.",
+          note_many: "이 영역 안에 얼굴이 여러 개라서 가장 크게 보이는 얼굴을 기준으로 했습니다.",
+          note_angle: "얼굴이 옆으로 돌아가 있으면 눈 크기가 실제와 다르게 나올 수 있어요. 가능하면 정면으로 다시 찍어 주세요.",
+          note_close: "1등과 2등 차이가 작아요. 표정을 바꾸거나 더 정면인 사진이면 순위가 달라질 수 있어요.",
+          partner_title: "제휴 문의",
+          partner_help: "함께 만들고 싶은 내용이 있으면 남겨 주세요. 답변은 적어 주신 이메일로 갑니다.",
+          partner_name: "이름",
+          partner_company: "회사 또는 브랜드",
+          partner_email: "답장 받을 이메일",
+          partner_message: "문의 내용",
+          partner_send: "문의 보내기",
+          partner_subject: "동물상 도감 제휴 문의",
+          partner_invalid: "이름, 답장 받을 이메일, 문의 내용을 입력한 뒤 다시 보내 주세요.",
+          partner_sending: "문의를 보내는 중이에요.",
+          partner_sent: "문의가 전달됐어요. 남겨 주신 메일로 답변드릴게요.",
+          partner_fail: "문의를 보내지 못했어요. 잠시 후 다시 시도해 주세요.",
+          partner_network: "문의를 보내지 못했어요. 인터넷 연결을 확인한 뒤 다시 시도해 주세요.",
+          footer: "사진은 이 브라우저 안에서만 처리되고 서버로 전송되지 않습니다. 결과는 얼굴 비율을 동물별 기준과 견준 재미있는 비교이며, 과학적 판별이나 성격 테스트가 아닙니다. 표정, 고개 각도, 안경, 조명에 따라 순위가 달라질 수 있어요.",
+          comment_title: "댓글",
+          disqus_fail: "댓글을 불러오지 못했어요. 인터넷 연결을 확인한 뒤 새로고침 해 주세요.",
+          theme_save_failed: "화면 모드를 저장하지 못했어요. 페이지를 새로고침한 뒤 다시 눌러 주세요.",
+          language_failed: "언어를 바꾸지 못했어요. 페이지를 새로고침한 뒤 다시 눌러 주세요.",
+          model_load_failed: "얼굴 분석 도구를 불러오지 못했어요. 인터넷 연결을 확인한 뒤 새로고침 해 주세요.",
+          file_protocol: "이 페이지를 파일로 직접 열면 분석 도구를 받을 수 없어요. 로컬 서버 주소로 접속해 주세요.",
+          not_image: "이미지 파일만 올릴 수 있어요. JPG나 PNG를 골라 주세요.",
+          heic: "이 사진 형식은 브라우저가 읽지 못할 수 있어요. JPG나 PNG로 저장한 뒤 다시 올려 주세요.",
+          decode_failed: "사진을 열지 못했어요. 다른 이미지로 다시 시도해 주세요.",
+          empty_image: "사진 크기를 읽지 못했어요. 다른 이미지로 다시 시도해 주세요.",
+          camera_unsupported: "이 브라우저는 카메라를 지원하지 않아요. 사진 업로드를 이용해 주세요.",
+          camera_denied: "카메라 권한이 필요해요. 브라우저에서 카메라를 허용하거나, 사진 업로드를 이용해 주세요.",
+          camera_missing: "사용할 수 있는 카메라를 찾지 못했어요. 사진 업로드를 이용해 주세요.",
+          camera_busy: "카메라를 켜지 못했어요. 다른 앱이 카메라를 쓰고 있다면 닫은 뒤 다시 시도하거나, 사진을 올려 주세요.",
+          camera_insecure: "카메라는 보안 연결에서만 열 수 있어요. localhost 주소로 열거나, 사진 업로드를 이용해 주세요.",
+          camera_not_ready: "카메라 화면이 아직 준비되지 않았어요. 잠시 후 다시 촬영해 주세요.",
+          camera_rear_missing: "후면 카메라를 찾지 못했어요. 전면 카메라로 계속 촬영해 주세요.",
+          camera_front_missing: "전면 카메라를 찾지 못했어요. 후면 카메라로 계속 촬영해 주세요.",
+          no_face: "얼굴을 찾지 못했어요. 밝고 정면인 사진으로 다시 시도해 주세요.",
+          face_too_small: "얼굴이 너무 작게 보여요. 얼굴이 더 크게 나오게 찍거나 올려 주세요.",
+          analyze_failed: "얼굴을 분석하지 못했어요. 다른 사진으로 다시 시도해 주세요.",
+          canvas_unavailable: "화면을 준비하지 못했어요. 페이지를 새로고침 해 주세요.",
+          selection_too_small: "영역이 너무 작아요. 얼굴이 들어가게 조금 더 크게 드래그해 주세요.",
+          selection_needed: "먼저 사진 위에서 분석할 얼굴을 드래그해 주세요.",
+          selection_limit: "한 번에 12명까지 고를 수 있어요. 필요 없는 영역은 카드의 지우기로 빼 주세요.",
+          selection_failed: "선택한 영역을 잘라내지 못했어요. 다시 드래그해 주세요.",
+          feature_face_roundness_label: "얼굴형",
+          feature_face_roundness_formula: "얼굴 가로 ÷ 얼굴 세로",
+          feature_face_roundness_high: "얼굴이 둥근 편",
+          feature_face_roundness_low: "얼굴이 긴 편",
+          feature_eye_size_label: "눈 크기",
+          feature_eye_size_formula: "눈 가로 ÷ 얼굴 가로",
+          feature_eye_size_high: "눈이 큰 편",
+          feature_eye_size_low: "눈이 크지 않은 편",
+          feature_eye_roundness_label: "눈매",
+          feature_eye_roundness_formula: "눈 세로 ÷ 눈 가로",
+          feature_eye_roundness_high: "눈매가 둥근 편",
+          feature_eye_roundness_low: "눈매가 가늘고 날카로운 편",
+          feature_eye_gap_label: "눈 사이",
+          feature_eye_gap_formula: "눈 사이 ÷ 얼굴 가로",
+          feature_eye_gap_high: "눈 사이가 넓은 편",
+          feature_eye_gap_low: "눈 사이가 가까운 편",
+          feature_nose_width_label: "코 너비",
+          feature_nose_width_formula: "코 가로 ÷ 얼굴 가로",
+          feature_nose_width_high: "코가 넓은 편",
+          feature_nose_width_low: "코가 좁은 편",
+          feature_nose_length_label: "코 길이",
+          feature_nose_length_formula: "코 길이 ÷ 얼굴 세로",
+          feature_nose_length_high: "코가 긴 편",
+          feature_nose_length_low: "코가 짧은 편",
+          feature_mouth_width_label: "입 너비",
+          feature_mouth_width_formula: "입 가로 ÷ 얼굴 가로",
+          feature_mouth_width_high: "입이 넓은 편",
+          feature_mouth_width_low: "입이 작은 편",
+          feature_jaw_width_label: "턱 너비",
+          feature_jaw_width_formula: "턱 가로 ÷ 얼굴 가로",
+          feature_jaw_width_high: "턱이 넓은 편",
+          feature_jaw_width_low: "턱이 좁은 편",
+          feature_chin_width_label: "턱끝",
+          feature_chin_width_formula: "턱끝 가로 ÷ 얼굴 가로",
+          feature_chin_width_high: "턱끝이 부드러운 편",
+          feature_chin_width_low: "턱끝이 갸름한 편",
+          feature_midface_ratio_label: "중안부",
+          feature_midface_ratio_formula: "눈에서 코끝까지 ÷ 얼굴 세로",
+          feature_midface_ratio_high: "눈과 코 사이가 긴 편",
+          feature_midface_ratio_low: "눈과 코 사이가 짧은 편"
+        },
+        en: {
+          page_title: "Animal Face Field Guide",
+          meta_description: "Drag a face in a photo and compare its proportions with nine animal types, entirely in your browser.",
+          language_group: "Language",
+          theme_group: "Theme",
+          theme_light: "Light",
+          theme_dark: "Dark",
+          app_title: "Animal Face Field Guide",
+          lead: "Upload a photo, zoom with the wheel, and drag to choose a face. Hold the left button briefly to move the photo. If there are several people, each chosen area is cropped below the original.",
+          empty_message: "Use a front-facing photo. Eyes should be visible, and the picture should not be too dark.",
+          video_aria: "Camera preview",
+          stage_aria: "Face preview",
+          stage_photo_aria: "Face preview. Use the wheel to zoom and drag to choose an area. Hold the left button briefly to move the photo.",
+          crop_heading: "Cropped faces",
+          clear_selections: "Clear all areas",
+          clear_one: "Remove",
+          crop_help: "These are only the areas you dragged. Analyze one card, or use the button below for all of them. Remove a wrong box with its delete button.",
+          loading: "Opening the field guide. The first time takes a few seconds.",
+          ready: "Ready. Take a photo or upload one.",
+          guide_pc: "Wheel to zoom · Drag to choose a face · Hold to move",
+          guide_mobile: "Drag with your finger to choose a face.",
+          button_camera: "Use camera",
+          button_upload: "Upload photo",
+          button_shutter: "Capture",
+          button_close_camera: "Close camera",
+          button_analyze: "Analyze every chosen face",
+          button_retake: "Try another face",
+          flip_to_rear: "Rear camera",
+          flip_to_front: "Front camera",
+          flip_to_rear_aria: "Switch to the rear camera",
+          flip_to_front_aria: "Switch to the front camera",
+          side_front: "Front",
+          side_back: "Rear",
+          camera_prompt: "When your face is inside the circle, press Capture.",
+          camera_switched: "{side} camera. When your face is inside the circle, press Capture.",
+          captured_circle: "Captured the area inside the circle.",
+          captured_wait: "Captured the area inside the circle. Press analyze when the guide is ready.",
+          selection_picked: "{count} face area(s) selected. Drag another, or press analyze.",
+          selection_left: "{count} face area(s) left.",
+          selection_ready: "{count} face area(s) selected. Press analyze.",
+          view_reset: "The view is back to the original size. You can zoom with the wheel again.",
+          zoom_failed: "Could not zoom. Turn the wheel over the photo again.",
+          pan_hold_failed: "Could not move the photo. Hold the left button briefly, then drag again.",
+          pan_move_failed: "Could not move the photo. Drag once more.",
+          analyze_progress: "Measuring the chosen face. ({current}/{total})",
+          analyze_done_one: "Closest match: {animal}.",
+          analyze_done_many: "Analyzed {count} face areas. Open each card for the full result.",
+          analyze_partial: "Analyzed {count} of {total}. Failed areas explain why on the card.",
+          analyze_none: "Could not read a face in the chosen area. Drag again with the face clearly visible.",
+          analyze_need_drag: "Drag a face on the photo first.",
+          result_target: "Closest animal for this face",
+          result_target_face: "Face {index} · closest animal",
+          score_label: "Similarity",
+          piece_heading: "Face parts",
+          piece_same: "{list} all match the {animal}.",
+          piece_mixed: "{lines}.",
+          piece_name_face: "face shape",
+          piece_name_eye: "eyes",
+          piece_name_nose: "nose",
+          piece_name_mouth: "mouth",
+          piece_name_jaw: "jaw",
+          piece_line_face: "Face shape: {animal}",
+          piece_line_eye: "Eyes: {animal}",
+          piece_line_nose: "Nose: {animal}",
+          piece_line_mouth: "Mouth: {animal}",
+          piece_line_jaw: "Jaw: {animal}",
+          piece_fail: "The parts could not be split. The overall result above is still available.",
+          reason_none: "Taken together, the whole face is closer to this animal than any single feature.",
+          reason_one: "{phrase}, so it leans toward the {animal}.",
+          reason_two: "{phrase_a}, and {phrase_b}, so it leans toward the {animal}.",
+          feature_average: "Close to average",
+          rank_heading: "Ranking",
+          meter_heading: "Measured face",
+          meter_help: "The center mark is average. A dot to the right means that proportion is larger than average, and a dot to the left means smaller. The words explain what that proportion means on a face.",
+          raw_summary: "Show the measurements",
+          raw_help: "Each number is a length divided by the face size. An eye size of 0.250 means the eye width is 25% of the face width.",
+          atlas_heading: "Animals in the guide",
+          crop_title: "Face {index}",
+          crop_remove_aria: "Remove face area {index}",
+          crop_pending: "Not analyzed yet",
+          crop_analyze: "Analyze this area",
+          crop_detail: "Full result",
+          note_zoom: "The face looked small, so only that part was enlarged before measuring.",
+          note_many: "Several faces were in this area, so the largest one was used.",
+          note_angle: "A turned face can change the measured eye size. A front-facing photo works better.",
+          note_close: "First and second place are close. A different expression or a straighter photo can change the rank.",
+          partner_title: "Partnership inquiry",
+          partner_help: "Leave a note if you want to build something together. The reply goes to the email you enter.",
+          partner_name: "Name",
+          partner_company: "Company or brand",
+          partner_email: "Email for the reply",
+          partner_message: "Message",
+          partner_send: "Send inquiry",
+          partner_subject: "Animal Face Field Guide partnership inquiry",
+          partner_invalid: "Enter your name, reply email, and message, then send again.",
+          partner_sending: "Sending your inquiry.",
+          partner_sent: "Your inquiry was sent. We will reply to the email you entered.",
+          partner_fail: "The inquiry could not be sent. Please try again in a moment.",
+          partner_network: "The inquiry could not be sent. Check your connection and try again.",
+          footer: "Photos are processed only in this browser and are not uploaded. The result is a playful comparison of face proportions, not a scientific or personality test. Expression, angle, glasses, and lighting can change the ranking.",
+          comment_title: "Comments",
+          disqus_fail: "Comments could not be loaded. Check your connection and refresh the page.",
+          theme_save_failed: "The theme could not be saved. Refresh the page and try again.",
+          language_failed: "The language could not be changed. Refresh the page and try again.",
+          model_load_failed: "The face tool could not be loaded. Check your connection and refresh the page.",
+          file_protocol: "Opening this page as a file blocks the face tool. Open it from a local server address.",
+          not_image: "Only image files can be uploaded. Choose a JPG or PNG.",
+          heic: "This photo format may not be readable here. Save it as JPG or PNG and upload it again.",
+          decode_failed: "The photo could not be opened. Try another image.",
+          empty_image: "The photo size could not be read. Try another image.",
+          camera_unsupported: "This browser does not support the camera. Upload a photo instead.",
+          camera_denied: "Camera permission is needed. Allow it in the browser, or upload a photo.",
+          camera_missing: "No usable camera was found. Upload a photo instead.",
+          camera_busy: "The camera could not be started. Close another app that is using it, or upload a photo.",
+          camera_insecure: "The camera only works on a secure connection. Open localhost, or upload a photo.",
+          camera_not_ready: "The camera picture is not ready yet. Try the capture again in a moment.",
+          camera_rear_missing: "No rear camera was found. You can keep using the front camera.",
+          camera_front_missing: "No front camera was found. You can keep using the rear camera.",
+          no_face: "No face was found. Try a brighter, front-facing photo.",
+          face_too_small: "The face looks too small. Take or upload a photo where the face is larger.",
+          analyze_failed: "The face could not be analyzed. Try another photo.",
+          canvas_unavailable: "The screen could not be prepared. Refresh the page.",
+          selection_too_small: "That area is too small. Drag a larger box around the face.",
+          selection_needed: "Drag the face you want to analyze on the photo first.",
+          selection_limit: "You can choose up to 12 faces at once. Remove an extra box with its delete button.",
+          selection_failed: "That area could not be cropped. Drag it again.",
+          feature_face_roundness_label: "Face shape",
+          feature_face_roundness_formula: "face width ÷ face height",
+          feature_face_roundness_high: "the face is on the round side",
+          feature_face_roundness_low: "the face is on the long side",
+          feature_eye_size_label: "Eye size",
+          feature_eye_size_formula: "eye width ÷ face width",
+          feature_eye_size_high: "the eyes are on the large side",
+          feature_eye_size_low: "the eyes are not especially large",
+          feature_eye_roundness_label: "Eye shape",
+          feature_eye_roundness_formula: "eye height ÷ eye width",
+          feature_eye_roundness_high: "the eyes are round",
+          feature_eye_roundness_low: "the eyes are narrow and sharp",
+          feature_eye_gap_label: "Eye spacing",
+          feature_eye_gap_formula: "gap between eyes ÷ face width",
+          feature_eye_gap_high: "the eyes are set wide apart",
+          feature_eye_gap_low: "the eyes are set close together",
+          feature_nose_width_label: "Nose width",
+          feature_nose_width_formula: "nose width ÷ face width",
+          feature_nose_width_high: "the nose is wide",
+          feature_nose_width_low: "the nose is narrow",
+          feature_nose_length_label: "Nose length",
+          feature_nose_length_formula: "nose length ÷ face height",
+          feature_nose_length_high: "the nose is long",
+          feature_nose_length_low: "the nose is short",
+          feature_mouth_width_label: "Mouth width",
+          feature_mouth_width_formula: "mouth width ÷ face width",
+          feature_mouth_width_high: "the mouth is wide",
+          feature_mouth_width_low: "the mouth is small",
+          feature_jaw_width_label: "Jaw width",
+          feature_jaw_width_formula: "jaw width ÷ face width",
+          feature_jaw_width_high: "the jaw is wide",
+          feature_jaw_width_low: "the jaw is narrow",
+          feature_chin_width_label: "Chin",
+          feature_chin_width_formula: "chin width ÷ face width",
+          feature_chin_width_high: "the chin is soft",
+          feature_chin_width_low: "the chin is narrow",
+          feature_midface_ratio_label: "Midface",
+          feature_midface_ratio_formula: "eyes to nose tip ÷ face height",
+          feature_midface_ratio_high: "the space between eyes and nose is long",
+          feature_midface_ratio_low: "the space between eyes and nose is short"
+        },
+        ja: {
+          page_title: "動物顔図鑑",
+          meta_description: "写真の顔の範囲をドラッグすると、その部分の比率から近い動物顔をブラウザの中だけで比べます。",
+          language_group: "言語",
+          theme_group: "画面モード",
+          theme_light: "ライト",
+          theme_dark: "ダーク",
+          app_title: "動物顔図鑑",
+          lead: "写真を読み込み、ホイールで拡大して、ドラッグで顔を指定します。左ボタンを少し押し続けると写真が動きます。複数人なら、選んだ部分だけを元の写真の下に並べます。",
+          empty_message: "正面の顔を用意してください。目がよく見え、暗すぎない写真が向いています。",
+          video_aria: "カメラプレビュー",
+          stage_aria: "顔のプレビュー",
+          stage_photo_aria: "顔のプレビュー。ホイールで拡大し、ドラッグで範囲を指定します。左ボタンを少し押し続けると写真が動きます。",
+          crop_heading: "切り出した顔",
+          clear_selections: "範囲をすべて消す",
+          clear_one: "削除",
+          crop_help: "ドラッグした部分だけを取り出したものです。カードごとに分析するか、下のボタンでまとめて分析できます。間違った枠は削除で外せます。",
+          loading: "図鑑を開いています。最初の一回は数秒かかります。",
+          ready: "準備できました。カメラで撮るか、写真を読み込んでください。",
+          guide_pc: "ホイールで拡大 · ドラッグで顔を指定 · 長押しで移動",
+          guide_mobile: "指でドラッグして顔を指定してください。",
+          button_camera: "カメラで撮る",
+          button_upload: "写真を読み込む",
+          button_shutter: "撮影",
+          button_close_camera: "カメラを閉じる",
+          button_analyze: "選んだ顔をすべて分析",
+          button_retake: "別の顔でやり直す",
+          flip_to_rear: "背面カメラ",
+          flip_to_front: "前面カメラ",
+          flip_to_rear_aria: "背面カメラに切り替える",
+          flip_to_front_aria: "前面カメラに切り替える",
+          side_front: "前面",
+          side_back: "背面",
+          camera_prompt: "顔が円の中に入ったら撮影を押してください。",
+          camera_switched: "{side}カメラです。顔が円の中に入ったら撮影を押してください。",
+          captured_circle: "円の中を撮影しました。",
+          captured_wait: "円の中を撮影しました。図鑑の準備ができたら分析を押してください。",
+          selection_picked: "顔の範囲を{count}か所選びました。さらにドラッグするか、分析を押してください。",
+          selection_left: "顔の範囲が{count}か所残っています。",
+          selection_ready: "顔の範囲を{count}か所選びました。分析を押してください。",
+          view_reset: "画面を最初の大きさに戻しました。ホイールでまた拡大できます。",
+          zoom_failed: "拡大できませんでした。写真の上でホイールをもう一度回してください。",
+          pan_hold_failed: "写真を動かせませんでした。左ボタンを少し押し続けてから、もう一度ドラッグしてください。",
+          pan_move_failed: "写真を動かせませんでした。もう一度ドラッグしてください。",
+          analyze_progress: "選んだ顔の比率を測っています。({current}/{total})",
+          analyze_done_one: "{animal}にいちばん近く出ました。",
+          analyze_done_many: "{count}か所の顔を分析しました。詳しい結果は各カードで見られます。",
+          analyze_partial: "{total}か所中{count}か所を分析しました。失敗した範囲はカードに理由があります。",
+          analyze_none: "選んだ範囲から顔を読めませんでした。顔がよく見えるようにドラッグし直してください。",
+          analyze_need_drag: "先に写真の上で顔の範囲をドラッグしてください。",
+          result_target: "この顔にいちばん近い動物",
+          result_target_face: "顔 {index} · いちばん近い動物",
+          score_label: "近さ",
+          piece_heading: "顔の部分",
+          piece_same: "{list}はすべて{animal}です。",
+          piece_mixed: "{lines}です。",
+          piece_name_face: "顔の形",
+          piece_name_eye: "目",
+          piece_name_nose: "鼻",
+          piece_name_mouth: "口",
+          piece_name_jaw: "顎",
+          piece_line_face: "顔の形は{animal}",
+          piece_line_eye: "目は{animal}",
+          piece_line_nose: "鼻は{animal}",
+          piece_line_mouth: "口は{animal}",
+          piece_line_jaw: "顎は{animal}",
+          piece_fail: "部分ごとの動物に分けられませんでした。上の全体結果はそのまま見られます。",
+          reason_none: "一か所より、顔全体の比率をまとめて見るとこの動物の基準にいちばん近いです。",
+          reason_one: "{phrase}なので、{animal}寄りです。",
+          reason_two: "{phrase_a}、{phrase_b}なので、{animal}寄りです。",
+          feature_average: "平均に近いです",
+          rank_heading: "比較順位",
+          meter_heading: "測った顔",
+          meter_help: "中央の印が平均の位置です。点が右ならその比率は平均より大きく、左なら平均より小さいです。右の言葉は、その比率が顔のどこを指すかを説明しています。",
+          raw_summary: "測定の数字を見る",
+          raw_help: "顔の大きさで長さを割った比率です。たとえば目の大きさ 0.250 は、目の横幅が顔の横幅の25%という意味です。",
+          atlas_heading: "図鑑の動物",
+          crop_title: "顔 {index}",
+          crop_remove_aria: "顔 {index} の範囲を消す",
+          crop_pending: "まだ分析前です",
+          crop_analyze: "この範囲を分析",
+          crop_detail: "詳しい結果",
+          note_zoom: "顔が小さく見えたので、その部分だけ拡大してから比率を測りました。",
+          note_many: "この範囲に顔が複数あったので、いちばん大きく見える顔を基準にしました。",
+          note_angle: "顔が横を向いていると、目の大きさが実際と違って出ることがあります。できれば正面でもう一度撮ってください。",
+          note_close: "1位と2位の差が小さいです。表情を変えるか、より正面の写真だと順位が変わることがあります。",
+          partner_title: "提携のお問い合わせ",
+          partner_help: "一緒に作りたい内容があれば残してください。返信は記入したメールへ届きます。",
+          partner_name: "名前",
+          partner_company: "会社またはブランド",
+          partner_email: "返信先メール",
+          partner_message: "問い合わせ内容",
+          partner_send: "送信する",
+          partner_subject: "動物顔図鑑 提携のお問い合わせ",
+          partner_invalid: "名前、返信先メール、内容を入力してからもう一度送ってください。",
+          partner_sending: "問い合わせを送っています。",
+          partner_sent: "問い合わせを送りました。記入したメールへ返信します。",
+          partner_fail: "問い合わせを送れませんでした。しばらくしてからもう一度試してください。",
+          partner_network: "問い合わせを送れませんでした。通信を確認してからもう一度試してください。",
+          footer: "写真はこのブラウザの中だけで処理され、サーバーには送られません。結果は顔の比率を動物の基準と比べた遊びであり、科学的な判定や性格テストではありません。表情、角度、眼鏡、照明で順位は変わることがあります。",
+          comment_title: "コメント",
+          disqus_fail: "コメントを読み込めませんでした。通信を確認してからページを更新してください。",
+          theme_save_failed: "画面モードを保存できませんでした。ページを更新してからもう一度押してください。",
+          language_failed: "言語を変更できませんでした。ページを更新してからもう一度押してください。",
+          model_load_failed: "顔の分析ツールを読み込めませんでした。通信を確認してからページを更新してください。",
+          file_protocol: "このページをファイルとして直接開くと分析ツールを受け取れません。ローカルサーバーのアドレスで開いてください。",
+          not_image: "画像ファイルだけ読み込めます。JPGかPNGを選んでください。",
+          heic: "この写真形式はブラウザが読めないことがあります。JPGかPNGで保存してからもう一度読み込んでください。",
+          decode_failed: "写真を開けませんでした。別の画像でもう一度試してください。",
+          empty_image: "写真のサイズを読めませんでした。別の画像でもう一度試してください。",
+          camera_unsupported: "このブラウザはカメラに対応していません。写真の読み込みを使ってください。",
+          camera_denied: "カメラの許可が必要です。ブラウザで許可するか、写真を読み込んでください。",
+          camera_missing: "使えるカメラが見つかりませんでした。写真を読み込んでください。",
+          camera_busy: "カメラを起動できませんでした。ほかのアプリがカメラを使っているなら閉じてから試すか、写真を読み込んでください。",
+          camera_insecure: "カメラは保護された接続でだけ開けます。localhostで開くか、写真を読み込んでください。",
+          camera_not_ready: "カメラ映像の準備がまだです。少し待ってからもう一度撮影してください。",
+          camera_rear_missing: "背面カメラが見つかりませんでした。前面カメラのまま撮影できます。",
+          camera_front_missing: "前面カメラが見つかりませんでした。背面カメラのまま撮影できます。",
+          no_face: "顔が見つかりませんでした。明るく正面の写真でもう一度試してください。",
+          face_too_small: "顔が小さすぎます。顔が大きく写った写真を撮るか読み込んでください。",
+          analyze_failed: "顔を分析できませんでした。別の写真でもう一度試してください。",
+          canvas_unavailable: "画面を用意できませんでした。ページを更新してください。",
+          selection_too_small: "範囲が小さすぎます。顔が入るように少し大きくドラッグしてください。",
+          selection_needed: "先に写真の上で分析する顔をドラッグしてください。",
+          selection_limit: "一度に12人まで選べます。不要な範囲はカードの削除で外してください。",
+          selection_failed: "選んだ範囲を切り出せませんでした。もう一度ドラッグしてください。",
+          feature_face_roundness_label: "顔の形",
+          feature_face_roundness_formula: "顔の横 ÷ 顔の縦",
+          feature_face_roundness_high: "顔が丸いほう",
+          feature_face_roundness_low: "顔が長いほう",
+          feature_eye_size_label: "目の大きさ",
+          feature_eye_size_formula: "目の横 ÷ 顔の横",
+          feature_eye_size_high: "目が大きいほう",
+          feature_eye_size_low: "目が特に大きくないほう",
+          feature_eye_roundness_label: "目の形",
+          feature_eye_roundness_formula: "目の縦 ÷ 目の横",
+          feature_eye_roundness_high: "目が丸い",
+          feature_eye_roundness_low: "目が細く鋭い",
+          feature_eye_gap_label: "目の間隔",
+          feature_eye_gap_formula: "目の間隔 ÷ 顔の横",
+          feature_eye_gap_high: "目の間隔が広い",
+          feature_eye_gap_low: "目の間隔が近い",
+          feature_nose_width_label: "鼻の幅",
+          feature_nose_width_formula: "鼻の横 ÷ 顔の横",
+          feature_nose_width_high: "鼻が広い",
+          feature_nose_width_low: "鼻が狭い",
+          feature_nose_length_label: "鼻の長さ",
+          feature_nose_length_formula: "鼻の長さ ÷ 顔の縦",
+          feature_nose_length_high: "鼻が長い",
+          feature_nose_length_low: "鼻が短い",
+          feature_mouth_width_label: "口の幅",
+          feature_mouth_width_formula: "口の横 ÷ 顔の横",
+          feature_mouth_width_high: "口が広い",
+          feature_mouth_width_low: "口が小さい",
+          feature_jaw_width_label: "顎の幅",
+          feature_jaw_width_formula: "顎の横 ÷ 顔の横",
+          feature_jaw_width_high: "顎が広い",
+          feature_jaw_width_low: "顎が狭い",
+          feature_chin_width_label: "あご先",
+          feature_chin_width_formula: "あご先の横 ÷ 顔の横",
+          feature_chin_width_high: "あご先が柔らかい",
+          feature_chin_width_low: "あご先が細い",
+          feature_midface_ratio_label: "中顔面",
+          feature_midface_ratio_formula: "目から鼻先まで ÷ 顔の縦",
+          feature_midface_ratio_high: "目と鼻の間が長い",
+          feature_midface_ratio_low: "目と鼻の間が短い"
+        }
+      };
+
+      var ANIMAL_TEXT = {
+        cat: {
+          ko: { name: "고양이상", short_name: "고양이", blurb: "눈이 또렷하고 코가 작아, 이목구비가 가운데로 모이는 인상입니다." },
+          en: { name: "Cat face", short_name: "cat", blurb: "Clear eyes and a small nose gather the features toward the center." },
+          ja: { name: "猫顔", short_name: "猫", blurb: "目がはっきりして鼻が小さく、パーツが中央に集まる印象です。" }
+        },
+        dog: {
+          ko: { name: "강아지상", short_name: "강아지", blurb: "눈이 둥글고 입이 넓어, 표정이 순하고 친근해 보이는 인상입니다." },
+          en: { name: "Puppy face", short_name: "puppy", blurb: "Round eyes and a wide mouth give a gentle, friendly look." },
+          ja: { name: "犬顔", short_name: "犬", blurb: "目が丸く口が広く、表情が穏やかで親しみやすく見える印象です。" }
+        },
+        fox: {
+          ko: { name: "여우상", short_name: "여우", blurb: "얼굴선이 길고 턱끝이 가늘어, 눈매가 날렵해 보이는 인상입니다." },
+          en: { name: "Fox face", short_name: "fox", blurb: "A long face and a narrow chin make the eyes look sharp." },
+          ja: { name: "狐顔", short_name: "狐", blurb: "顔の線が長くあご先が細く、目元が鋭く見える印象です。" }
+        },
+        rabbit: {
+          ko: { name: "토끼상", short_name: "토끼", blurb: "눈이 크고 코와 입이 작아, 인상이 동글고 부드러운 쪽입니다." },
+          en: { name: "Rabbit face", short_name: "rabbit", blurb: "Large eyes with a small nose and mouth give a round, soft look." },
+          ja: { name: "兎顔", short_name: "兎", blurb: "目が大きく鼻と口が小さく、印象が丸く柔らかいほうです。" }
+        },
+        owl: {
+          ko: { name: "부엉이상", short_name: "부엉이", blurb: "얼굴이 아주 둥글고 눈이 커서, 이목구비가 동그랗게 띄는 인상입니다." },
+          en: { name: "Owl face", short_name: "owl", blurb: "A very round face and large eyes make the features look circular." },
+          ja: { name: "フクロウ顔", short_name: "フクロウ", blurb: "顔がとても丸く目が大きく、パーツが丸く目立つ印象です。" }
+        },
+        bear: {
+          ko: { name: "곰상", short_name: "곰", blurb: "얼굴과 코, 턱이 넓고 눈은 작아, 든든하고 너그러운 인상입니다." },
+          en: { name: "Bear face", short_name: "bear", blurb: "A wide face, nose, and jaw with smaller eyes give a solid, easygoing look." },
+          ja: { name: "熊顔", short_name: "熊", blurb: "顔と鼻、顎が広く目は小さめなので、どっしりしておおらかな印象です。" }
+        },
+        lion: {
+          ko: { name: "사자상", short_name: "사자", blurb: "코와 입, 턱이 넓어 이목구비가 진하고 존재감이 커 보이는 인상입니다." },
+          en: { name: "Lion face", short_name: "lion", blurb: "A wide nose, mouth, and jaw make the features look strong and present." },
+          ja: { name: "ライオン顔", short_name: "ライオン", blurb: "鼻と口、顎が広く、パーツが濃く存在感が大きく見える印象です。" }
+        },
+        deer: {
+          ko: { name: "사슴상", short_name: "사슴", blurb: "얼굴이 길고 눈은 크며 턱이 가늘어, 선이 가늘고 순해 보이는 인상입니다." },
+          en: { name: "Deer face", short_name: "deer", blurb: "A long face, large eyes, and a narrow jaw give a fine, gentle look." },
+          ja: { name: "鹿顔", short_name: "鹿", blurb: "顔が長く目は大きく顎が細く、線が細く穏やかに見える印象です。" }
+        },
+        wolf: {
+          ko: { name: "늑대상", short_name: "늑대", blurb: "눈매가 가늘고 중안부가 길어, 얼굴선이 날카로워 보이는 인상입니다." },
+          en: { name: "Wolf face", short_name: "wolf", blurb: "Narrow eyes and a long midface make the outline look sharp." },
+          ja: { name: "狼顔", short_name: "狼", blurb: "目元が細く中顔面が長く、顔の線が鋭く見える印象です。" }
+        }
+      };
+
+      // 저장된 값과 브라우저 언어를 ko, en, ja 중 하나로 맞춘다.
+      function normalize_language(value) {
+        var code = String(value || "").toLowerCase();
+        if (code.indexOf("ja") === 0) return "ja";
+        if (code.indexOf("en") === 0) return "en";
+        if (code.indexOf("ko") === 0) return "ko";
+        return "";
+      }
+
+      // 지금 화면에 적용된 언어를 읽는다.
+      function current_language() {
+        var from_page = document.documentElement.getAttribute("data-language");
+        return normalize_language(from_page) || "ko";
+      }
+
+      // 문구 키를 현재 언어의 문장으로 바꾸고, {이름} 칸을 채운다.
+      function translate(key, vars) {
+        var language_code = current_language();
+        var table = UI_TEXT[language_code] || UI_TEXT.ko;
+        var template = table[key] || (UI_TEXT.ko && UI_TEXT.ko[key]) || "";
+        if (!template) {
+          console.error("화면 문구를 찾지 못했습니다.", key);
+          return key;
+        }
+        var text = template;
+        if (vars) {
+          Object.keys(vars).forEach(function (name) {
+            text = text.split("{" + name + "}").join(String(vars[name]));
+          });
+        }
+        return text;
+      }
+
+      // 동물 번호에 해당하는 이름과 설명을 현재 언어로 꺼낸다.
+      function animal_copy(animal_id) {
+        var pack = ANIMAL_TEXT[animal_id];
+        var language_code = current_language();
+        var row = pack && (pack[language_code] || pack.ko);
+        if (!row) {
+          console.error("동물 문구를 찾지 못했습니다.", animal_id);
+          return { name: "", short_name: "", blurb: "" };
+        }
+        return row;
+      }
+
+      // 고정된 화면 글을 현재 언어로 다시 채운다.
+      function apply_static_text() {
+        var text_nodes = document.querySelectorAll("[data-i18n]");
+        text_nodes.forEach(function (node) {
+          if (node.getAttribute("data-i18n-live") === "true" && window.PAGE_I18N && window.PAGE_I18N.skip_live) {
+            return;
+          }
+          node.textContent = translate(node.getAttribute("data-i18n"));
+        });
+        document.querySelectorAll("[data-i18n-aria]").forEach(function (node) {
+          node.setAttribute("aria-label", translate(node.getAttribute("data-i18n-aria")));
+        });
+        document.querySelectorAll("[data-i18n-content]").forEach(function (node) {
+          node.setAttribute("content", translate(node.getAttribute("data-i18n-content")));
+        });
+        document.querySelectorAll("[data-i18n-value]").forEach(function (node) {
+          node.value = translate(node.getAttribute("data-i18n-value"));
+        });
+        document.title = translate("page_title");
+        ["ko", "en", "ja"].forEach(function (code) {
+          var button = document.getElementById("button_language_" + code);
+          if (!button) return;
+          var is_selected = code === current_language();
+          button.classList.toggle("is_selected", is_selected);
+          button.setAttribute("aria-pressed", is_selected ? "true" : "false");
+        });
+      }
+
+      // 언어를 바꾸고 다음 방문에도 남긴다.
+      function apply_language(language_code, is_persist) {
+        var next_language = normalize_language(language_code) || "ko";
+        document.documentElement.lang = next_language;
+        document.documentElement.setAttribute("data-language", next_language);
+        if (is_persist) {
+          try {
+            localStorage.setItem(LANGUAGE_KEY, next_language);
+          } catch (error) {
+            console.error("언어 선택을 저장하지 못했습니다.", error);
+          }
+        }
+        apply_static_text();
+        if (typeof window.refresh_localized_views === "function") {
+          window.refresh_localized_views();
+        }
+      }
+
+      window.PAGE_I18N = {
+        t: translate,
+        animal_copy: animal_copy,
+        current: current_language,
+        has: function (key) {
+          return Boolean(UI_TEXT.ko && UI_TEXT.ko[key]);
+        },
+        apply: apply_language,
+        skip_live: false
+      };
+
+      try {
+        apply_static_text();
+        ["ko", "en", "ja"].forEach(function (code) {
+          var button = document.getElementById("button_language_" + code);
+          if (!button) return;
+          button.addEventListener("click", function () {
+            try {
+              apply_language(code, true);
+              if (window.DISQUS && typeof window.DISQUS.reset === "function") {
+                window.DISQUS.reset({ reload: true });
+              }
+            } catch (error) {
+              console.error("언어를 바꾸지 못했습니다.", error);
+            }
+          });
+        });
+      } catch (error) {
+        console.error("화면 언어를 적용하지 못했습니다.", error);
+      }
+    })();
+  </script>
+
 
   <script type="module">
     import { FaceLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.17";
@@ -989,10 +1699,6 @@
     const PAN_HOLD_MS = 100;
     const PAN_HOLD_SLOP_PX = 6;
     const THEME_STORAGE_KEY = "theme_mode";
-    const READY_MESSAGE = "준비됐어요. 카메라로 찍거나 사진을 올려 주세요.";
-    const LOADING_MESSAGE = "동물 도감을 펼치는 중이에요. 처음 한 번은 몇 초 걸려요.";
-    const SELECT_MESSAGE_PC = "휠로 확대 · 드래그로 얼굴 지정 · 길게 누르면 이동";
-    const SELECT_MESSAGE_MOBILE = "손가락으로 드래그해 얼굴을 지정하세요.";
     const SELECTION_COLORS = ["#234e36", "#9c2f24", "#c9852a", "#1f4e79", "#6b3f69", "#3d6b4f"];
 
     // 화면 기준이 아니라 마주 본 사람의 왼쪽/오른쪽이다. 두 눈을 평균내서 좌우가 뒤집혀도 비율은 같다.
@@ -1063,48 +1769,11 @@
       midface_ratio: 1.3
     };
 
-    const FEATURE_PHRASE = {
-      face_roundness: { high: "얼굴이 둥근 편", low: "얼굴이 긴 편" },
-      eye_size: { high: "눈이 큰 편", low: "눈이 크지 않은 편" },
-      eye_roundness: { high: "눈매가 둥근 편", low: "눈매가 가늘고 날카로운 편" },
-      eye_gap: { high: "눈 사이가 넓은 편", low: "눈 사이가 가까운 편" },
-      nose_width: { high: "코가 넓은 편", low: "코가 좁은 편" },
-      nose_length: { high: "코가 긴 편", low: "코가 짧은 편" },
-      mouth_width: { high: "입이 넓은 편", low: "입이 작은 편" },
-      jaw_width: { high: "턱이 넓은 편", low: "턱이 좁은 편" },
-      chin_width: { high: "턱끝이 부드러운 편", low: "턱끝이 갸름한 편" },
-      midface_ratio: { high: "눈과 코 사이가 긴 편", low: "눈과 코 사이가 짧은 편" }
-    };
-
-    const USER_MESSAGE = {
-      model_load_failed: "얼굴 분석 도구를 불러오지 못했어요. 인터넷 연결을 확인한 뒤 새로고침 해 주세요.",
-      file_protocol: "이 페이지를 파일로 직접 열면 분석 도구를 받을 수 없어요. 로컬 서버 주소로 접속해 주세요.",
-      not_image: "이미지 파일만 올릴 수 있어요. JPG나 PNG를 골라 주세요.",
-      heic: "이 사진 형식은 브라우저가 읽지 못할 수 있어요. JPG나 PNG로 저장한 뒤 다시 올려 주세요.",
-      decode_failed: "사진을 열지 못했어요. 다른 이미지로 다시 시도해 주세요.",
-      empty_image: "사진 크기를 읽지 못했어요. 다른 이미지로 다시 시도해 주세요.",
-      camera_unsupported: "이 브라우저는 카메라를 지원하지 않아요. 사진 업로드를 이용해 주세요.",
-      camera_denied: "카메라 권한이 필요해요. 브라우저에서 카메라를 허용하거나, 사진 업로드를 이용해 주세요.",
-      camera_missing: "사용할 수 있는 카메라를 찾지 못했어요. 사진 업로드를 이용해 주세요.",
-      camera_busy: "카메라를 켜지 못했어요. 다른 앱이 카메라를 쓰고 있다면 닫은 뒤 다시 시도하거나, 사진을 올려 주세요.",
-      camera_insecure: "카메라는 보안 연결에서만 열 수 있어요. localhost 주소로 열거나, 사진 업로드를 이용해 주세요.",
-      camera_not_ready: "카메라 화면이 아직 준비되지 않았어요. 잠시 후 다시 촬영해 주세요.",
-      camera_rear_missing: "후면 카메라를 찾지 못했어요. 전면 카메라로 계속 촬영해 주세요.",
-      camera_front_missing: "전면 카메라를 찾지 못했어요. 후면 카메라로 계속 촬영해 주세요.",
-      no_face: "얼굴을 찾지 못했어요. 밝고 정면인 사진으로 다시 시도해 주세요.",
-      face_too_small: "얼굴이 너무 작게 보여요. 얼굴이 더 크게 나오게 찍거나 올려 주세요.",
-      analyze_failed: "얼굴을 분석하지 못했어요. 다른 사진으로 다시 시도해 주세요.",
-      canvas_unavailable: "화면을 준비하지 못했어요. 페이지를 새로고침 해 주세요.",
-      selection_too_small: "영역이 너무 작아요. 얼굴이 들어가게 조금 더 크게 드래그해 주세요.",
-      selection_needed: "먼저 사진 위에서 분석할 얼굴을 드래그해 주세요.",
-      selection_limit: "한 번에 12명까지 고를 수 있어요. 필요 없는 영역은 카드의 지우기로 빼 주세요.",
-      selection_failed: "선택한 영역을 잘라내지 못했어요. 다시 드래그해 주세요."
-    };
-
     // 숫자는 평균에서 몇 걸음 떨어졌는지다. 양수는 그 비율이 평균보다 크다는 뜻이다.
     const RAW_ANIMALS = [
       {
         order: 1,
+        id: "cat",
         no_label: "01",
         name: "고양이상",
         short_name: "고양이",
@@ -1115,6 +1784,7 @@
       },
       {
         order: 2,
+        id: "dog",
         no_label: "02",
         name: "강아지상",
         short_name: "강아지",
@@ -1125,6 +1795,7 @@
       },
       {
         order: 3,
+        id: "fox",
         no_label: "03",
         name: "여우상",
         short_name: "여우",
@@ -1135,6 +1806,7 @@
       },
       {
         order: 4,
+        id: "rabbit",
         no_label: "04",
         name: "토끼상",
         short_name: "토끼",
@@ -1145,6 +1817,7 @@
       },
       {
         order: 5,
+        id: "owl",
         no_label: "05",
         name: "부엉이상",
         short_name: "부엉이",
@@ -1155,6 +1828,7 @@
       },
       {
         order: 6,
+        id: "bear",
         no_label: "06",
         name: "곰상",
         short_name: "곰",
@@ -1165,6 +1839,7 @@
       },
       {
         order: 7,
+        id: "lion",
         no_label: "07",
         name: "사자상",
         short_name: "사자",
@@ -1175,6 +1850,7 @@
       },
       {
         order: 8,
+        id: "deer",
         no_label: "08",
         name: "사슴상",
         short_name: "사슴",
@@ -1185,6 +1861,7 @@
       },
       {
         order: 9,
+        id: "wolf",
         no_label: "09",
         name: "늑대상",
         short_name: "늑대",
@@ -1280,6 +1957,53 @@
       status_text.classList.toggle("is_busy", Boolean(is_busy) && !is_error);
     }
 
+    const status_state = { key: "loading", vars: {}, is_error: false, is_busy: true };
+    const partner_state = { key: "", is_error: false };
+    let result_view = { mode: "default", index: 1 };
+
+    // 문구 사전에서 현재 언어의 문장을 꺼낸다.
+    function t(key, vars) {
+      if (!window.PAGE_I18N) {
+        console.error("언어 문구가 준비되지 않았습니다.", key);
+        return key;
+      }
+      return window.PAGE_I18N.t(key, vars);
+    }
+
+    // 동물 기준 데이터에 현재 언어의 이름과 설명을 붙인다.
+    function localized_animal(animal) {
+      const copy = window.PAGE_I18N.animal_copy(animal.id);
+      return {
+        name: copy.name || animal.name,
+        short_name: copy.short_name || animal.short_name,
+        blurb: copy.blurb || animal.blurb
+      };
+    }
+
+    // 상태 문장의 키를 기억해 두었다가, 언어가 바뀌면 같은 키로 다시 그린다.
+    function show_status(key, vars, is_error, is_busy) {
+      status_state.key = key;
+      status_state.vars = vars || {};
+      status_state.is_error = Boolean(is_error);
+      status_state.is_busy = Boolean(is_busy);
+      window.PAGE_I18N.skip_live = true;
+      set_status(t(key, status_state.vars), status_state.is_error, status_state.is_busy);
+    }
+
+    // 오류 코드가 사전에 있으면 그 문장을, 없으면 공통 실패 문장을 보여 준다.
+    function error_code(error, fallback_code) {
+      const code = error && error.code;
+      if (code && window.PAGE_I18N.has(code)) {
+        return code;
+      }
+      return fallback_code;
+    }
+
+    function show_user_error(code) {
+      const key = code && window.PAGE_I18N.has(code) ? code : "analyze_failed";
+      show_status(key, {}, true, false);
+    }
+
     // 마우스가 있는 화면인지, 손가락으로 누르는 화면인지 가른다.
     function is_touch_input() {
       try {
@@ -1290,24 +2014,18 @@
       }
     }
 
-    // 사진 아래 안내 한 줄을 입력 장치에 맞게 고른다.
-    function select_guide_message() {
-      return is_touch_input() ? SELECT_MESSAGE_MOBILE : SELECT_MESSAGE_PC;
+    // 사진 아래 안내 한 줄의 문구 키를 입력 장치에 맞게 고른다.
+    function select_guide_key() {
+      return is_touch_input() ? "guide_mobile" : "guide_pc";
     }
 
     // 안내 문장이 떠 있을 때만, 장치를 바꿀 때 그 한 줄을 다시 고른다.
     function refresh_select_guide() {
-      const current_message = status_text.textContent;
-      const is_guide = current_message === SELECT_MESSAGE_PC || current_message === SELECT_MESSAGE_MOBILE;
+      const is_guide = status_state.key === "guide_pc" || status_state.key === "guide_mobile";
       if (!is_guide || !app_state.has_photo || app_state.is_analyzing || app_state.selections.length > 0) {
         return;
       }
-      set_status(select_guide_message(), false, false);
-    }
-
-    // 사용자에게는 다음 행동만 안내하고, 자세한 원인은 콘솔에만 남긴다.
-    function show_user_error(message) {
-      set_status(message, true, false);
+      show_status(select_guide_key(), {}, false, false);
     }
 
     // 분석 버튼은 모델이 준비되고, 드래그한 영역이 있으며, 분석 중이 아닐 때만 누를 수 있다.
@@ -1317,7 +2035,7 @@
       button_analyze.disabled = !can_analyze;
       button_clear_selections.disabled = app_state.is_analyzing || !has_selection;
       if (app_state.has_photo && app_state.is_model_ready && !has_selection) {
-        button_analyze.title = "먼저 사진 위에서 얼굴 영역을 드래그해 주세요.";
+        button_analyze.title = t("analyze_need_drag");
       } else {
         button_analyze.title = "";
       }
@@ -1360,7 +2078,7 @@
       app_state.photo_canvas = null;
       app_state.has_photo = false;
       photo_stage.classList.remove("is_camera", "is_photo", "is_front");
-      photo_stage.setAttribute("aria-label", "얼굴 미리보기");
+      photo_stage.setAttribute("aria-label", t("stage_aria"));
       empty_message.hidden = false;
       live_video.hidden = true;
       camera_guide.hidden = true;
@@ -1413,7 +2131,7 @@
       reset_photo_view();
       photo_stage.classList.remove("is_camera", "is_front");
       photo_stage.classList.add("is_photo");
-      photo_stage.setAttribute("aria-label", "얼굴 미리보기. 휠로 확대하고, 드래그로 영역을 지정합니다. 왼쪽 버튼을 잠시 누르면 사진이 이동합니다.");
+      photo_stage.setAttribute("aria-label", t("stage_photo_aria"));
       empty_message.hidden = true;
       live_video.hidden = true;
       camera_guide.hidden = true;
@@ -1553,8 +2271,9 @@
     function sync_camera_facing_ui() {
       const is_front_camera = app_state.camera_facing !== "environment";
       photo_stage.classList.toggle("is_front", is_front_camera);
-      button_flip_camera.textContent = is_front_camera ? "후면 카메라" : "전면 카메라";
-      button_flip_camera.setAttribute("aria-label", is_front_camera ? "후면 카메라로 전환" : "전면 카메라로 전환");
+      const flip_key = is_front_camera ? "flip_to_rear" : "flip_to_front";
+      button_flip_camera.textContent = t(flip_key);
+      button_flip_camera.setAttribute("aria-label", t(flip_key + "_aria"));
     }
 
     // 장치가 알려 준 방향이 있으면 그 값을 쓰고, 없으면 요청한 방향을 기억한다.
@@ -1660,11 +2379,11 @@
     // 처음에는 전면 카메라를 연다. 없으면 기본 카메라로 한 번 더 시도한다.
     async function open_camera() {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        show_user_error(USER_MESSAGE.camera_unsupported);
+        show_user_error("camera_unsupported");
         return;
       }
       if (!window.isSecureContext) {
-        show_user_error(USER_MESSAGE.camera_insecure);
+        show_user_error("camera_insecure");
         return;
       }
       if (app_state.is_camera_switching) {
@@ -1676,12 +2395,12 @@
       try {
         const device_id = await find_camera_device_id("user");
         await start_camera_stream("user", device_id, true);
-        set_status("얼굴이 원 안에 들어오면 촬영을 눌러 주세요.", false, false);
+        show_status("camera_prompt", {}, false, false);
       } catch (error) {
         console.error("카메라를 열지 못했습니다.", error);
         stop_camera();
         show_idle_mode();
-        show_user_error(USER_MESSAGE[camera_error_code(error)] || USER_MESSAGE.camera_busy);
+        show_user_error(error_code({ code: camera_error_code(error) }, "camera_busy"));
       } finally {
         app_state.is_camera_switching = false;
       }
@@ -1700,8 +2419,8 @@
       try {
         const device_id = await find_camera_device_id(next_facing);
         await start_camera_stream(next_facing, device_id, false);
-        const facing_label = app_state.camera_facing === "environment" ? "후면" : "전면";
-        set_status(facing_label + " 카메라예요. 얼굴이 원 안에 들어오면 촬영을 눌러 주세요.", false, false);
+        const facing_label = t(app_state.camera_facing === "environment" ? "side_back" : "side_front");
+        show_status("camera_switched", { side: facing_label }, false, false);
       } catch (error) {
         console.error("카메라를 바꾸지 못했습니다.", error);
         try {
@@ -1712,8 +2431,8 @@
           stop_camera();
           show_idle_mode();
         }
-        const message = next_facing === "environment" ? USER_MESSAGE.camera_rear_missing : USER_MESSAGE.camera_front_missing;
-        show_user_error(message);
+        const message_code = next_facing === "environment" ? "camera_rear_missing" : "camera_front_missing";
+        show_user_error(message_code);
       } finally {
         app_state.is_camera_switching = false;
         button_flip_camera.disabled = !app_state.is_camera_on;
@@ -1761,7 +2480,7 @@
     // 현재 카메라 화면을 멈춰, 원 안을 얼굴 영역으로 바로 분석한다.
     function capture_camera_frame() {
       if (!app_state.is_camera_on || !live_video.videoWidth) {
-        show_user_error(USER_MESSAGE.camera_not_ready);
+        show_user_error("camera_not_ready");
         return;
       }
       try {
@@ -1770,21 +2489,21 @@
         const canvas = fit_to_canvas(live_video, is_front_camera);
         const rect = circle_to_canvas_rect(circle, canvas);
         if (rect.width < MIN_SELECTION_EDGE || rect.height < MIN_SELECTION_EDGE) {
-          show_user_error(USER_MESSAGE.selection_too_small);
+          show_user_error("selection_too_small");
           return;
         }
         stop_camera();
         show_photo_mode(canvas);
-        add_selection(rect, "원 안을 촬영했어요.");
+        add_selection(rect, "captured_circle");
         const captured = app_state.selections[app_state.selections.length - 1];
         if (app_state.is_model_ready && captured) {
           analyze_selections([captured]);
           return;
         }
-        set_status("원 안을 촬영했어요. 도감이 준비되면 분석을 눌러 주세요.", false, false);
+        show_status("captured_wait", {}, false, false);
       } catch (error) {
         console.error("카메라 화면을 저장하지 못했습니다.", error);
-        show_user_error(USER_MESSAGE[error.code] || USER_MESSAGE.analyze_failed);
+        show_user_error(error_code(error, "analyze_failed"));
       }
     }
 
@@ -1805,7 +2524,7 @@
           return;
         }
         show_photo_mode(canvas);
-        set_status(app_state.is_model_ready ? select_guide_message() : LOADING_MESSAGE, false, !app_state.is_model_ready);
+        show_status(app_state.is_model_ready ? select_guide_key() : "loading", {}, false, !app_state.is_model_ready);
       } catch (error) {
         console.error("사진을 불러오지 못했습니다.", error);
         if (generation !== app_state.analysis_generation) {
@@ -1813,7 +2532,7 @@
         }
         render_crop_cards();
         sync_analyze_button();
-        show_user_error(USER_MESSAGE[error.code] || USER_MESSAGE.decode_failed);
+        show_user_error(error_code(error, "decode_failed"));
       }
     }
 
@@ -2063,11 +2782,11 @@
 
     // 얼굴 조각은 전체 1등과 따로, 그 부위의 비율만 보고 가까운 동물을 고른다.
     const FACE_PIECES = [
-      { label: "얼굴형", particle: "은", keys: ["face_roundness"] },
-      { label: "눈", particle: "은", keys: ["eye_size", "eye_roundness", "eye_gap"] },
-      { label: "코", particle: "는", keys: ["nose_width", "nose_length"] },
-      { label: "입", particle: "은", keys: ["mouth_width"] },
-      { label: "턱", particle: "은", keys: ["jaw_width", "chin_width"] }
+      { id: "face", keys: ["face_roundness"] },
+      { id: "eye", keys: ["eye_size", "eye_roundness", "eye_gap"] },
+      { id: "nose", keys: ["nose_width", "nose_length"] },
+      { id: "mouth", keys: ["mouth_width"] },
+      { id: "jaw", keys: ["jaw_width", "chin_width"] }
     ];
 
     // 한 부위의 비율만 모아, 그 동물과 얼마나 먼지 잰다.
@@ -2121,8 +2840,7 @@
           throw Object.assign(new Error("piece_invalid"), { code: "analyze_failed" });
         }
         return {
-          label: piece.label,
-          particle: piece.particle,
+          id: piece.id,
           animal: closest_animal,
           note: piece_note(piece, user_z)
         };
@@ -2134,14 +2852,14 @@
       if (!pieces.length) {
         throw Object.assign(new Error("piece_invalid"), { code: "analyze_failed" });
       }
-      const first_name = pieces[0].animal.short_name;
-      const is_same_animal = pieces.every((piece) => piece.animal.short_name === first_name);
+      const first_name = localized_animal(pieces[0].animal).short_name;
+      const is_same_animal = pieces.every((piece) => localized_animal(piece.animal).short_name === first_name);
       if (is_same_animal) {
-        const labels = pieces.map((piece) => piece.label).join(", ");
-        return labels + "이 모두 " + first_name + "입니다.";
+        const labels = pieces.map((piece) => t("piece_name_" + piece.id)).join(", ");
+        return t("piece_same", { list: labels, animal: first_name });
       }
-      const clauses = pieces.map((piece) => piece.label + piece.particle + " " + piece.animal.short_name);
-      return clauses.join(", ") + "입니다.";
+      const lines = pieces.map((piece) => t("piece_line_" + piece.id, { animal: localized_animal(piece.animal).short_name }));
+      return t("piece_mixed", { lines: lines.join(", ") });
     }
 
     // 얼굴 조각 카드를 그린다. 실패해도 전체 순위는 그대로 보여 준다.
@@ -2160,10 +2878,10 @@
           const text = document.createElement("div");
           const part = document.createElement("p");
           part.className = "piece_part";
-          part.textContent = piece.label;
+          part.textContent = t("piece_name_" + piece.id);
           const animal_name = document.createElement("p");
           animal_name.className = "piece_animal";
-          animal_name.textContent = piece.animal.short_name;
+          animal_name.textContent = localized_animal(piece.animal).short_name;
           const note = document.createElement("p");
           note.className = "piece_note";
           note.textContent = piece.note;
@@ -2173,7 +2891,7 @@
         }
       } catch (error) {
         console.error("얼굴 조각을 나누지 못했습니다.", error);
-        piece_summary.textContent = "부위별 동물을 나누지 못했어요. 위의 전체 결과는 그대로 볼 수 있어요.";
+        piece_summary.textContent = t("piece_fail");
         piece_list.replaceChildren();
       }
     }
@@ -2215,21 +2933,22 @@
         }
       }
       if (picked.length === 0) {
-        return "한두 군데보다 얼굴 전체 비율을 함께 봤을 때 이 동물 기준과 가장 가깝습니다.";
+        return t("reason_none");
       }
-      const phrases = picked.map((row) => (row.user_z >= 0 ? FEATURE_PHRASE[row.key].high : FEATURE_PHRASE[row.key].low));
+      const phrases = picked.map((row) => (row.user_z >= 0 ? t("feature_" + row.key + "_high") : t("feature_" + row.key + "_low")));
+      const animal_name = localized_animal(animal).short_name;
       if (phrases.length === 1) {
-        return phrases[0] + "이라서 " + animal.short_name + " 쪽에 더 기울었습니다.";
+        return t("reason_one", { phrase: phrases[0], animal: animal_name });
       }
-      return phrases[0] + "이고 " + phrases[1] + "이라서 " + animal.short_name + " 쪽에 더 기울었습니다.";
+      return t("reason_two", { phrase_a: phrases[0], phrase_b: phrases[1], animal: animal_name });
     }
 
     // 평균에서 얼마나 벗어났는지 짧은 말로 바꾼다.
     function describe_feature(key, user_z) {
       if (Math.abs(user_z) < 0.45) {
-        return "평균에 가까워요";
+        return t("feature_average");
       }
-      return user_z >= 0 ? FEATURE_PHRASE[key].high : FEATURE_PHRASE[key].low;
+      return user_z >= 0 ? t("feature_" + key + "_high") : t("feature_" + key + "_low");
     }
 
     // 우리가 만든 SVG만 넣고, 사진에서 온 글자는 텍스트로만 넣는다.
@@ -2238,17 +2957,19 @@
     }
 
     // 1등 동물, 순위 막대, 측정 미터, 원본 비율을 한 번에 그린다.
-    function render_result(ranked, user_z, ratios, notes) {
+    function render_result(ranked, user_z, ratios, notes, should_scroll) {
       const winner = ranked[0];
+      const winner_copy = localized_animal(winner);
       set_svg(result_icon, winner.svg);
-      result_name.textContent = winner.name;
+      result_name.textContent = winner_copy.name;
       result_score.textContent = String(winner.score);
-      result_blurb.textContent = winner.blurb;
+      result_blurb.textContent = winner_copy.blurb;
       result_reason.textContent = build_reason(user_z, winner);
       render_face_pieces(user_z);
-      if (notes.length > 0) {
+      const note_codes = Array.isArray(notes) ? notes : [];
+      if (note_codes.length > 0) {
         result_note.hidden = false;
-        result_note.textContent = notes.join(" ");
+        result_note.textContent = note_codes.map((note_code) => t("note_" + note_code)).join(" ");
       } else {
         result_note.hidden = true;
         result_note.textContent = "";
@@ -2272,7 +2993,7 @@
         name_row.className = "rank_name_row";
         const name = document.createElement("span");
         name.className = "rank_name";
-        name.textContent = animal.name;
+        name.textContent = localized_animal(animal).name;
         const score = document.createElement("span");
         score.textContent = animal.score + "%";
         name_row.append(name, score);
@@ -2301,7 +3022,7 @@
         const head = document.createElement("div");
         head.className = "meter_head";
         const label = document.createElement("span");
-        label.textContent = spec.label;
+        label.textContent = t("feature_" + key + "_label");
         const value = document.createElement("span");
         value.className = "meter_value";
         value.textContent = describe_feature(key, user_z[key]);
@@ -2320,10 +3041,10 @@
         meter_list.append(meter_item);
 
         const term = document.createElement("dt");
-        term.textContent = spec.label;
+        term.textContent = t("feature_" + key + "_label");
         const formula = document.createElement("span");
         formula.className = "raw_formula";
-        formula.textContent = spec.formula;
+        formula.textContent = t("feature_" + key + "_formula");
         term.append(formula);
         const detail = document.createElement("dd");
         detail.textContent = ratios[key].toFixed(3);
@@ -2331,6 +3052,9 @@
       }
 
       result_panel.hidden = false;
+      if (should_scroll === false) {
+        return;
+      }
       const is_reduced_motion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       result_panel.scrollIntoView({ behavior: is_reduced_motion ? "auto" : "smooth", block: "nearest" });
     }
@@ -2344,7 +3068,7 @@
         const icon = document.createElement("div");
         set_svg(icon, animal.svg);
         const text = document.createElement("span");
-        text.textContent = animal.name;
+        text.textContent = localized_animal(animal).name;
         const no_label = document.createElement("span");
         no_label.className = "guide_no";
         no_label.textContent = animal.no_label;
@@ -2716,13 +3440,13 @@
         pip.className = "crop_pip";
         pip.style.background = selection.color;
         const title_text = document.createElement("span");
-        title_text.textContent = "얼굴 " + (index + 1);
+        title_text.textContent = t("crop_title", { index: index + 1 });
         title.append(pip, title_text);
         const remove_button = document.createElement("button");
         remove_button.type = "button";
         remove_button.className = "button_ghost button_compact";
-        remove_button.textContent = "지우기";
-        remove_button.setAttribute("aria-label", "얼굴 " + (index + 1) + " 영역 지우기");
+        remove_button.textContent = t("clear_one");
+        remove_button.setAttribute("aria-label", t("crop_remove_aria", { index: index + 1 }));
         remove_button.disabled = app_state.is_analyzing;
         remove_button.addEventListener("click", () => {
           remove_selection(selection.id);
@@ -2752,14 +3476,14 @@
           icon.className = "crop_winner_icon";
           set_svg(icon, winner.svg);
           const text = document.createElement("span");
-          text.textContent = winner.name + " · " + winner.score + "%";
+          text.textContent = localized_animal(winner).name + " · " + winner.score + "%";
           row.append(icon, text);
           meta.append(row);
         } else if (selection.result && selection.result.message) {
           meta.classList.add("is_error");
-          meta.textContent = selection.result.message;
+          meta.textContent = t(selection.result.error_code || "analyze_failed");
         } else {
-          meta.textContent = "아직 분석 전이에요";
+          meta.textContent = t("crop_pending");
         }
 
         const actions = document.createElement("div");
@@ -2767,7 +3491,7 @@
         const analyze_button = document.createElement("button");
         analyze_button.type = "button";
         analyze_button.className = "button_primary";
-        analyze_button.textContent = "이 영역 분석";
+        analyze_button.textContent = t("crop_analyze");
         analyze_button.disabled = !app_state.is_model_ready || app_state.is_analyzing;
         analyze_button.addEventListener("click", () => {
           analyze_selections([selection]);
@@ -2777,7 +3501,7 @@
           const detail_button = document.createElement("button");
           detail_button.type = "button";
           detail_button.className = "button_ghost";
-          detail_button.textContent = "자세한 결과";
+          detail_button.textContent = t("crop_detail");
           detail_button.disabled = app_state.is_analyzing;
           detail_button.addEventListener("click", () => {
             show_selection_detail(selection);
@@ -2806,10 +3530,10 @@
       sync_analyze_button();
       sync_selection_hint();
       if (app_state.selections.length === 0) {
-        set_status(select_guide_message(), false, false);
+        show_status(select_guide_key(), {}, false, false);
         return;
       }
-      set_status("얼굴 영역 " + app_state.selections.length + "곳이 남았어요.", false, false);
+      show_status("selection_left", { count: app_state.selections.length }, false, false);
     }
 
     // 드래그를 확정된 얼굴 영역으로 추가하고 바로 아래에 카드를 만든다.
@@ -2832,8 +3556,11 @@
       render_crop_cards();
       sync_analyze_button();
       sync_selection_hint();
-      const default_message = "얼굴 영역 " + app_state.selections.length + "곳을 골랐어요. 더 드래그하거나 분석을 눌러 주세요.";
-      set_status(status_message || default_message, false, false);
+      if (status_message) {
+        show_status(status_message, {}, false, false);
+      } else {
+        show_status("selection_picked", { count: app_state.selections.length }, false, false);
+      }
       const is_reduced_motion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       crop_panel.scrollIntoView({ behavior: is_reduced_motion ? "auto" : "smooth", block: "nearest" });
     }
@@ -2910,7 +3637,7 @@
         apply_photo_view();
       } catch (error) {
         console.error("화면 확대에 실패했습니다.", error);
-        show_user_error("화면을 확대하지 못했습니다. 사진 위에서 휠을 다시 돌려 주세요.");
+        show_user_error("zoom_failed");
       }
     }
 
@@ -2920,7 +3647,7 @@
         return;
       }
       reset_photo_view();
-      set_status("화면을 처음 크기로 되돌렸어요. 휠로 다시 확대할 수 있어요.", false, false);
+      show_status("view_reset", {}, false, false);
     }
 
     // 누르고 있기 타이머를 지운다. 손을 떼거나 영역 드래그가 시작되면 이동으로 바뀌지 않게 한다.
@@ -3004,7 +3731,7 @@
             app_state.pointer_hold = null;
             app_state.pan = null;
             selection_layer.classList.remove("is_panning");
-            show_user_error("화면을 움직이지 못했습니다. 왼쪽 버튼을 잠시 누른 뒤 다시 끌어 주세요.");
+            show_user_error("pan_hold_failed");
           }
         }, PAN_HOLD_MS);
       } catch (error) {
@@ -3014,7 +3741,7 @@
         app_state.drag = null;
         selection_draft.hidden = true;
         selection_layer.classList.remove("is_selecting");
-        show_user_error(USER_MESSAGE.selection_failed);
+        show_user_error("selection_failed");
       }
     }
 
@@ -3030,7 +3757,7 @@
           apply_photo_view();
         } catch (error) {
           console.error("화면 이동에 실패했습니다.", error);
-          show_user_error("화면을 움직이지 못했습니다. 한 번 더 끌어 주세요.");
+          show_user_error("pan_move_failed");
         }
         return;
       }
@@ -3055,7 +3782,7 @@
           app_state.drag = null;
           selection_draft.hidden = true;
           selection_layer.classList.remove("is_selecting");
-          show_user_error(USER_MESSAGE.selection_failed);
+          show_user_error("selection_failed");
         }
         return;
       }
@@ -3152,7 +3879,7 @@
         return;
       }
       if (app_state.selections.length >= MAX_SELECTION_COUNT) {
-        show_user_error(USER_MESSAGE.selection_limit);
+        show_user_error("selection_limit");
         return;
       }
       const rect = normalize_rect(
@@ -3164,14 +3891,14 @@
         app_state.photo_canvas.height
       );
       if (rect.width < MIN_SELECTION_EDGE || rect.height < MIN_SELECTION_EDGE) {
-        show_user_error(USER_MESSAGE.selection_too_small);
+        show_user_error("selection_too_small");
         return;
       }
       try {
         add_selection(rect);
       } catch (error) {
         console.error("선택 영역을 만들지 못했습니다.", error);
-        show_user_error(USER_MESSAGE[error && error.code] || USER_MESSAGE.selection_failed);
+        show_user_error(error_code(error, "selection_failed"));
       }
     }
 
@@ -3246,17 +3973,17 @@
       const ranked_result = rank_animals(measured.ratios);
       const notes = [];
       if (located.did_zoom) {
-        notes.push("얼굴이 작게 보여서 그 부분만 확대한 뒤 비율을 쟀어요.");
+        notes.push("zoom");
       }
       if (located.face_count > 1) {
-        notes.push("이 영역 안에 얼굴이 여러 개라서 가장 크게 보이는 얼굴을 기준으로 했습니다.");
+        notes.push("many");
       }
       if (!measured.is_frontal) {
-        notes.push("얼굴이 옆으로 돌아가 있으면 눈 크기가 실제와 다르게 나올 수 있어요. 가능하면 정면으로 다시 찍어 주세요.");
+        notes.push("angle");
       }
       const distance_gap = ranked_result.ranked[1].distance - ranked_result.ranked[0].distance;
       if (distance_gap < 0.12) {
-        notes.push("1등과 2등 차이가 작아요. 표정을 바꾸거나 더 정면인 사진이면 순위가 달라질 수 있어요.");
+        notes.push("close");
       }
       selection.result = {
         is_ok: true,
@@ -3277,7 +4004,8 @@
         return;
       }
       app_state.active_selection_id = selection.id;
-      result_target.textContent = "얼굴 " + (index + 1) + " · 가장 가까운 동물";
+      result_view = { mode: "face", index: index + 1 };
+      result_target.textContent = t("result_target_face", { index: index + 1 });
       render_crop_cards();
       render_result(selection.result.ranked, selection.result.user_z, selection.result.ratios, selection.result.notes);
     }
@@ -3288,7 +4016,7 @@
         return;
       }
       if (!selections || selections.length === 0) {
-        show_user_error(USER_MESSAGE.selection_needed);
+        show_user_error("selection_needed");
         return;
       }
       const generation = app_state.analysis_generation;
@@ -3300,7 +4028,7 @@
       try {
         for (let index = 0; index < selections.length; index += 1) {
           const selection = selections[index];
-          set_status("고른 얼굴의 비율을 재는 중이에요. (" + (index + 1) + "/" + selections.length + ")", false, true);
+          show_status("analyze_progress", { current: index + 1, total: selections.length }, false, true);
           await wait_next_frame();
           if (generation !== app_state.analysis_generation) {
             return;
@@ -3318,7 +4046,7 @@
             }
             selection.result = {
               is_ok: false,
-              message: USER_MESSAGE[error && error.code] || USER_MESSAGE.analyze_failed
+              error_code: error_code(error, "analyze_failed")
             };
             try {
               refresh_selection_preview(selection, null);
@@ -3347,21 +4075,22 @@
         }
         if (success_count === selections.length) {
           const winner_name = first_success && first_success.result && first_success.result.is_ok
-            ? first_success.result.ranked[0].name
+            ? localized_animal(first_success.result.ranked[0]).name
             : "";
-          const done_message = selections.length === 1
-            ? winner_name + "과 가장 가깝게 나왔어요."
-            : success_count + "곳의 얼굴 영역을 분석했어요. 카드의 자세한 결과로 각각을 볼 수 있어요.";
-          set_status(done_message, false, false);
+          if (selections.length === 1) {
+            show_status("analyze_done_one", { animal: winner_name }, false, false);
+          } else {
+            show_status("analyze_done_many", { count: success_count }, false, false);
+          }
         } else if (success_count === 0) {
-          show_user_error("고른 영역에서 얼굴을 읽지 못했어요. 얼굴이 잘 보이게 다시 드래그해 주세요.");
+          show_user_error("analyze_none");
         } else {
-          set_status(selections.length + "곳 중 " + success_count + "곳을 분석했어요. 실패한 영역은 카드에 이유를 적어 두었어요.", false, false);
+          show_status("analyze_partial", { total: selections.length, count: success_count }, false, false);
         }
       } catch (error) {
         console.error("얼굴 분석을 마치지 못했습니다.", error);
         if (generation === app_state.analysis_generation) {
-          show_user_error(USER_MESSAGE.analyze_failed);
+          show_user_error("analyze_failed");
         }
       } finally {
         if (generation === app_state.analysis_generation) {
@@ -3373,7 +4102,7 @@
             console.error("분석 카드를 다시 그리지 못했습니다.", render_error);
           }
           if (status_text.classList.contains("is_busy")) {
-            show_user_error(USER_MESSAGE.analyze_failed);
+            show_user_error("analyze_failed");
           }
         }
       }
@@ -3387,11 +4116,12 @@
       app_state.selections = [];
       app_state.active_selection_id = null;
       result_panel.hidden = true;
+      result_view = { mode: "default", index: 1 };
       render_selection_boxes();
       render_crop_cards();
       sync_analyze_button();
       sync_selection_hint();
-      set_status(app_state.has_photo ? select_guide_message() : READY_MESSAGE, false, false);
+      show_status(app_state.has_photo ? select_guide_key() : "ready", {}, false, false);
     }
 
     // 얼굴 랜드마크 모델을 내려받는다. 사진 한 장 분석이라 CPU로 충분히 빠르고 더 안정적이다.
@@ -3441,7 +4171,7 @@
         localStorage.setItem(THEME_STORAGE_KEY, next_theme);
       } catch (error) {
         console.error("화면 모드를 저장하지 못했습니다.", error);
-        show_user_error("화면 모드를 저장하지 못했어요. 페이지를 새로고침한 뒤 다시 눌러 주세요.");
+        show_user_error("theme_save_failed");
       }
     }
 
@@ -3449,6 +4179,13 @@
     function set_partner_status(message, is_error) {
       partner_status.textContent = message;
       partner_status.classList.toggle("is_error", Boolean(is_error));
+    }
+
+    // 제휴 문의 문장도 키로 기억해, 언어를 바꾸면 같은 상태로 다시 보여 준다.
+    function show_partner_status(key, is_error) {
+      partner_state.key = key;
+      partner_state.is_error = Boolean(is_error);
+      set_partner_status(t(key), partner_state.is_error);
     }
 
     // 입력한 제휴 문의를 Formspree로 보내고, 페이지는 그대로 둔다.
@@ -3461,7 +4198,7 @@
       if (String(form_data.get("_gotcha") || "").trim()) {
         console.error("자동 입력으로 보이는 제휴 문의는 보내지 않았습니다.");
         partner_form.reset();
-        set_partner_status("문의가 전달됐어요. 남겨 주신 메일로 답변드릴게요.", false);
+        show_partner_status("partner_sent", false);
         return;
       }
       const name_value = String(form_data.get("이름") || "").trim();
@@ -3472,13 +4209,13 @@
       form_data.set("문의", message_value);
       form_data.set("회사", String(form_data.get("회사") || "").trim());
       if (!name_value || !email_value || !message_value || !partner_form.checkValidity()) {
-        set_partner_status("이름, 답장 받을 이메일, 문의 내용을 입력한 뒤 다시 보내 주세요.", true);
+        show_partner_status("partner_invalid", true);
         partner_form.reportValidity();
         return;
       }
       is_partner_sending = true;
       button_partner_send.disabled = true;
-      set_partner_status("문의를 보내는 중이에요.", false);
+      show_partner_status("partner_sending", false);
       try {
         const response = await fetch(PARTNER_FORM_URL, {
           method: "POST",
@@ -3493,14 +4230,14 @@
             console.error("제휴 문의 오류 내용을 읽지 못했습니다.", read_error);
           }
           console.error("제휴 문의를 보내지 못했습니다.", response.status, error_detail);
-          set_partner_status("문의를 보내지 못했어요. 잠시 후 다시 시도해 주세요.", true);
+          show_partner_status("partner_fail", true);
           return;
         }
         partner_form.reset();
-        set_partner_status("문의가 전달됐어요. 남겨 주신 메일로 답변드릴게요.", false);
+        show_partner_status("partner_sent", false);
       } catch (error) {
         console.error("제휴 문의 전송 중 네트워크 오류가 났습니다.", error);
-        set_partner_status("문의를 보내지 못했어요. 인터넷 연결을 확인한 뒤 다시 시도해 주세요.", true);
+        show_partner_status("partner_network", true);
       } finally {
         is_partner_sending = false;
         button_partner_send.disabled = false;
@@ -3533,11 +4270,11 @@
         });
         button_close_camera.addEventListener("click", () => {
           show_idle_mode();
-          set_status(app_state.is_model_ready ? READY_MESSAGE : LOADING_MESSAGE, false, app_state.is_model_loading);
+          show_status(app_state.is_model_ready ? "ready" : "loading", {}, false, app_state.is_model_loading);
         });
         button_retake.addEventListener("click", () => {
           show_idle_mode();
-          set_status(app_state.is_model_ready ? READY_MESSAGE : LOADING_MESSAGE, false, app_state.is_model_loading);
+          show_status(app_state.is_model_ready ? "ready" : "loading", {}, false, app_state.is_model_loading);
         });
         button_analyze.addEventListener("click", () => {
           analyze_selections(app_state.selections.slice());
@@ -3565,32 +4302,89 @@
         }
 
         if (location.protocol === "file:") {
-          show_user_error(USER_MESSAGE.file_protocol);
+          show_user_error("file_protocol");
           return;
         }
 
         app_state.is_model_loading = true;
-        set_status(LOADING_MESSAGE, false, true);
+        show_status("loading", {}, false, true);
         app_state.face_landmarker = await load_face_landmarker();
         app_state.is_model_ready = true;
         app_state.is_model_loading = false;
         sync_analyze_button();
         render_crop_cards();
-        if (!status_text.classList.contains("is_error")) {
-          let ready_message = READY_MESSAGE;
-          if (app_state.has_photo) {
-            ready_message = app_state.selections.length > 0
-              ? "얼굴 영역 " + app_state.selections.length + "곳을 골랐어요. 분석을 눌러 주세요."
-              : select_guide_message();
+        if (!status_state.is_error) {
+          if (app_state.has_photo && app_state.selections.length > 0) {
+            show_status("selection_ready", { count: app_state.selections.length }, false, false);
+          } else if (app_state.has_photo) {
+            show_status(select_guide_key(), {}, false, false);
+          } else {
+            show_status("ready", {}, false, false);
           }
-          set_status(ready_message, false, false);
         }
       } catch (error) {
         app_state.is_model_loading = false;
         console.error("프로그램을 시작하지 못했습니다.", error);
-        show_user_error(USER_MESSAGE[error && error.code] || USER_MESSAGE.model_load_failed);
+        show_user_error(error_code(error, "model_load_failed"));
       }
     }
+
+    // 결과 판 위 한 줄을 지금 보고 있는 얼굴 번호에 맞춘다.
+    function refresh_result_target() {
+      if (result_view.mode === "face") {
+        result_target.textContent = t("result_target_face", { index: result_view.index });
+        return;
+      }
+      result_target.textContent = t("result_target");
+    }
+
+    // 분석 완료 문장 안의 동물 이름은 지금 언어로 다시 꺼낸다.
+    function refresh_status_sentence() {
+      if (status_state.key === "analyze_done_one") {
+        const source = app_state.selections.find((item) => item.result && item.result.is_ok);
+        if (source) {
+          status_state.vars = { animal: localized_animal(source.result.ranked[0]).name };
+        }
+      }
+      if (!status_state.key) {
+        return;
+      }
+      show_status(status_state.key, status_state.vars, status_state.is_error, status_state.is_busy);
+    }
+
+    // 언어 버튼을 누르면 고정 글 다음에 결과, 안내, 카드, 상태를 다시 그린다.
+    function refresh_localized_views() {
+      try {
+        sync_analyze_button();
+        sync_camera_facing_ui();
+        if (photo_stage.classList.contains("is_camera")) {
+          photo_stage.setAttribute("aria-label", t("stage_aria"));
+        } else if (app_state.has_photo) {
+          photo_stage.setAttribute("aria-label", t("stage_photo_aria"));
+        }
+        render_guide();
+        render_crop_cards();
+        refresh_result_target();
+        const active_selection = app_state.selections.find((item) => item.id === app_state.active_selection_id);
+        if (active_selection && active_selection.result && active_selection.result.is_ok && !result_panel.hidden) {
+          render_result(
+            active_selection.result.ranked,
+            active_selection.result.user_z,
+            active_selection.result.ratios,
+            active_selection.result.notes,
+            false
+          );
+        }
+        refresh_status_sentence();
+        if (partner_state.key) {
+          set_partner_status(t(partner_state.key), partner_state.is_error);
+        }
+      } catch (error) {
+        console.error("언어에 맞춰 화면을 다시 그리지 못했습니다.", error);
+      }
+    }
+
+    window.refresh_localized_views = refresh_localized_views;
 
     const animal_list = build_animal_list();
     init();
