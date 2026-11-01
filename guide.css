@@ -51,7 +51,7 @@ a.button_primary:focus-visible {
 .prose ul,
 .prose ol {
   margin: 0.4em 0 0;
-  padding-left: 1.25em;
+  padding-inline-start: 1.25em;
 }
 
 .ratio_list li + li {

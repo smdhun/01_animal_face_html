@@ -59,7 +59,7 @@
       margin: 0;
       min-height: 100vh;
       color: var(--ink);
-      font-family: "Noto Sans KR", sans-serif;
+      font-family: "Noto Sans KR", "Noto Sans SC", "Noto Sans", "Noto Sans Arabic", "Noto Sans Devanagari", sans-serif;
       background:
         radial-gradient(1000px 480px at 0% -10%, var(--bg-glow-a) 0%, transparent 55%),
         radial-gradient(800px 420px at 100% 0%, var(--bg-glow-b) 0%, transparent 50%),
@@ -81,7 +81,7 @@
     .theme_bar {
       display: flex;
       justify-content: flex-end;
-      align-items: center;
+      align-items: flex-start;
       flex-wrap: nowrap;
       gap: 6px;
       margin: -8px 0 12px;
@@ -95,6 +95,13 @@
       border-radius: 999px;
       background: var(--card);
       box-shadow: inset 0 0 0 1px var(--line);
+    }
+
+    .language_switch {
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      max-width: calc(100% - 148px);
+      min-width: 0;
     }
 
     .theme_button {
@@ -136,7 +143,7 @@
     }
 
     h1, h2, .score_number {
-      font-family: "Gowun Batang", serif;
+      font-family: "Gowun Batang", "Noto Sans SC", "Noto Sans", "Noto Sans Arabic", "Noto Sans Devanagari", serif;
       font-weight: 700;
     }
 
@@ -496,7 +503,7 @@
     .score_value { margin: 4px 0 0; }
 
     .score_label, .score_unit {
-      font-family: "Noto Sans KR", sans-serif;
+      font-family: "Noto Sans KR", "Noto Sans SC", "Noto Sans", "Noto Sans Arabic", "Noto Sans Devanagari", sans-serif;
       font-size: 0.95rem;
       font-weight: 500;
     }
@@ -548,7 +555,7 @@
 
     .piece_animal {
       margin: 1px 0 0;
-      font-family: "Gowun Batang", serif;
+      font-family: "Gowun Batang", "Noto Sans SC", "Noto Sans Devanagari", serif;
       font-size: 1.2rem;
       line-height: 1.2;
     }
@@ -709,7 +716,7 @@
       margin-top: 28px;
       padding-top: 8px;
       border-top: 1px solid var(--line);
-      text-align: left;
+      text-align: start;
     }
 
     .partner_form {
@@ -778,7 +785,7 @@
       margin-top: 28px;
       padding-top: 8px;
       border-top: 1px solid var(--line);
-      text-align: left;
+      text-align: start;
     }
 
     #disqus_thread {
@@ -800,6 +807,64 @@
       .meter_list { grid-template-columns: 1fr; }
       .stage.is_camera { height: 360px; min-height: 360px; }
       .crop_panel_head { align-items: flex-start; flex-direction: column; }
+    }
+
+
+    html[data-language="zh"] body,
+    html[data-language="zh"] .score_label,
+    html[data-language="zh"] .score_unit {
+      font-family: "Noto Sans SC", "Noto Sans KR", "Noto Sans Devanagari", sans-serif;
+    }
+
+    html[data-language="zh"] h1,
+    html[data-language="zh"] h2,
+    html[data-language="zh"] .score_number,
+    html[data-language="zh"] .piece_animal {
+      font-family: "Noto Sans SC", "Gowun Batang", serif;
+    }
+
+    html[data-language="zh-Hant"] body,
+    html[data-language="zh-Hant"] .score_label,
+    html[data-language="zh-Hant"] .score_unit {
+      font-family: "Noto Sans TC", "Noto Sans KR", "Noto Sans Devanagari", sans-serif;
+    }
+
+    html[data-language="zh-Hant"] h1,
+    html[data-language="zh-Hant"] h2,
+    html[data-language="zh-Hant"] .score_number,
+    html[data-language="zh-Hant"] .piece_animal {
+      font-family: "Noto Sans TC", "Gowun Batang", serif;
+    }
+
+
+    html[dir="rtl"] .theme_bar {
+      direction: ltr;
+    }
+
+    html[dir="rtl"] .sheet::before {
+      left: auto;
+      right: 0;
+      border-right: none;
+      border-left: 2px solid var(--binding);
+    }
+
+    html[dir="rtl"] .meter_list,
+    html[dir="rtl"] .meter_track,
+    html[dir="rtl"] .raw_list {
+      direction: ltr;
+    }
+
+    html[data-language="ar"] body,
+    html[data-language="ar"] .score_label,
+    html[data-language="ar"] .score_unit {
+      font-family: "Noto Sans Arabic", "Noto Sans", "Noto Sans KR", sans-serif;
+    }
+
+    html[data-language="ar"] h1,
+    html[data-language="ar"] h2,
+    html[data-language="ar"] .score_number,
+    html[data-language="ar"] .piece_animal {
+      font-family: "Noto Sans Arabic", "Noto Sans", "Gowun Batang", serif;
     }
 
     @media (prefers-reduced-motion: reduce) {

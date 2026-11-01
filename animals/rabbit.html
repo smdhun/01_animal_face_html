@@ -10,19 +10,44 @@
         var saved_language = localStorage.getItem("language_code") || "";
         var browser_language = (navigator.language || "").toLowerCase();
         var language_code = "ko";
-        if (saved_language === "en" || saved_language === "ja" || saved_language === "ko") {
+        var known_language = { ko: true, en: true, ja: true, zh: true, "zh-Hant": true, hi: true, es: true, pt: true, ar: true, fr: true, id: true, de: true, ru: true, vi: true };
+        if (known_language[saved_language]) {
           language_code = saved_language;
+        } else if (browser_language.indexOf("zh-tw") === 0 || browser_language.indexOf("zh-hk") === 0 || browser_language.indexOf("zh-mo") === 0 || browser_language.indexOf("zh-hant") === 0) {
+          language_code = "zh-Hant";
+        } else if (browser_language.indexOf("zh") === 0) {
+          language_code = "zh";
+        } else if (browser_language.indexOf("hi") === 0) {
+          language_code = "hi";
         } else if (browser_language.indexOf("ja") === 0) {
           language_code = "ja";
+        } else if (browser_language.indexOf("es") === 0) {
+          language_code = "es";
+        } else if (browser_language.indexOf("pt") === 0) {
+          language_code = "pt";
+        } else if (browser_language.indexOf("ar") === 0) {
+          language_code = "ar";
+        } else if (browser_language.indexOf("fr") === 0) {
+          language_code = "fr";
+        } else if (browser_language.indexOf("id") === 0) {
+          language_code = "id";
+        } else if (browser_language.indexOf("de") === 0) {
+          language_code = "de";
+        } else if (browser_language.indexOf("ru") === 0) {
+          language_code = "ru";
+        } else if (browser_language.indexOf("vi") === 0) {
+          language_code = "vi";
         } else if (browser_language.indexOf("en") === 0) {
           language_code = "en";
         }
         document.documentElement.lang = language_code;
         document.documentElement.setAttribute("data-language", language_code);
+        document.documentElement.dir = language_code === "ar" ? "rtl" : "ltr";
       } catch (error) {
         document.documentElement.setAttribute("data-theme", "light");
         document.documentElement.lang = "ko";
         document.documentElement.setAttribute("data-language", "ko");
+        document.documentElement.dir = "ltr";
       }
     })();
   </script>
@@ -35,7 +60,7 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8803401825336300" crossorigin="anonymous"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+SC:wght@400;700&family=Noto+Sans+TC:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans:wght@400;500;700&family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../styles.css" />
   <link rel="stylesheet" href="../guide.css" />
 </head>
@@ -46,6 +71,17 @@
         <button type="button" class="theme_button" id="button_language_ko" data-language="ko">한국어</button>
         <button type="button" class="theme_button" id="button_language_en" data-language="en">English</button>
         <button type="button" class="theme_button" id="button_language_ja" data-language="ja">日本語</button>
+        <button type="button" class="theme_button" id="button_language_zh" data-language="zh">简体</button>
+        <button type="button" class="theme_button" id="button_language_zh-Hant" data-language="zh-Hant">繁體</button>
+        <button type="button" class="theme_button" id="button_language_hi" data-language="hi">हिन्दी</button>
+        <button type="button" class="theme_button" id="button_language_es" data-language="es">Español</button>
+        <button type="button" class="theme_button" id="button_language_pt" data-language="pt">Português</button>
+        <button type="button" class="theme_button" id="button_language_ar" data-language="ar">العربية</button>
+        <button type="button" class="theme_button" id="button_language_fr" data-language="fr">Français</button>
+        <button type="button" class="theme_button" id="button_language_id" data-language="id">Indonesia</button>
+        <button type="button" class="theme_button" id="button_language_de" data-language="de">Deutsch</button>
+        <button type="button" class="theme_button" id="button_language_ru" data-language="ru">Русский</button>
+        <button type="button" class="theme_button" id="button_language_vi" data-language="vi">Tiếng Việt</button>
       </div>
       <div class="theme_switch" role="group" data-i18n-aria="theme_group" aria-label="화면 모드">
         <button type="button" class="theme_button is_selected" id="button_theme_light" data-i18n="theme_light" aria-pressed="true">화이트</button>
