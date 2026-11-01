@@ -374,6 +374,10 @@
       inset: 0;
       height: 100%;
       object-fit: cover;
+      transform: none;
+    }
+
+    .stage.is_camera.is_front #live_video {
       transform: scaleX(-1);
     }
 
@@ -766,6 +770,7 @@
       <button type="button" class="button_ghost" id="button_camera">카메라로 찍기</button>
       <button type="button" class="button_ghost" id="button_upload">사진 올리기</button>
       <button type="button" class="button_primary button_wide" id="button_shutter" hidden disabled>촬영</button>
+      <button type="button" class="button_ghost" id="button_flip_camera" hidden>후면 카메라</button>
       <button type="button" class="button_ghost" id="button_close_camera" hidden>카메라 닫기</button>
       <button type="button" class="button_primary button_wide" id="button_analyze" hidden disabled>고른 얼굴 모두 분석하기</button>
       <button type="button" class="button_ghost" id="button_retake" hidden>다른 얼굴로 다시</button>
@@ -953,6 +958,8 @@
       camera_busy: "카메라를 켜지 못했어요. 다른 앱이 카메라를 쓰고 있다면 닫은 뒤 다시 시도하거나, 사진을 올려 주세요.",
       camera_insecure: "카메라는 보안 연결에서만 열 수 있어요. localhost 주소로 열거나, 사진 업로드를 이용해 주세요.",
       camera_not_ready: "카메라 화면이 아직 준비되지 않았어요. 잠시 후 다시 촬영해 주세요.",
+      camera_rear_missing: "후면 카메라를 찾지 못했어요. 전면 카메라로 계속 촬영해 주세요.",
+      camera_front_missing: "전면 카메라를 찾지 못했어요. 후면 카메라로 계속 촬영해 주세요.",
       no_face: "얼굴을 찾지 못했어요. 밝고 정면인 사진으로 다시 시도해 주세요.",
       face_too_small: "얼굴이 너무 작게 보여요. 얼굴이 더 크게 나오게 찍거나 올려 주세요.",
       analyze_failed: "얼굴을 분석하지 못했어요. 다른 사진으로 다시 시도해 주세요.",
@@ -1061,8 +1068,10 @@
       is_model_ready: false,
       is_model_loading: false,
       is_camera_on: false,
+      is_camera_switching: false,
       is_analyzing: false,
       has_photo: false,
+      camera_facing: "user",
       camera_stream: null,
       photo_canvas: null,
       face_landmarker: null,
@@ -1089,6 +1098,7 @@
     const button_camera = require_element("button_camera");
     const button_upload = require_element("button_upload");
     const button_shutter = require_element("button_shutter");
+    const button_flip_camera = require_element("button_flip_camera");
     const button_close_camera = require_element("button_close_camera");
     const button_analyze = require_element("button_analyze");
     const button_retake = require_element("button_retake");
@@ -1213,7 +1223,7 @@
       stop_camera();
       app_state.photo_canvas = null;
       app_state.has_photo = false;
-      photo_stage.classList.remove("is_camera", "is_photo");
+      photo_stage.classList.remove("is_camera", "is_photo", "is_front");
       photo_stage.setAttribute("aria-label", "얼굴 미리보기");
       empty_message.hidden = false;
       live_video.hidden = true;
@@ -1223,6 +1233,7 @@
       button_camera.hidden = false;
       button_upload.hidden = false;
       button_shutter.hidden = true;
+      button_flip_camera.hidden = true;
       button_close_camera.hidden = true;
       button_analyze.hidden = true;
       button_retake.hidden = true;
@@ -1243,7 +1254,9 @@
       button_camera.hidden = true;
       button_upload.hidden = false;
       button_shutter.hidden = false;
+      button_flip_camera.hidden = false;
       button_close_camera.hidden = false;
+      sync_camera_facing_ui();
       button_analyze.hidden = true;
       button_retake.hidden = true;
       result_panel.hidden = true;
@@ -1262,7 +1275,7 @@
       app_state.pan = null;
       paint_display(canvas, null);
       reset_photo_view();
-      photo_stage.classList.remove("is_camera");
+      photo_stage.classList.remove("is_camera", "is_front");
       photo_stage.classList.add("is_photo");
       photo_stage.setAttribute("aria-label", "얼굴 미리보기. 휠로 확대하고, 드래그로 영역을 지정합니다. 왼쪽 버튼을 잠시 누르면 사진이 이동합니다.");
       empty_message.hidden = true;
@@ -1274,6 +1287,7 @@
       button_camera.hidden = true;
       button_upload.hidden = true;
       button_shutter.hidden = true;
+      button_flip_camera.hidden = true;
       button_close_camera.hidden = true;
       button_analyze.hidden = false;
       button_retake.hidden = false;
@@ -1399,7 +1413,115 @@
       return "camera_busy";
     }
 
-    // 전면 카메라를 먼저 열고, 실패하면 기본 카메라로 한 번 더 시도한다.
+    // 전면 미리보기는 거울처럼 뒤집고, 후면은 보이는 그대로 둔다.
+    function sync_camera_facing_ui() {
+      const is_front_camera = app_state.camera_facing !== "environment";
+      photo_stage.classList.toggle("is_front", is_front_camera);
+      button_flip_camera.textContent = is_front_camera ? "후면 카메라" : "전면 카메라";
+      button_flip_camera.setAttribute("aria-label", is_front_camera ? "후면 카메라로 전환" : "전면 카메라로 전환");
+    }
+
+    // 장치가 알려 준 방향이 있으면 그 값을 쓰고, 없으면 요청한 방향을 기억한다.
+    function read_camera_facing(stream, requested_facing) {
+      const track = stream.getVideoTracks()[0];
+      let facing_mode = "";
+      try {
+        const settings = track && typeof track.getSettings === "function" ? track.getSettings() : {};
+        facing_mode = settings.facingMode || "";
+      } catch (error) {
+        console.error("카메라 방향을 읽지 못했습니다.", error);
+      }
+      if (facing_mode === "environment" || facing_mode === "user") {
+        return facing_mode;
+      }
+      return requested_facing === "environment" ? "environment" : "user";
+    }
+
+    // 권한을 받은 뒤의 카메라 목록을 읽는다. 실패하면 빈 목록으로 방향 제약만 사용한다.
+    async function list_video_inputs() {
+      if (!navigator.mediaDevices || typeof navigator.mediaDevices.enumerateDevices !== "function") {
+        return [];
+      }
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        return devices.filter((device) => device.kind === "videoinput");
+      } catch (error) {
+        console.error("카메라 목록을 읽지 못했습니다.", error);
+        return [];
+      }
+    }
+
+    // 전면·후면 이름 또는 지금 켜진 카메라가 아닌 장치를 고른다.
+    async function find_camera_device_id(facing_mode) {
+      const videos = await list_video_inputs();
+      const label_pattern = facing_mode === "environment"
+        ? /back|rear|environment|world|후면/i
+        : /front|user|face|facetime|전면/i;
+      const labeled = videos.find((device) => label_pattern.test(device.label || ""));
+      if (labeled && labeled.deviceId) {
+        return labeled.deviceId;
+      }
+      const current_track = app_state.camera_stream ? app_state.camera_stream.getVideoTracks()[0] : null;
+      let current_id = "";
+      try {
+        current_id = current_track && typeof current_track.getSettings === "function"
+          ? (current_track.getSettings().deviceId || "")
+          : "";
+      } catch (error) {
+        console.error("현재 카메라 번호를 읽지 못했습니다.", error);
+      }
+      if (videos.length >= 2 && current_id) {
+        const other = videos.find((device) => device.deviceId && device.deviceId !== current_id);
+        if (other) {
+          return other.deviceId;
+        }
+      }
+      return "";
+    }
+
+    // 원하는 렌즈를 연다. 처음 켤 때만 아무 카메라나 잡는 후퇴를 허용한다.
+    async function request_camera_stream(facing_mode, device_id, allow_any_fallback) {
+      const attempts = [];
+      if (device_id) {
+        attempts.push({ deviceId: { exact: device_id }, width: { ideal: 1280 }, height: { ideal: 1280 } });
+      }
+      attempts.push({ facingMode: { exact: facing_mode }, width: { ideal: 1280 }, height: { ideal: 1280 } });
+      if (allow_any_fallback) {
+        attempts.push({ facingMode: facing_mode, width: { ideal: 1280 }, height: { ideal: 1280 } });
+        attempts.push(true);
+      }
+      let last_error = null;
+      for (const video of attempts) {
+        try {
+          return await navigator.mediaDevices.getUserMedia({ audio: false, video });
+        } catch (error) {
+          last_error = error;
+          console.error("카메라 열기 조건이 거절되었습니다.", facing_mode, error);
+        }
+      }
+      throw last_error || Object.assign(new Error("camera_missing"), { name: "NotFoundError" });
+    }
+
+    // 이전 카메라를 끄고 새 화면을 붙인다. 휴대폰은 렌즈를 하나만 열 수 있는 경우가 많다.
+    async function start_camera_stream(facing_mode, device_id, allow_any_fallback) {
+      stop_camera();
+      const stream = await request_camera_stream(facing_mode, device_id, allow_any_fallback);
+      app_state.camera_stream = stream;
+      app_state.is_camera_on = true;
+      app_state.camera_facing = read_camera_facing(stream, facing_mode);
+      live_video.srcObject = stream;
+      show_live_mode();
+      try {
+        await live_video.play();
+      } catch (error) {
+        console.error("카메라 미리보기를 재생하지 못했습니다.", error);
+        throw error;
+      }
+      button_shutter.disabled = false;
+      button_flip_camera.disabled = false;
+    }
+
+    // 처음에는 전면 카메라를 연다. 없으면 기본 카메라로 한 번 더 시도한다.
     async function open_camera() {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         show_user_error(USER_MESSAGE.camera_unsupported);
@@ -1409,45 +1531,121 @@
         show_user_error(USER_MESSAGE.camera_insecure);
         return;
       }
+      if (app_state.is_camera_switching) {
+        return;
+      }
+      app_state.is_camera_switching = true;
+      button_shutter.disabled = true;
+      button_flip_camera.disabled = true;
       try {
-        stop_camera();
-        button_shutter.disabled = true;
-        let stream = null;
-        try {
-          stream = await navigator.mediaDevices.getUserMedia({
-            audio: false,
-            video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 1280 } }
-          });
-        } catch (error) {
-          console.error("전면 카메라를 열지 못했습니다. 기본 카메라로 다시 시도합니다.", error);
-          stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: true });
-        }
-        app_state.camera_stream = stream;
-        app_state.is_camera_on = true;
-        live_video.srcObject = stream;
-        show_live_mode();
+        const device_id = await find_camera_device_id("user");
+        await start_camera_stream("user", device_id, true);
         set_status("얼굴이 원 안에 들어오면 촬영을 눌러 주세요.", false, false);
-        await live_video.play();
-        button_shutter.disabled = false;
       } catch (error) {
         console.error("카메라를 열지 못했습니다.", error);
         stop_camera();
         show_idle_mode();
         show_user_error(USER_MESSAGE[camera_error_code(error)] || USER_MESSAGE.camera_busy);
+      } finally {
+        app_state.is_camera_switching = false;
       }
     }
 
-    // 현재 카메라 화면을 멈춰 분석용 사진으로 저장한다.
+    // 전면과 후면을 바꾼다. 바꾸지 못하면 원래 카메라로 되돌린다.
+    async function flip_camera() {
+      if (!app_state.is_camera_on || app_state.is_camera_switching) {
+        return;
+      }
+      const next_facing = app_state.camera_facing === "environment" ? "user" : "environment";
+      const previous_facing = app_state.camera_facing === "environment" ? "environment" : "user";
+      app_state.is_camera_switching = true;
+      button_shutter.disabled = true;
+      button_flip_camera.disabled = true;
+      try {
+        const device_id = await find_camera_device_id(next_facing);
+        await start_camera_stream(next_facing, device_id, false);
+        const facing_label = app_state.camera_facing === "environment" ? "후면" : "전면";
+        set_status(facing_label + " 카메라예요. 얼굴이 원 안에 들어오면 촬영을 눌러 주세요.", false, false);
+      } catch (error) {
+        console.error("카메라를 바꾸지 못했습니다.", error);
+        try {
+          const restore_device_id = await find_camera_device_id(previous_facing);
+          await start_camera_stream(previous_facing, restore_device_id, true);
+        } catch (restore_error) {
+          console.error("이전 카메라로 되돌리지 못했습니다.", restore_error);
+          stop_camera();
+          show_idle_mode();
+        }
+        const message = next_facing === "environment" ? USER_MESSAGE.camera_rear_missing : USER_MESSAGE.camera_front_missing;
+        show_user_error(message);
+      } finally {
+        app_state.is_camera_switching = false;
+        button_flip_camera.disabled = !app_state.is_camera_on;
+      }
+    }
+
+    // 화면 위 원이 저장된 사진의 어느 칸인지 계산한다. 미리보기와 저장 사진이 모두 좌우로 뒤집혀 화면 위치와 맞는다.
+    function circle_to_canvas_rect(circle, canvas) {
+      const video_width = live_video.videoWidth;
+      const video_height = live_video.videoHeight;
+      if (!video_width || !video_height || !canvas.width || !canvas.height) {
+        throw Object.assign(new Error("camera_not_ready"), { code: "camera_not_ready" });
+      }
+      const cover_scale = Math.max(circle.stage_width / video_width, circle.stage_height / video_height);
+      if (!Number.isFinite(cover_scale) || cover_scale <= 0) {
+        throw Object.assign(new Error("selection_failed"), { code: "selection_failed" });
+      }
+      const offset_x = (video_width * cover_scale - circle.stage_width) / 2;
+      const offset_y = (video_height * cover_scale - circle.stage_height) / 2;
+      const fit_scale = canvas.width / video_width;
+      const x = (circle.left + offset_x) / cover_scale * fit_scale;
+      const y = (circle.top + offset_y) / cover_scale * fit_scale;
+      const size = circle.size / cover_scale * fit_scale;
+      return normalize_rect(x, y, x + size, y + size, canvas.width, canvas.height);
+    }
+
+    // 카메라 화면 한가운데 원의 화면 위치를 읽는다. 촬영 전에 불러야 원 크기가 유지된다.
+    function read_camera_circle() {
+      const ring = camera_guide.querySelector(".camera_guide_ring");
+      const stage_box = photo_stage.getBoundingClientRect();
+      const ring_box = ring ? ring.getBoundingClientRect() : null;
+      if (!ring_box || ring_box.width < 8 || stage_box.width <= 0 || stage_box.height <= 0) {
+        console.error("카메라 원 위치를 읽지 못했습니다.");
+        throw Object.assign(new Error("selection_failed"), { code: "selection_failed" });
+      }
+      return {
+        stage_width: stage_box.width,
+        stage_height: stage_box.height,
+        left: ring_box.left - stage_box.left,
+        top: ring_box.top - stage_box.top,
+        size: ring_box.width
+      };
+    }
+
+    // 현재 카메라 화면을 멈춰, 원 안을 얼굴 영역으로 바로 분석한다.
     function capture_camera_frame() {
       if (!app_state.is_camera_on || !live_video.videoWidth) {
         show_user_error(USER_MESSAGE.camera_not_ready);
         return;
       }
       try {
-        const canvas = fit_to_canvas(live_video, true);
+        const circle = read_camera_circle();
+        const is_front_camera = app_state.camera_facing !== "environment";
+        const canvas = fit_to_canvas(live_video, is_front_camera);
+        const rect = circle_to_canvas_rect(circle, canvas);
+        if (rect.width < MIN_SELECTION_EDGE || rect.height < MIN_SELECTION_EDGE) {
+          show_user_error(USER_MESSAGE.selection_too_small);
+          return;
+        }
         stop_camera();
         show_photo_mode(canvas);
-        set_status(app_state.is_model_ready ? select_guide_message() : LOADING_MESSAGE, false, !app_state.is_model_ready);
+        add_selection(rect, "원 안을 촬영했어요.");
+        const captured = app_state.selections[app_state.selections.length - 1];
+        if (app_state.is_model_ready && captured) {
+          analyze_selections([captured]);
+          return;
+        }
+        set_status("원 안을 촬영했어요. 도감이 준비되면 분석을 눌러 주세요.", false, false);
       } catch (error) {
         console.error("카메라 화면을 저장하지 못했습니다.", error);
         show_user_error(USER_MESSAGE[error.code] || USER_MESSAGE.analyze_failed);
@@ -2479,7 +2677,7 @@
     }
 
     // 드래그를 확정된 얼굴 영역으로 추가하고 바로 아래에 카드를 만든다.
-    function add_selection(rect) {
+    function add_selection(rect, status_message) {
       const crop_canvas = crop_canvas_rect(app_state.photo_canvas, rect);
       const selection = {
         id: app_state.selection_seq,
@@ -2498,7 +2696,8 @@
       render_crop_cards();
       sync_analyze_button();
       sync_selection_hint();
-      set_status("얼굴 영역 " + app_state.selections.length + "곳을 골랐어요. 더 드래그하거나 분석을 눌러 주세요.", false, false);
+      const default_message = "얼굴 영역 " + app_state.selections.length + "곳을 골랐어요. 더 드래그하거나 분석을 눌러 주세요.";
+      set_status(status_message || default_message, false, false);
       const is_reduced_motion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       crop_panel.scrollIntoView({ behavior: is_reduced_motion ? "auto" : "smooth", block: "nearest" });
     }
@@ -3131,6 +3330,9 @@
           on_photo_selected(event);
         });
         button_shutter.addEventListener("click", capture_camera_frame);
+        button_flip_camera.addEventListener("click", () => {
+          flip_camera();
+        });
         button_close_camera.addEventListener("click", () => {
           show_idle_mode();
           set_status(app_state.is_model_ready ? READY_MESSAGE : LOADING_MESSAGE, false, app_state.is_model_loading);
