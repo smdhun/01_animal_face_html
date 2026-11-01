@@ -68,8 +68,8 @@
 
     .sheet {
       width: min(640px, calc(100% - 28px));
-      margin: 28px auto 40px;
-      padding: 32px 22px 28px;
+      margin: 14px auto 40px;
+      padding: 16px 22px 28px;
       position: relative;
       background:
         linear-gradient(180deg, var(--paper-sheen), transparent 120px),
@@ -100,18 +100,27 @@
     .language_switch {
       display: grid;
       grid-template-columns: repeat(7, minmax(0, 1fr));
-      align-self: stretch;
-      width: 100%;
+      align-self: center;
+      width: min(100%, 489px);
       max-width: none;
-      gap: 4px;
+      gap: 2.8px;
       padding: 4px;
       border-radius: 18px;
+    }
+
+    /* 넓은 화면에서는 이름 간격은 유지하고, 둥근 상자만 좌우로 늘린다. */
+    @media (min-width: 680px) {
+      .language_switch {
+        width: 545px;
+        padding-left: 32px;
+        padding-right: 32px;
+      }
     }
 
     .language_switch .theme_button {
       width: 100%;
       min-width: 0;
-      padding: 6px 2px;
+      padding: 4.2px 1.4px;
       text-align: center;
       white-space: nowrap;
       line-height: 1.15;
@@ -809,14 +818,15 @@
       .sheet { padding-left: 16px; }
       .theme_bar { gap: 10px; }
       .language_switch {
+        align-self: stretch;
         width: calc(100% + 38px);
         margin-left: -16px;
         margin-right: -22px;
-        gap: 1px;
+        gap: 0.7px;
         padding: 3px 1px;
       }
       .language_switch .theme_button {
-        padding: 5px 0;
+        padding: 3.5px 0;
         font-size: clamp(0.5rem, 2.35vw, 0.72rem);
         letter-spacing: -0.03em;
       }
