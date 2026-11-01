@@ -78,13 +78,13 @@
       box-shadow: 0 24px 60px var(--shadow);
     }
 
+    /* 언어는 위쪽 두 줄, 화면 모드는 그 아래 메뉴 가운데에 둔다. */
     .theme_bar {
       display: flex;
-      justify-content: flex-end;
-      align-items: flex-start;
-      flex-wrap: nowrap;
-      gap: 6px;
-      margin: -8px 0 12px;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 8px;
     }
 
     .theme_switch {
@@ -98,10 +98,23 @@
     }
 
     .language_switch {
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      max-width: calc(100% - 148px);
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      align-self: stretch;
+      width: 100%;
+      max-width: none;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 18px;
+    }
+
+    .language_switch .theme_button {
+      width: 100%;
       min-width: 0;
+      padding: 6px 2px;
+      text-align: center;
+      white-space: nowrap;
+      line-height: 1.15;
     }
 
     .theme_button {
@@ -794,7 +807,19 @@
 
     @media (max-width: 560px) {
       .sheet { padding-left: 16px; }
-      .theme_bar { gap: 4px; }
+      .theme_bar { gap: 10px; }
+      .language_switch {
+        width: calc(100% + 38px);
+        margin-left: -16px;
+        margin-right: -22px;
+        gap: 1px;
+        padding: 3px 1px;
+      }
+      .language_switch .theme_button {
+        padding: 5px 0;
+        font-size: clamp(0.5rem, 2.35vw, 0.72rem);
+        letter-spacing: -0.03em;
+      }
       .theme_switch { gap: 2px; padding: 2px; }
       .theme_button {
         min-height: 28px;
