@@ -769,6 +769,17 @@
       font-size: 0.85rem;
     }
 
+    .disqus_panel {
+      margin-top: 28px;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      text-align: left;
+    }
+
+    #disqus_thread {
+      min-height: 160px;
+    }
+
     @media (max-width: 560px) {
       .sheet { padding-left: 16px; }
       .sheet::before { display: none; }
@@ -912,7 +923,35 @@
       결과는 얼굴 비율을 동물별 기준과 견준 재미있는 비교이며, 과학적 판별이나 성격 테스트가 아닙니다.
       표정, 고개 각도, 안경, 조명에 따라 순위가 달라질 수 있어요.
     </p>
+
+    <section class="disqus_panel" aria-labelledby="comment_title">
+      <h2 class="section_title" id="comment_title">댓글</h2>
+      <p class="meter_caption">댓글은 Disqus로 전달됩니다. 얼굴 사진과는 별개입니다.</p>
+      <div id="disqus_thread"></div>
+      <noscript>댓글을 보려면 자바스크립트를 켜 주세요. <a href="https://disqus.com/?ref_noscript">Disqus 댓글</a></noscript>
+    </section>
   </main>
+
+  <script>
+    // 주소가 달라도 같은 댓글방으로 모이도록 페이지 이름을 고정한다.
+    var disqus_config = function () {
+      this.page.url = window.location.origin + window.location.pathname;
+      this.page.identifier = "01-animal-face";
+    };
+    (function () {
+      var d = document, s = d.createElement("script");
+      s.src = "https://productbuilder-2x0esbl22b.disqus.com/embed.js";
+      s.setAttribute("data-timestamp", +new Date());
+      s.onerror = function () {
+        console.error("Disqus 댓글 스크립트를 불러오지 못했습니다.");
+        var thread = d.getElementById("disqus_thread");
+        if (thread && !thread.childElementCount) {
+          thread.textContent = "댓글을 불러오지 못했어요. 인터넷 연결을 확인한 뒤 새로고침 해 주세요.";
+        }
+      };
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
 
   <noscript>
     <p>얼굴을 분석하려면 자바스크립트를 켜 주세요.</p>
