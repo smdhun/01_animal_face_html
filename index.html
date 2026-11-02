@@ -128,6 +128,7 @@
       <p class="lead" data-i18n="lead">비교에 쓰는 값은 머리카락이나 귀가 아니라 얼굴 가로·세로와 눈, 코, 입, 턱의 길이 비율입니다. 점수는 아홉 동물 기준과의 거리이며, 성격 테스트나 과학적 판별이 아닙니다.</p>
     </header>
 
+    <button type="button" class="button_primary draw_arm_button" id="button_draw_arm" data-i18n="draw_arm" hidden aria-pressed="false">얼굴 칸 그리기</button>
     <div class="stage" id="photo_stage" aria-label="얼굴 미리보기">
       <p id="empty_message" data-i18n="empty_message">정면 얼굴을 준비해 주세요. 눈이 잘 보이고, 너무 어둡지 않은 사진이 좋아요.</p>
       <video id="live_video" hidden playsinline autoplay muted data-i18n-aria="video_aria" aria-label="카메라 미리보기"></video>
@@ -301,7 +302,7 @@
     "loading": "동물 도감을 펼치는 중이에요. 처음 한 번은 몇 초 걸려요.",
     "ready": "준비됐어요. 카메라로 찍거나 사진을 올려 주세요.",
     "guide_pc": "휠로 확대 · 드래그로 얼굴 지정 · 길게 누르면 이동",
-    "guide_mobile": "손가락으로 드래그해 얼굴을 지정하세요.",
+    "guide_mobile": "사진 위에서는 페이지가 스크롤됩니다. 얼굴 칸은 그리기 버튼을 누른 뒤 드래그하세요.",
     "button_camera": "카메라로 찍기",
     "button_upload": "사진 올리기",
     "button_shutter": "촬영",
@@ -467,7 +468,10 @@
     "share_received": "이 링크의 결과는 {animal} {score}%예요. 사진은 오지 않았고, 점수만 도착했어요.",
     "share_link_bad": "공유 링크의 결과를 읽지 못했어요. 아래에서 얼굴을 재 보세요.",
     "share_need_result": "먼저 얼굴을 잰 뒤에 결과를 보내 주세요.",
-    "share_text": "{animal} {score}%\n{invite}\n{url}"
+    "share_text": "{animal} {score}%\n{invite}\n{url}",
+    "draw_arm": "얼굴 칸 그리기",
+    "draw_armed": "칸 그리는 중 · 다시 누르면 스크롤",
+    "draw_hint": "이제 사진 위를 드래그하세요. 손을 떼면 다시 스크롤됩니다."
   },
   "en": {
     "page_title": "Animal Face Field Guide",
@@ -489,7 +493,7 @@
     "loading": "Opening the field guide. The first time takes a few seconds.",
     "ready": "Ready. Take a photo or upload one.",
     "guide_pc": "Wheel to zoom · Drag to choose a face · Hold to move",
-    "guide_mobile": "Drag with your finger to choose a face.",
+    "guide_mobile": "The page scrolls over the photo. Tap the draw button, then drag a face box.",
     "button_camera": "Use camera",
     "button_upload": "Upload photo",
     "button_shutter": "Capture",
@@ -655,7 +659,10 @@
     "share_received": "This link says {animal} {score}%. Only the score arrived, not a photo.",
     "share_link_bad": "This share link could not be read. Measure a face below.",
     "share_need_result": "Measure a face first, then share the result.",
-    "share_text": "{animal} {score}%\n{invite}\n{url}"
+    "share_text": "{animal} {score}%\n{invite}\n{url}",
+    "draw_arm": "Draw a face box",
+    "draw_armed": "Drawing · tap again to scroll",
+    "draw_hint": "Drag on the photo now. When you lift your finger, the page scrolls again."
   },
   "ja": {
     "page_title": "動物顔図鑑",
@@ -677,7 +684,7 @@
     "loading": "図鑑を開いています。最初の一回は数秒かかります。",
     "ready": "準備できました。カメラで撮るか、写真を読み込んでください。",
     "guide_pc": "ホイールで拡大 · ドラッグで顔を指定 · 長押しで移動",
-    "guide_mobile": "指でドラッグして顔を指定してください。",
+    "guide_mobile": "写真の上ではページがスクロールします。枠は描くボタンを押してからドラッグしてください。",
     "button_camera": "カメラで撮る",
     "button_upload": "写真を読み込む",
     "button_shutter": "撮影",
@@ -843,7 +850,10 @@
     "share_received": "このリンクの結果は{animal} {score}%です。写真は届かず、点数だけです。",
     "share_link_bad": "共有リンクを読めませんでした。下で顔を測ってください。",
     "share_need_result": "先に顔を測ってから共有してください。",
-    "share_text": "{animal} {score}%\n{invite}\n{url}"
+    "share_text": "{animal} {score}%\n{invite}\n{url}",
+    "draw_arm": "顔の枠を描く",
+    "draw_armed": "描き中 · もう一度押すとスクロール",
+    "draw_hint": "今、写真の上をドラッグしてください。指を離すと再びスクロールできます。"
   },
   "zh": {
     "page_title": "动物面相图鉴",
@@ -865,7 +875,7 @@
     "loading": "正在打开图鉴。第一次需要几秒钟。",
     "ready": "准备好了。可以拍照，也可以上传照片。",
     "guide_pc": "滚轮放大 · 拖动选脸 · 按住可移动",
-    "guide_mobile": "用手指拖动来选择脸部。",
+    "guide_mobile": "在照片上滑动会滚动页面。请先按绘制按钮，再拖动选择脸部。",
     "button_camera": "用相机拍",
     "button_upload": "上传照片",
     "button_shutter": "拍摄",
@@ -1031,7 +1041,10 @@
     "share_received": "这个链接的结果是{animal} {score}%。照片没有传来，只有分数。",
     "share_link_bad": "无法读取这条分享链接。请在下方测量一张脸。",
     "share_need_result": "请先测量一张脸，再分享结果。",
-    "share_text": "{animal} {score}%\n{invite}\n{url}"
+    "share_text": "{animal} {score}%\n{invite}\n{url}",
+    "draw_arm": "画脸部选框",
+    "draw_armed": "绘制中 · 再按即可滚动",
+    "draw_hint": "现在请在照片上拖动。松手后可以再次滚动页面。"
   },
   "hi": {
     "page_title": "पशु चेहरा गाइड",
@@ -1053,7 +1066,7 @@
     "loading": "गाइड खुल रही है। पहली बार कुछ सेकंड लगते हैं।",
     "ready": "तैयार है। फ़ोटो लें या अपलोड करें।",
     "guide_pc": "पहिया: बड़ा करें · घसीटें: चेहरा चुनें · दबाए रखें: हिलाएँ",
-    "guide_mobile": "उंगली से घसीटकर चेहरा चुनें।",
+    "guide_mobile": "फ़ोटो पर सरकाने से पेज स्क्रॉल होता है। बटन दबाकर फिर चेहरा चुनें।",
     "button_camera": "कैमरा खोलें",
     "button_upload": "फ़ोटो अपलोड",
     "button_shutter": "लें",
@@ -1219,7 +1232,10 @@
     "share_received": "इस लिंक का परिणाम {animal} {score}% है। फ़ोटो नहीं, केवल अंक आया है।",
     "share_link_bad": "यह शेयर लिंक पढ़ा नहीं जा सका। नीचे चेहरा नापें।",
     "share_need_result": "पहले चेहरा नापें, फिर परिणाम साझा करें।",
-    "share_text": "{animal} {score}%\n{invite}\n{url}"
+    "share_text": "{animal} {score}%\n{invite}\n{url}",
+    "draw_arm": "चेहरा बॉक्स बनाएँ",
+    "draw_armed": "बना रहे हैं · फिर दबाएँ तो स्क्रॉल",
+    "draw_hint": "अब फ़ोटो पर घसीटें। उँगली हटाते ही पेज फिर स्क्रॉल होगा।"
   },
   "zh-Hant": {
     "page_title": "動物面相圖鑑",
@@ -1241,7 +1257,7 @@
     "loading": "正在打開圖鑑。第一次需要幾秒鐘。",
     "ready": "準備好了。可以拍照，也可以上傳照片。",
     "guide_pc": "滾輪放大 · 拖動選臉 · 按住可移動",
-    "guide_mobile": "用手指拖動來選擇臉部。",
+    "guide_mobile": "在照片上滑動會捲動頁面。請先按繪製按鈕，再拖動選擇臉部。",
     "button_camera": "用相機拍",
     "button_upload": "上傳照片",
     "button_shutter": "拍攝",
@@ -1407,7 +1423,10 @@
     "share_received": "這個連結的結果是{animal} {score}%。照片沒有傳來，只有分數。",
     "share_link_bad": "無法讀取這條分享連結。請在下方測量一張臉。",
     "share_need_result": "請先測量一張臉，再分享結果。",
-    "share_text": "{animal} {score}%\n{invite}\n{url}"
+    "share_text": "{animal} {score}%\n{invite}\n{url}",
+    "draw_arm": "畫臉部選框",
+    "draw_armed": "繪製中 · 再按即可捲動",
+    "draw_hint": "現在請在照片上拖動。鬆手後可以再次捲動頁面。"
   },
   "es": {
     "page_title": "Guía de rostros animales",
@@ -1429,7 +1448,7 @@
     "loading": "Abriendo la guía. La primera vez tarda unos segundos.",
     "ready": "Listo. Haz una foto o sube una.",
     "guide_pc": "Rueda para ampliar · Arrastra para elegir un rostro · Mantén para mover",
-    "guide_mobile": "Arrastra con el dedo para elegir un rostro.",
+    "guide_mobile": "Sobre la foto la página se desplaza. Pulsa el botón y luego arrastra un recuadro.",
     "button_camera": "Usar cámara",
     "button_upload": "Subir foto",
     "button_shutter": "Capturar",
@@ -1595,7 +1614,10 @@
     "share_received": "Este enlace dice {animal} {score}%. Llegó solo la puntuación, sin foto.",
     "share_link_bad": "No se pudo leer este enlace. Mide un rostro abajo.",
     "share_need_result": "Mide un rostro antes de compartir.",
-    "share_text": "{animal} {score}%\n{invite}\n{url}"
+    "share_text": "{animal} {score}%\n{invite}\n{url}",
+    "draw_arm": "Dibujar un recuadro",
+    "draw_armed": "Dibujando · toca otra vez para desplazar",
+    "draw_hint": "Ahora arrastra sobre la foto. Al soltar, la página vuelve a desplazarse."
   },
   "pt": {
     "page_title": "Guia de rostos de animais",
@@ -1617,7 +1639,7 @@
     "loading": "Abrindo o guia. A primeira vez leva alguns segundos.",
     "ready": "Pronto. Tire uma foto ou envie uma.",
     "guide_pc": "Roda para ampliar · Arraste para escolher um rosto · Segure para mover",
-    "guide_mobile": "Arraste com o dedo para escolher um rosto.",
+    "guide_mobile": "Sobre a foto a página rola. Toque no botão e depois arraste uma caixa.",
     "button_camera": "Usar câmera",
     "button_upload": "Enviar foto",
     "button_shutter": "Capturar",
@@ -1783,7 +1805,10 @@
     "share_received": "Este link diz {animal} {score}%. Chegou só a pontuação, sem foto.",
     "share_link_bad": "Não foi possível ler este link. Meça um rosto abaixo.",
     "share_need_result": "Meça um rosto antes de compartilhar.",
-    "share_text": "{animal} {score}%\n{invite}\n{url}"
+    "share_text": "{animal} {score}%\n{invite}\n{url}",
+    "draw_arm": "Desenhar uma caixa",
+    "draw_armed": "Desenhando · toque de novo para rolar",
+    "draw_hint": "Agora arraste sobre a foto. Ao soltar, a página volta a rolar."
   },
   "ar": {
     "page_title": "دليل وجوه الحيوانات",
@@ -1805,7 +1830,7 @@
     "loading": "جارٍ فتح الدليل. المرة الأولى تستغرق بضع ثوانٍ.",
     "ready": "جاهز. التقط صورة أو ارفع واحدة.",
     "guide_pc": "العجلة للتكبير · اسحب لتحديد الوجه · اضغط مطولًا للتحريك",
-    "guide_mobile": "اسحب بإصبعك لتحديد الوجه.",
+    "guide_mobile": "فوق الصورة تتحرك الصفحة. اضغط زر الرسم ثم اسحب مربع الوجه.",
     "button_camera": "استخدم الكاميرا",
     "button_upload": "رفع صورة",
     "button_shutter": "التقاط",
@@ -1971,7 +1996,10 @@
     "share_received": "نتيجة هذا الرابط هي {animal} {score}%. وصلت الدرجة فقط، بلا صورة.",
     "share_link_bad": "تعذّر قراءة رابط المشاركة. قس وجهًا في الأسفل.",
     "share_need_result": "قس وجهًا أولًا، ثم شارك النتيجة.",
-    "share_text": "{animal} {score}%\n{invite}\n{url}"
+    "share_text": "{animal} {score}%\n{invite}\n{url}",
+    "draw_arm": "ارسم مربع الوجه",
+    "draw_armed": "الرسم جارٍ · اضغط مجددًا للتمرير",
+    "draw_hint": "الآن اسحب على الصورة. عند رفع الإصبع يعود التمرير."
   },
   "fr": {
     "page_title": "Guide des visages d'animaux",
@@ -1993,7 +2021,7 @@
     "loading": "Ouverture du guide. La première fois prend quelques secondes.",
     "ready": "Prêt. Prenez une photo ou importez-en une.",
     "guide_pc": "Molette pour zoomer · Glisser pour choisir un visage · Maintenir pour déplacer",
-    "guide_mobile": "Faites glisser avec le doigt pour choisir un visage.",
+    "guide_mobile": "Sur la photo, la page défile. Appuyez sur le bouton, puis faites glisser un cadre.",
     "button_camera": "Utiliser la caméra",
     "button_upload": "Importer une photo",
     "button_shutter": "Capturer",
@@ -2159,7 +2187,10 @@
     "share_received": "Ce lien indique {animal} {score}%. Seul le score est arrivé, sans photo.",
     "share_link_bad": "Ce lien n'a pas pu être lu. Mesurez un visage plus bas.",
     "share_need_result": "Mesurez un visage avant de partager.",
-    "share_text": "{animal} {score}%\n{invite}\n{url}"
+    "share_text": "{animal} {score}%\n{invite}\n{url}",
+    "draw_arm": "Dessiner un cadre",
+    "draw_armed": "Dessin · appuyez encore pour défiler",
+    "draw_hint": "Faites glisser sur la photo. Quand vous relâchez, la page défile à nouveau."
   },
   "id": {
     "page_title": "Panduan Wajah Hewan",
@@ -2181,7 +2212,7 @@
     "loading": "Membuka panduan. Kali pertama butuh beberapa detik.",
     "ready": "Siap. Ambil foto atau unggah satu.",
     "guide_pc": "Roda untuk memperbesar · Seret untuk memilih wajah · Tahan untuk menggeser",
-    "guide_mobile": "Seret dengan jari untuk memilih wajah.",
+    "guide_mobile": "Di atas foto, halaman bergulir. Ketuk tombol, lalu seret kotak wajah.",
     "button_camera": "Pakai kamera",
     "button_upload": "Unggah foto",
     "button_shutter": "Ambil",
@@ -2347,7 +2378,10 @@
     "share_received": "Tautan ini berbunyi {animal} {score}%. Yang sampai hanya skor, tanpa foto.",
     "share_link_bad": "Tautan berbagi tidak terbaca. Ukur wajah di bawah.",
     "share_need_result": "Ukur wajah dulu, lalu bagikan hasilnya.",
-    "share_text": "{animal} {score}%\n{invite}\n{url}"
+    "share_text": "{animal} {score}%\n{invite}\n{url}",
+    "draw_arm": "Gambar kotak wajah",
+    "draw_armed": "Menggambar · ketuk lagi untuk gulir",
+    "draw_hint": "Sekarang seret di atas foto. Saat jari diangkat, halaman bisa digulir lagi."
   },
   "de": {
     "page_title": "Tiergesichter-Atlas",
@@ -2369,7 +2403,7 @@
     "loading": "Der Atlas wird geöffnet. Beim ersten Mal dauert es ein paar Sekunden.",
     "ready": "Bereit. Machen Sie ein Foto oder laden Sie eines hoch.",
     "guide_pc": "Rad zum Zoomen · Ziehen, um ein Gesicht zu wählen · Halten zum Verschieben",
-    "guide_mobile": "Ziehen Sie mit dem Finger, um ein Gesicht zu wählen.",
+    "guide_mobile": "Auf dem Foto scrollt die Seite. Tippen Sie die Taste und ziehen Sie dann ein Feld.",
     "button_camera": "Kamera nutzen",
     "button_upload": "Foto hochladen",
     "button_shutter": "Aufnehmen",
@@ -2535,7 +2569,10 @@
     "share_received": "Dieser Link sagt {animal} {score}%. Angekommen ist nur die Punktzahl, ohne Foto.",
     "share_link_bad": "Dieser Link ließ sich nicht lesen. Messen Sie unten ein Gesicht.",
     "share_need_result": "Messen Sie zuerst ein Gesicht, dann teilen Sie das Ergebnis.",
-    "share_text": "{animal} {score}%\n{invite}\n{url}"
+    "share_text": "{animal} {score}%\n{invite}\n{url}",
+    "draw_arm": "Gesichtsfeld zeichnen",
+    "draw_armed": "Zeichnen · erneut tippen zum Scrollen",
+    "draw_hint": "Ziehen Sie jetzt auf dem Foto. Nach dem Loslassen scrollt die Seite wieder."
   },
   "ru": {
     "page_title": "Атлас звериных лиц",
@@ -2557,7 +2594,7 @@
     "loading": "Открываем атлас. В первый раз это занимает несколько секунд.",
     "ready": "Готово. Сделайте фото или загрузите его.",
     "guide_pc": "Колесо — увеличить · Перетаскивание — выбрать лицо · Удержание — сдвинуть",
-    "guide_mobile": "Проведите пальцем, чтобы выбрать лицо.",
+    "guide_mobile": "По фото страница прокручивается. Нажмите кнопку и затем проведите рамку.",
     "button_camera": "Камера",
     "button_upload": "Загрузить фото",
     "button_shutter": "Снять",
@@ -2723,7 +2760,10 @@
     "share_received": "По этой ссылке {animal} {score}%. Пришёл только балл, без фото.",
     "share_link_bad": "Ссылку не удалось прочитать. Измерьте лицо ниже.",
     "share_need_result": "Сначала измерьте лицо, потом делитесь результатом.",
-    "share_text": "{animal} {score}%\n{invite}\n{url}"
+    "share_text": "{animal} {score}%\n{invite}\n{url}",
+    "draw_arm": "Нарисовать рамку",
+    "draw_armed": "Рисуете · нажмите снова для прокрутки",
+    "draw_hint": "Теперь проведите по фото. Когда отпустите палец, страница снова прокручивается."
   },
   "vi": {
     "page_title": "Sổ tay khuôn mặt động vật",
@@ -2745,7 +2785,7 @@
     "loading": "Đang mở sổ tay. Lần đầu mất vài giây.",
     "ready": "Sẵn sàng. Chụp ảnh hoặc tải một ảnh lên.",
     "guide_pc": "Con lăn để phóng to · Kéo để chọn mặt · Giữ để di chuyển",
-    "guide_mobile": "Kéo bằng ngón tay để chọn khuôn mặt.",
+    "guide_mobile": "Trên ảnh, trang sẽ cuộn. Chạm nút rồi kéo một khung mặt.",
     "button_camera": "Dùng camera",
     "button_upload": "Tải ảnh lên",
     "button_shutter": "Chụp",
@@ -2911,7 +2951,10 @@
     "share_received": "Liên kết này là {animal} {score}%. Chỉ có điểm số, không có ảnh.",
     "share_link_bad": "Không đọc được liên kết chia sẻ. Hãy đo một khuôn mặt bên dưới.",
     "share_need_result": "Hãy đo một khuôn mặt trước khi chia sẻ.",
-    "share_text": "{animal} {score}%\n{invite}\n{url}"
+    "share_text": "{animal} {score}%\n{invite}\n{url}",
+    "draw_arm": "Vẽ khung mặt",
+    "draw_armed": "Đang vẽ · chạm lại để cuộn",
+    "draw_hint": "Hãy kéo trên ảnh. Nhấc ngón tay thì trang cuộn lại được."
   }
 };
 
@@ -3937,7 +3980,8 @@
       view_scale: 1,
       view_x: 0,
       view_y: 0,
-      analysis_generation: 0
+      analysis_generation: 0,
+      is_draw_armed: false
     };
 
     let share_state = {
@@ -3959,6 +4003,7 @@
     const action_bar = require_element("action_bar");
     const button_camera = require_element("button_camera");
     const button_upload = require_element("button_upload");
+    const button_draw_arm = require_element("button_draw_arm");
     const button_shutter = require_element("button_shutter");
     const button_flip_camera = require_element("button_flip_camera");
     const button_close_camera = require_element("button_close_camera");
@@ -4082,9 +4127,48 @@
       return is_touch_input() ? "guide_mobile" : "guide_pc";
     }
 
+    // 휴대폰에서는 그리기 버튼을 눌렀을 때만 사진이 스크롤을 가로챈다.
+    function sync_draw_button() {
+      const can_draw = app_state.has_photo && !app_state.is_camera_on && !app_state.is_analyzing && is_touch_input();
+      const is_armed = Boolean(app_state.is_draw_armed) && can_draw;
+      app_state.is_draw_armed = is_armed;
+      button_draw_arm.hidden = !can_draw;
+      button_draw_arm.setAttribute("aria-pressed", is_armed ? "true" : "false");
+      button_draw_arm.setAttribute("data-i18n", is_armed ? "draw_armed" : "draw_arm");
+      button_draw_arm.textContent = t(is_armed ? "draw_armed" : "draw_arm");
+      button_draw_arm.classList.toggle("is_selected", is_armed);
+      photo_stage.classList.toggle("is_draw_armed", is_armed);
+    }
+
+    // 얼굴 칸 그리기를 켜고 끈다. 켜져 있으면 다시 눌러 스크롤로 돌아간다.
+    function toggle_draw_arm() {
+      try {
+        if (!app_state.has_photo || app_state.is_camera_on || app_state.is_analyzing) {
+          console.error("사진을 연 뒤에 얼굴 칸을 그릴 수 있습니다.");
+          show_user_error("selection_failed");
+          return;
+        }
+        app_state.is_draw_armed = !app_state.is_draw_armed;
+        sync_draw_button();
+        if (app_state.is_draw_armed) {
+          show_status("draw_hint", {}, false, false);
+          return;
+        }
+        show_status(app_state.selections.length > 0 ? "selection_picked" : select_guide_key(), {
+          count: app_state.selections.length
+        }, false, false);
+      } catch (error) {
+        console.error("얼굴 칸 그리기를 바꾸지 못했습니다. 버튼을 한 번 더 눌러 주세요.", error);
+        app_state.is_draw_armed = false;
+        sync_draw_button();
+        show_user_error("selection_failed");
+      }
+    }
+
     // 안내 문장이 떠 있을 때만, 장치를 바꿀 때 그 한 줄을 다시 고른다.
     function refresh_select_guide() {
-      const is_guide = status_state.key === "guide_pc" || status_state.key === "guide_mobile";
+      sync_draw_button();
+      const is_guide = status_state.key === "guide_pc" || status_state.key === "guide_mobile" || status_state.key === "draw_hint";
       if (!is_guide || !app_state.has_photo || app_state.is_analyzing || app_state.selections.length > 0) {
         return;
       }
@@ -4141,7 +4225,7 @@
       app_state.photo_canvas = null;
       app_state.has_photo = false;
       action_bar.classList.remove("is_live");
-      photo_stage.classList.remove("is_camera", "is_photo", "is_front");
+      photo_stage.classList.remove("is_camera", "is_photo", "is_front", "is_draw_armed");
       photo_stage.setAttribute("aria-label", t("stage_aria"));
       empty_message.hidden = false;
       live_video.hidden = true;
@@ -4158,6 +4242,8 @@
       result_panel.hidden = true;
       clear_selection_state();
       reset_photo_view();
+      app_state.is_draw_armed = false;
+      sync_draw_button();
       sync_analyze_button();
     }
 
@@ -4165,7 +4251,7 @@
     function show_live_mode() {
       action_bar.classList.add("is_live");
       photo_stage.classList.add("is_camera");
-      photo_stage.classList.remove("is_photo");
+      photo_stage.classList.remove("is_photo", "is_draw_armed");
       empty_message.hidden = true;
       live_video.hidden = false;
       camera_guide.hidden = false;
@@ -4181,6 +4267,8 @@
       result_panel.hidden = true;
       selection_layer.hidden = true;
       crop_panel.hidden = true;
+      app_state.is_draw_armed = false;
+      sync_draw_button();
     }
 
     // 찍거나 고른 사진을 보여주고, 드래그로 영역을 고를 수 있게 한다.
@@ -4215,6 +4303,8 @@
       render_selection_boxes();
       render_crop_cards();
       sync_selection_hint();
+      app_state.is_draw_armed = false;
+      sync_draw_button();
       sync_analyze_button();
     }
 
@@ -6009,12 +6099,15 @@
       selection_layer.classList.remove("is_selecting");
     }
 
-    // 사진 위에서 드래그를 시작한다. 바로 끌면 영역이고, 0.1초 누르고 있으면 이동이다.
+    // 사진 위에서 드래그를 시작한다. 휴대폰 손가락은 그리기 버튼이 켜져 있을 때만 칸을 만든다.
     function on_selection_pointer_down(event) {
       if (!app_state.has_photo || app_state.is_camera_on || app_state.is_analyzing || event.button !== 0) {
         return;
       }
       app_state.last_pointer_type = event.pointerType;
+      if (event.pointerType === "touch" && !app_state.is_draw_armed) {
+        return;
+      }
       capture_selection_pointer(event);
       event.preventDefault();
       try {
@@ -6207,6 +6300,8 @@
       }
       try {
         add_selection(rect);
+        app_state.is_draw_armed = false;
+        sync_draw_button();
       } catch (error) {
         console.error("선택 영역을 만들지 못했습니다.", error);
         show_user_error(error_code(error, "selection_failed"));
@@ -6332,6 +6427,8 @@
       }
       const generation = app_state.analysis_generation;
       app_state.is_analyzing = true;
+      app_state.is_draw_armed = false;
+      sync_draw_button();
       sync_analyze_button();
       render_crop_cards();
       let success_count = 0;
@@ -6407,6 +6504,7 @@
         if (generation === app_state.analysis_generation) {
           app_state.is_analyzing = false;
           sync_analyze_button();
+          sync_draw_button();
           try {
             render_crop_cards();
           } catch (render_error) {
@@ -6577,6 +6675,9 @@
         button_upload.addEventListener("click", () => {
           photo_input.click();
         });
+        button_draw_arm.addEventListener("click", () => {
+          toggle_draw_arm();
+        });
         photo_input.addEventListener("change", (event) => {
           on_photo_selected(event);
         });
@@ -6706,6 +6807,7 @@
         render_guide();
         render_crop_cards();
         render_shared_banner();
+        sync_draw_button();
         refresh_result_target();
         const active_selection = app_state.selections.find((item) => item.id === app_state.active_selection_id);
         if (active_selection && active_selection.result && active_selection.result.is_ok && !result_panel.hidden) {

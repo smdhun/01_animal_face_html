@@ -204,7 +204,25 @@
 
     .stage.is_camera { height: 440px; min-height: 440px; }
 
-    .stage.is_photo { min-height: 0; touch-action: none; }
+    .stage.is_photo { min-height: 0; touch-action: pan-y; }
+
+    .stage.is_photo.is_draw_armed,
+    .stage.is_photo.is_draw_armed .selection_layer {
+      touch-action: none;
+    }
+
+    .draw_arm_button {
+      display: block;
+      margin: 18px auto 0;
+    }
+
+    .draw_arm_button[hidden] {
+      display: none !important;
+    }
+
+    .draw_arm_button.is_selected {
+      box-shadow: inset 0 0 0 2px var(--focus);
+    }
 
     .photo_view {
       position: relative;
@@ -217,7 +235,7 @@
       inset: 0;
       z-index: 2;
       cursor: crosshair;
-      touch-action: none;
+      touch-action: pan-y;
       user-select: none;
     }
 
