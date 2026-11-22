@@ -5,8 +5,8 @@
     // 첫 그림이 그려지기 전에 저장된 화면 모드와 언어를 적용한다.
     (function () {
       try {
-        var saved_theme = localStorage.getItem("theme_mode");
-        document.documentElement.setAttribute("data-theme", saved_theme === "light" ? "light" : "dark");
+        document.documentElement.setAttribute("data-theme", "dark");
+        localStorage.removeItem("theme_mode");
         var saved_language = localStorage.getItem("language_code") || "";
         var browser_language = (navigator.language || "").toLowerCase();
         var language_code = "ko";
@@ -100,10 +100,6 @@
         <button type="button" class="theme_button" id="button_language_ru" data-language="ru">Русский</button>
         <button type="button" class="theme_button" id="button_language_vi" data-language="vi">Tiếng Việt</button>
       </div>
-      <div class="theme_switch" role="group" data-i18n-aria="theme_group" aria-label="화면 모드">
-        <button type="button" class="theme_button is_selected" id="button_theme_light" data-i18n="theme_light" aria-pressed="true">화이트</button>
-        <button type="button" class="theme_button" id="button_theme_dark" data-i18n="theme_dark" aria-pressed="false">다크</button>
-      </div>
     </div>
     <nav class="site_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
       <a href="index.html" data-i18n="nav_tool">얼굴 재기</a>
@@ -118,7 +114,7 @@
       <h2 data-i18n="privacy_photo_heading">얼굴 사진</h2>
       <p data-i18n="privacy_photo">카메라로 찍거나 올린 얼굴 사진은 분석을 위해 이 브라우저의 메모리에서만 다룹니다. 동물상 도감의 서버로 전송하지 않고, 계정에 저장하지도 않습니다. 페이지를 닫거나 다른 사진으로 바꾸면 이전 사진은 남지 않습니다.</p>
       <h2 data-i18n="privacy_store_heading">이 기기에 남는 설정</h2>
-      <p data-i18n="privacy_store">고른 언어는 language_code라는 이름으로, 화이트 또는 다크 모드는 theme_mode라는 이름으로 이 브라우저의 로컬 저장소에 남습니다. 이 값은 다음 방문에 같은 화면을 보여 주기 위한 것이며, 얼굴 사진과 함께 보내지지 않습니다.</p>
+      <p data-i18n="privacy_store">고른 언어는 language_code라는 이름으로 이 브라우저의 로컬 저장소에 남습니다. 이 값은 다음 방문에 같은 화면을 보여 주기 위한 것이며, 얼굴 사진과 함께 보내지지 않습니다.</p>
       <h2 data-i18n="privacy_ads_heading">광고</h2>
       <p data-i18n="privacy_ads">이 사이트는 구글 애드센스 자동 광고를 사용합니다. 광고가 표시되면 구글이 쿠키와 비슷한 식별 값을 사용해 광고를 고르고 측정할 수 있습니다. 광고가 쓰는 정보에 대한 구글의 설명은 https://policies.google.com/technologies/ads 에서 볼 수 있습니다. 사이트 소유 확인을 위해 페이지 머리의 메타 태그와 루트의 ads.txt에 게시자 번호 ca-pub-8803401825336300 을 적어 두었습니다.</p>
       <h2 data-i18n="privacy_disqus_heading">댓글</h2>

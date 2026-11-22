@@ -5,8 +5,8 @@
     // 첫 그림이 그려지기 전에 저장된 화면 모드와 언어를 적용한다.
     (function () {
       try {
-        var saved_theme = localStorage.getItem("theme_mode");
-        document.documentElement.setAttribute("data-theme", saved_theme === "light" ? "light" : "dark");
+        document.documentElement.setAttribute("data-theme", "dark");
+        localStorage.removeItem("theme_mode");
         var saved_language = localStorage.getItem("language_code") || "";
         var browser_language = (navigator.language || "").toLowerCase();
         var language_code = "ko";
@@ -99,10 +99,6 @@
         <button type="button" class="theme_button" id="button_language_de" data-language="de">Deutsch</button>
         <button type="button" class="theme_button" id="button_language_ru" data-language="ru">Русский</button>
         <button type="button" class="theme_button" id="button_language_vi" data-language="vi">Tiếng Việt</button>
-      </div>
-      <div class="theme_switch" role="group" data-i18n-aria="theme_group" aria-label="화면 모드">
-        <button type="button" class="theme_button is_selected" id="button_theme_light" data-i18n="theme_light" aria-pressed="true">화이트</button>
-        <button type="button" class="theme_button" id="button_theme_dark" data-i18n="theme_dark" aria-pressed="false">다크</button>
       </div>
     </div>
     <nav class="site_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
