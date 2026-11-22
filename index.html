@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="light">
+<html lang="ko" data-theme="dark">
 <head>
   <script>
     // 첫 그림이 그려지기 전에 저장된 화면 모드를 적용한다.
     (function () {
       try {
         var saved_theme = localStorage.getItem("theme_mode");
-        document.documentElement.setAttribute("data-theme", saved_theme === "dark" ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", saved_theme === "light" ? "light" : "dark");
         var saved_language = localStorage.getItem("language_code") || "";
         var browser_language = (navigator.language || "").toLowerCase();
         var language_code = "ko";
@@ -44,7 +44,7 @@
         document.documentElement.setAttribute("data-language", language_code);
         document.documentElement.dir = language_code === "ar" ? "rtl" : "ltr";
       } catch (error) {
-        document.documentElement.setAttribute("data-theme", "light");
+        document.documentElement.setAttribute("data-theme", "dark");
         document.documentElement.lang = "ko";
         document.documentElement.setAttribute("data-language", "ko");
         document.documentElement.dir = "ltr";
@@ -88,8 +88,9 @@
   <link rel="stylesheet" href="guide.css" />
 </head>
 <body>
-    <main class="sheet">
-    <div class="theme_bar">
+  <div class="app_shell">
+    <div class="app_top">
+    <div class="language_bar">
       <div class="language_switch theme_switch" role="group" data-i18n-aria="language_group" aria-label="언어">
         <button type="button" class="theme_button" id="button_language_ko" data-language="ko">한국어</button>
         <button type="button" class="theme_button" id="button_language_en" data-language="en">English</button>
@@ -106,28 +107,60 @@
         <button type="button" class="theme_button" id="button_language_ru" data-language="ru">Русский</button>
         <button type="button" class="theme_button" id="button_language_vi" data-language="vi">Tiếng Việt</button>
       </div>
-      <div class="theme_switch" role="group" data-i18n-aria="theme_group" aria-label="화면 모드">
-        <button type="button" class="theme_button is_selected" id="button_theme_light" data-i18n="theme_light" aria-pressed="true">화이트</button>
-        <button type="button" class="theme_button" id="button_theme_dark" data-i18n="theme_dark" aria-pressed="false">다크</button>
-      </div>
     </div>
-    <nav class="site_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
-      <a href="index.html" data-i18n="nav_tool" aria-current="page">얼굴 재기</a>
-      <a href="method.html" data-i18n="nav_method">측정 방법</a>
-      <a href="about.html" data-i18n="nav_about">소개</a>
-      <a href="privacy.html" data-i18n="nav_privacy">개인정보</a>
-      <a href="contact.html" data-i18n="nav_contact">문의</a>
-    </nav>
+    <header class="app_bar">
+      <button type="button" class="icon_button" id="button_back" data-i18n="back_label" hidden>뒤로</button>
+      <div class="app_brand_row"><svg class="brand_mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="18" r="8" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="10" r="3" fill="currentColor"/><circle cx="16" cy="7" r="3" fill="currentColor"/><circle cx="24" cy="10" r="3" fill="currentColor"/></svg><span class="app_brand" data-i18n="brand_name">동물상 AI</span></div>
+      <button type="button" class="icon_button" id="button_open_my" data-i18n="tab_my">마이</button>
+    </header>
+    </div>
+    <main class="sheet">
+    <section id="pane_home" class="pane" data-pane="home">
     <section id="shared_result" class="shared_result" hidden>
       <p id="shared_result_text"></p>
       <a class="shared_try" id="shared_result_try" href="#photo_stage" data-i18n="share_try">나도 재보기</a>
     </section>
     <header class="header">
-      <p class="eyebrow">Face Field Notes</p>
-      <h1 data-i18n="app_title">동물상 도감</h1>
+      <p class="eyebrow" data-i18n="home_kicker">사진 한 장으로 알아보는</p>
+      <h1 data-i18n="home_headline">내 얼굴 속 동물상</h1>
       <p class="lead" data-i18n="lead">비교에 쓰는 값은 머리카락이나 귀가 아니라 얼굴 가로·세로와 눈, 코, 입, 턱의 길이 비율입니다. 점수는 아홉 동물 기준과의 거리이며, 성격 테스트나 과학적 판별이 아닙니다.</p>
     </header>
+    <div class="home_cards">
+      <button type="button" class="home_card home_card_main" id="button_home_scan">
+        <span class="icon_badge icon_badge_lg" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M9 4h6l1.2 2H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.8L9 4zm3 12.2a3.7 3.7 0 1 0 0-7.4 3.7 3.7 0 0 0 0 7.4z"/></svg></span>
+        <span class="home_card_copy">
+          <span class="home_card_title" data-i18n="button_camera">카메라로 바로 촬영하기</span>
+          <span class="home_card_help" data-i18n="home_camera_help">타원 안에 얼굴을 맞추고 촬영합니다.</span>
+        </span>
+      </button>
+      <button type="button" class="home_card" id="button_home_upload">
+        <span class="icon_badge icon_badge_md" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zm2 10 3.2-3.2 2.2 2.2 3.4-4 3.2 5H6z"/></svg></span>
+        <span class="home_card_copy">
+          <span class="home_card_title" data-i18n="button_upload">갤러리에서 사진 선택</span>
+          <span class="home_card_help" data-i18n="home_gallery_help">앨범에서 사진을 고릅니다.</span>
+        </span>
+        <span class="icon_badge icon_badge_sm" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M9 6l6 6-6 6"/></svg></span>
+      </button>
+    </div>
+    <p class="footer_note" data-i18n="footer">
+      사진은 이 브라우저 안에서만 처리되고 서버로 전송되지 않습니다.
+      결과는 얼굴 비율을 동물별 기준과 견준 재미있는 비교이며, 과학적 판별이나 성격 테스트가 아닙니다.
+      표정, 고개 각도, 안경, 조명에 따라 순위가 달라질 수 있어요.
+    </p>
+    </section>
 
+    <section id="pane_capture" class="pane" data-pane="capture">
+    <div class="mode_row" role="group" data-i18n-aria="mode_group" aria-label="촬영 모드">
+      <button type="button" class="mode_button is_selected" id="button_mode_selfie" data-mode="selfie" data-i18n="mode_selfie" aria-pressed="true">셀카 모드</button>
+      <button type="button" class="mode_button" id="button_mode_friends" data-mode="friends" data-i18n="mode_friends" aria-pressed="false">친구와 함께</button>
+      <button type="button" class="mode_button" id="button_mode_pet" data-mode="pet" data-i18n="mode_pet" aria-pressed="false">반려동물 비교</button>
+    </div>
+    <p class="pose_hint" id="pose_hint" data-i18n="pose_hint">안경을 벗고 정면을 보면 더 잘 맞습니다. 쓴 채로도 재 볼 수 있어요.</p>
+    <p class="brightness_text" id="brightness_text" hidden></p>
+    <div class="start_actions" id="start_actions">
+      <button type="button" class="button_primary button_wide" id="button_camera" data-i18n="button_camera">카메라로 바로 촬영하기</button>
+      <button type="button" class="button_ghost button_wide" id="button_upload" data-i18n="button_upload">갤러리에서 사진 선택</button>
+    </div>
     <button type="button" class="button_primary draw_arm_button" id="button_draw_arm" data-i18n="draw_arm" hidden aria-pressed="false">얼굴 칸 그리기</button>
     <div class="stage" id="photo_stage" aria-label="얼굴 미리보기">
       <p id="empty_message" data-i18n="empty_message">정면 얼굴을 준비해 주세요. 눈이 잘 보이고, 너무 어둡지 않은 사진이 좋아요.</p>
@@ -156,28 +189,54 @@
     <p id="status_text" class="status_text" role="status" data-i18n="loading" data-i18n-live="true">동물 도감을 펼치는 중이에요. 처음 한 번은 몇 초 걸려요.</p>
 
     <div class="actions" id="action_bar">
-      <button type="button" class="button_ghost" id="button_camera" data-i18n="button_camera">카메라로 찍기</button>
       <button type="button" class="button_primary button_wide" id="button_shutter" data-i18n="button_shutter" hidden disabled>촬영</button>
       <div class="camera_row">
         <button type="button" class="button_ghost" id="button_flip_camera" hidden>후면 카메라</button>
         <button type="button" class="button_ghost" id="button_close_camera" data-i18n="button_close_camera" hidden>카메라 닫기</button>
       </div>
-      <button type="button" class="button_ghost" id="button_upload" data-i18n="button_upload">사진 올리기</button>
+      <button type="button" class="button_primary button_wide" id="button_instant" data-i18n="instant_analyze" hidden>즉시 분석</button>
       <button type="button" class="button_primary button_wide" id="button_analyze" data-i18n="button_analyze" hidden disabled>고른 얼굴 모두 분석하기</button>
       <button type="button" class="button_ghost" id="button_retake" data-i18n="button_retake" hidden>다른 얼굴로 다시</button>
       <input id="photo_input" type="file" accept="image/*" hidden aria-hidden="true" tabindex="-1" />
     </div>
+    </section>
 
+    <section id="pane_analyze" class="pane" data-pane="analyze" hidden>
+      <header class="header">
+        <h1 data-i18n="analyze_title">눈, 코, 입, 턱 비율을 비교하고 있어요</h1>
+        <p class="lead" data-i18n="analyze_wait">잠시만 기다려 주세요. 아홉 동물 기준과 거리를 계산합니다.</p>
+      </header>
+      <ol class="analyze_steps" id="analyze_steps">
+        <li data-step="model" data-i18n="step_model">측정 도구 준비</li>
+        <li data-step="points" data-i18n="step_points">얼굴 점 찾기</li>
+        <li data-step="ratios" data-i18n="step_ratios">눈, 코, 입, 턱 비율</li>
+        <li data-step="animals" data-i18n="step_animals">아홉 동물과 비교</li>
+      </ol>
+      <button type="button" class="button_ghost" id="button_cancel_analyze" data-i18n="analyze_cancel">분석 취소</button>
+    </section>
+
+    <section id="pane_result" class="pane" data-pane="result">
     <section id="result_panel" class="result_panel" hidden aria-live="polite">
-      <p class="specimen" id="result_target" data-i18n="result_target" data-i18n-live="true">이번 얼굴과 가장 가까운 동물</p>
+      <p class="specimen" id="result_target" data-i18n="result_target" data-i18n-live="true">이번 얼굴과 가장 가까운 품종</p>
       <div class="hero">
-        <div id="result_icon"></div>
-        <div>
+        <div class="face_pair">
+          <figure class="face_slot">
+            <canvas id="result_face" width="320" height="320" hidden></canvas>
+            <figcaption data-i18n="compare_mine">내 얼굴</figcaption>
+          </figure>
+          <figure class="face_slot">
+            <img id="result_dog" alt="" hidden>
+            <div id="result_icon"></div>
+            <figcaption id="result_dog_label"></figcaption>
+          </figure>
+        </div>
+        <div class="hero_text">
           <h2 class="result_name" id="result_name"></h2>
           <p class="score_value">
             <span class="score_label" data-i18n="score_label">유사도</span>
             <span class="score_number" id="result_score">0</span><span class="score_unit">%</span>
           </p>
+          <p class="photo_source" data-i18n="photo_source">강아지 사진은 품종마다 모아 둔 최대 100장 중에서 무작위로 고릅니다.</p>
         </div>
       </div>
       <div class="share_box" id="share_box">
@@ -185,12 +244,14 @@
         <div class="share_actions">
           <button type="button" class="button_primary" id="button_share_native" data-i18n="share_native" hidden>카카오톡 등으로 보내기</button>
           <button type="button" class="button_ghost" id="button_share_copy" data-i18n="share_copy">문구 복사</button>
+          <button type="button" class="button_ghost" id="button_save_card" data-i18n="save_card">카드 이미지 저장</button>
           <a class="share_link" id="link_share_x" href="#photo_stage" target="_blank" rel="noopener noreferrer">X</a>
           <a class="share_link" id="link_share_facebook" href="#photo_stage" target="_blank" rel="noopener noreferrer">Facebook</a>
           <a class="share_link" id="link_share_whatsapp" href="#photo_stage" target="_blank" rel="noopener noreferrer">WhatsApp</a>
           <a class="share_link" id="link_share_line" href="#photo_stage" target="_blank" rel="noopener noreferrer">LINE</a>
         </div>
         <p class="share_status" id="share_status" role="status" hidden></p>
+        <button type="button" class="button_ghost" id="button_result_again" data-i18n="button_retake">다른 얼굴로 다시</button>
       </div>
       <p class="result_blurb" id="result_blurb"></p>
       <p class="result_reason" id="result_reason"></p>
@@ -200,6 +261,7 @@
       <p class="meter_caption" id="piece_summary"></p>
       <ul class="piece_list" id="piece_list"></ul>
 
+      <h2 class="section_title" data-i18n="rank_bars_heading">각 품종과의 유사도</h2>
       <h2 class="section_title" data-i18n="rank_heading">비교 순위</h2>
       <ol class="rank_list" id="result_list"></ol>
 
@@ -213,26 +275,44 @@
         <dl class="raw_list" id="raw_list"></dl>
       </details>
     </section>
+    </section>
 
+    <section id="pane_feed" class="pane" data-pane="feed">
+      <header class="header">
+        <h1 data-i18n="feed_heading">이 브라우저의 최근 결과</h1>
+        <p class="lead" id="feed_empty" data-i18n="feed_empty">아직 이 탭에 남은 결과가 없습니다. 사진은 저장하지 않습니다.</p>
+      </header>
+      <div class="feed_last" id="feed_last" hidden>
+        <p id="feed_last_text"></p>
+        <button type="button" class="button_primary" id="button_feed_open" data-i18n="feed_open">결과 다시 보기</button>
+      </div>
     <section class="atlas">
       <h2 class="section_title" data-i18n="atlas_heading">도감에 있는 동물</h2>
       <p class="meter_caption" data-i18n="atlas_help">동물 이름을 누르면 그 기준을 글로 읽을 수 있습니다. 얼굴 사진 없이도 도감을 볼 수 있어요.</p>
       <ul class="guide_list" id="guide_list"></ul>
     </section>
-
-    <section class="partner_panel" aria-labelledby="contact_teaser_title">
-      <h2 class="section_title" id="contact_teaser_title" data-i18n="contact_teaser_title">문의</h2>
-      <p class="meter_caption" data-i18n="contact_teaser">제휴, 오류, 개인정보와 관련된 질문은 문의 페이지에 남겨 주세요. 답변은 적어 주신 이메일로 갑니다. 얼굴 사진은 문의에 포함되지 않습니다.</p>
-      <p class="page_cta_row"><a class="button_primary" href="contact.html" data-i18n="nav_contact">문의</a></p>
     </section>
 
-    <nav class="site_nav footer_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
+    <section id="pane_my" class="pane" data-pane="my">
+    <div class="theme_bar">
+      <div class="theme_switch" role="group" data-i18n-aria="theme_group" aria-label="화면 모드">
+        <button type="button" class="theme_button is_selected" id="button_theme_light" data-i18n="theme_light" aria-pressed="true">화이트</button>
+        <button type="button" class="theme_button" id="button_theme_dark" data-i18n="theme_dark" aria-pressed="false">다크</button>
+      </div>
+    </div>
+    <nav class="site_nav" data-i18n-aria="nav_label" aria-label="도감 메뉴">
       <a href="index.html" data-i18n="nav_tool" aria-current="page">얼굴 재기</a>
       <a href="method.html" data-i18n="nav_method">측정 방법</a>
       <a href="about.html" data-i18n="nav_about">소개</a>
       <a href="privacy.html" data-i18n="nav_privacy">개인정보</a>
       <a href="contact.html" data-i18n="nav_contact">문의</a>
     </nav>
+    <section class="partner_panel" aria-labelledby="contact_teaser_title">
+      <h2 class="section_title" id="contact_teaser_title" data-i18n="contact_teaser_title">문의</h2>
+      <p class="meter_caption" data-i18n="contact_teaser">제휴, 오류, 개인정보와 관련된 질문은 문의 페이지에 남겨 주세요. 답변은 적어 주신 이메일로 갑니다. 얼굴 사진은 문의에 포함되지 않습니다.</p>
+      <p class="page_cta_row"><a class="button_primary" href="contact.html" data-i18n="nav_contact">문의</a></p>
+    </section>
+
     <p class="footer_note" data-i18n="footer">
       사진은 이 브라우저 안에서만 처리되고 서버로 전송되지 않습니다.
       결과는 얼굴 비율을 동물별 기준과 견준 재미있는 비교이며, 과학적 판별이나 성격 테스트가 아닙니다.
@@ -244,7 +324,15 @@
       <div id="disqus_thread"></div>
       <noscript>댓글을 보려면 자바스크립트를 켜 주세요. <a href="https://disqus.com/?ref_noscript">Disqus 댓글</a></noscript>
     </section>
+    </section>
   </main>
+    <nav class="tab_bar" data-i18n-aria="tab_label" aria-label="화면 이동">
+      <button type="button" class="tab_button is_selected" data-view="home"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5z"/></svg><span data-i18n="tab_home">홈</span></button>
+      <button type="button" class="tab_button" data-view="capture"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M9 4h6l1.2 2H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.8L9 4zm3 12a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg><span data-i18n="tab_test">테스트</span></button>
+      <button type="button" class="tab_button" data-view="feed"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M4 5h16v3H4V5zm0 5.5h16v3H4v-3zM4 16h10v3H4v-3z"/></svg><span data-i18n="tab_feed">피드/랭킹</span></button>
+      <button type="button" class="tab_button" data-view="my"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0 2c-4 0-7 2-7 4.5V20h14v-1.5C19 16 16 14 12 14z"/></svg><span data-i18n="tab_my">마이</span></button>
+    </nav>
+  </div>
 
   <script>
     // 주소가 달라도 같은 댓글방으로 모이도록 페이지 이름을 고정한다.
@@ -290,7 +378,7 @@
     "theme_light": "화이트",
     "theme_dark": "다크",
     "app_title": "동물상 도감",
-    "lead": "비교에 쓰는 값은 머리카락이나 귀가 아니라 얼굴 가로·세로와 눈, 코, 입, 턱의 길이 비율입니다. 점수는 아홉 동물 기준과의 거리이며, 성격 테스트나 과학적 판별이 아닙니다.",
+    "lead": "비교에 쓰는 값은 머리카락이나 귀가 아니라 얼굴 가로·세로와 눈, 코, 입, 턱의 길이 비율입니다. 점수는 아홉 개 품종 기준과의 거리이며, 성격 테스트나 과학적 판별이 아닙니다.",
     "empty_message": "정면 얼굴을 준비해 주세요. 눈이 잘 보이고, 너무 어둡지 않은 사진이 좋아요.",
     "video_aria": "카메라 미리보기",
     "stage_aria": "얼굴 미리보기",
@@ -303,8 +391,8 @@
     "ready": "준비됐어요. 카메라로 찍거나 사진을 올려 주세요.",
     "guide_pc": "휠로 확대 · 드래그로 얼굴 지정 · 길게 누르면 이동",
     "guide_mobile": "사진 위에서는 페이지가 스크롤됩니다. 얼굴 칸은 그리기 버튼을 누른 뒤 드래그하세요.",
-    "button_camera": "카메라로 찍기",
-    "button_upload": "사진 올리기",
+    "button_camera": "카메라로 바로 촬영하기",
+    "button_upload": "갤러리에서 사진 선택",
     "button_shutter": "촬영",
     "button_close_camera": "카메라 닫기",
     "button_analyze": "고른 얼굴 모두 분석하기",
@@ -315,9 +403,9 @@
     "flip_to_front_aria": "전면 카메라로 전환",
     "side_front": "전면",
     "side_back": "후면",
-    "camera_prompt": "얼굴이 원 안에 들어오면 촬영을 눌러 주세요.",
-    "camera_switched": "{side} 카메라예요. 얼굴이 원 안에 들어오면 촬영을 눌러 주세요.",
-    "captured_circle": "원 안을 촬영했어요.",
+    "camera_prompt": "얼굴이 타원 안에 들어오면 촬영을 눌러 주세요.",
+    "camera_switched": "{side} 카메라예요. 얼굴이 타원 안에 들어오면 촬영을 눌러 주세요.",
+    "captured_circle": "타원 안을 촬영했어요.",
     "captured_wait": "원 안을 촬영했어요. 도감이 준비되면 분석을 눌러 주세요.",
     "selection_picked": "얼굴 영역 {count}곳을 골랐어요. 더 드래그하거나 분석을 눌러 주세요.",
     "selection_left": "얼굴 영역 {count}곳이 남았어요.",
@@ -332,8 +420,8 @@
     "analyze_partial": "{total}곳 중 {count}곳을 분석했어요. 실패한 영역은 카드에 이유를 적어 두었어요.",
     "analyze_none": "고른 영역에서 얼굴을 읽지 못했어요. 얼굴이 잘 보이게 다시 드래그해 주세요.",
     "analyze_need_drag": "먼저 사진 위에서 얼굴 영역을 드래그해 주세요.",
-    "result_target": "이번 얼굴과 가장 가까운 동물",
-    "result_target_face": "얼굴 {index} · 가장 가까운 동물",
+    "result_target": "이번 얼굴과 가장 가까운 품종",
+    "result_target_face": "얼굴 {index} · 가장 가까운 품종",
     "score_label": "유사도",
     "piece_heading": "얼굴 조각",
     "piece_same": "{list}이 모두 {animal}입니다.",
@@ -366,8 +454,8 @@
     "nav_contact": "문의",
     "contact_teaser_title": "문의",
     "contact_teaser": "제휴, 오류, 개인정보와 관련된 질문은 문의 페이지에 남겨 주세요. 답변은 적어 주신 이메일로 갑니다. 얼굴 사진은 문의에 포함되지 않습니다.",
-    "atlas_help": "동물 이름을 누르면 그 기준을 글로 읽을 수 있습니다. 얼굴 사진 없이도 도감을 볼 수 있어요.",
-    "atlas_heading": "도감에 있는 동물",
+    "atlas_help": "품종 이름을 누르면 그 기준을 글로 읽을 수 있습니다. 얼굴 사진 없이도 도감을 볼 수 있어요.",
+    "atlas_heading": "도감에 있는 품종",
     "crop_title": "얼굴 {index}",
     "crop_remove_aria": "얼굴 {index} 영역 지우기",
     "crop_pending": "아직 분석 전이에요",
@@ -390,7 +478,7 @@
     "partner_sent": "문의가 전달됐어요. 남겨 주신 메일로 답변드릴게요.",
     "partner_fail": "문의를 보내지 못했어요. 잠시 후 다시 시도해 주세요.",
     "partner_network": "문의를 보내지 못했어요. 인터넷 연결을 확인한 뒤 다시 시도해 주세요.",
-    "footer": "사진은 이 브라우저 안에서만 처리되고 서버로 전송되지 않습니다. 결과는 얼굴 비율을 동물별 기준과 견준 재미있는 비교이며, 과학적 판별이나 성격 테스트가 아닙니다. 표정, 고개 각도, 안경, 조명에 따라 순위가 달라질 수 있어요.",
+    "footer": "사진은 이 브라우저 안에서만 처리되고 서버로 전송되지 않습니다. 결과는 얼굴 비율을 개 품종별 기준과 견준 재미있는 비교이며, 과학적 판별이나 성격 테스트가 아닙니다. 표정, 고개 각도, 안경, 조명에 따라 순위가 달라질 수 있어요.",
     "comment_title": "댓글",
     "disqus_fail": "댓글을 불러오지 못했어요. 인터넷 연결을 확인한 뒤 새로고침 해 주세요.",
     "theme_save_failed": "화면 모드를 저장하지 못했어요. 페이지를 새로고침한 뒤 다시 눌러 주세요.",
@@ -463,7 +551,7 @@
     "share_copied": "문구를 복사했어요. 카카오톡이나 원하는 곳에 붙여 넣으세요.",
     "share_copy_fail": "문구를 복사하지 못했어요. 아래 버튼으로 보내 주세요.",
     "share_native_fail": "공유 창을 열지 못했어요. 문구 복사를 눌러 주세요.",
-    "share_invite": "얼굴 비율로 가장 가까운 동물이에요. 당신은 어디에 가까울까요?",
+    "share_invite": "얼굴 비율로 가장 가까운 개 품종이에요. 당신은 어디에 가까울까요?",
     "share_try": "나도 재보기",
     "share_received": "이 링크의 결과는 {animal} {score}%예요. 사진은 오지 않았고, 점수만 도착했어요.",
     "share_link_bad": "공유 링크의 결과를 읽지 못했어요. 아래에서 얼굴을 재 보세요.",
@@ -471,7 +559,44 @@
     "share_text": "{animal} {score}%\n{invite}\n{url}",
     "draw_arm": "얼굴 칸 그리기",
     "draw_armed": "칸 그리는 중 · 다시 누르면 스크롤",
-    "draw_hint": "이제 사진 위를 드래그하세요. 손을 떼면 다시 스크롤됩니다."
+    "draw_hint": "이제 사진 위를 드래그하세요. 손을 떼면 다시 스크롤됩니다.",
+    "pose_hint": "안경을 벗고 정면을 보면 더 잘 맞습니다. 쓴 채로도 재 볼 수 있어요.",
+    "brand_name": "동물상 AI",
+    "home_kicker": "사진 한 장으로 알아보는",
+    "home_headline": "내 얼굴 속 동물상",
+    "home_camera_help": "타원 안에 얼굴을 맞추고 촬영합니다.",
+    "home_gallery_help": "앨범에서 사진을 고릅니다.",
+    "tab_home": "홈",
+    "tab_test": "테스트",
+    "tab_feed": "피드/랭킹",
+    "tab_my": "마이",
+    "mode_selfie": "셀카 모드",
+    "mode_friends": "친구와 함께",
+    "mode_pet": "반려동물 비교",
+    "mode_pet_notice": "사람 얼굴의 길이 비율만 비교합니다. 반려동물 사진은 기준으로 쓰지 않습니다.",
+    "mode_group": "촬영 모드",
+    "tab_label": "화면 이동",
+    "brightness_ok": "밝기가 충분해요.",
+    "brightness_dim": "조금 더 밝혀 주세요.",
+    "instant_analyze": "즉시 분석",
+    "analyze_title": "눈, 코, 입, 턱 비율을 비교하고 있어요",
+    "analyze_wait": "잠시만 기다려 주세요. 아홉 개 품종 기준과 거리를 계산합니다.",
+    "step_model": "측정 도구 준비",
+    "step_points": "얼굴 점 찾기",
+    "step_ratios": "눈, 코, 입, 턱 비율",
+    "step_animals": "아홉 품종과 비교",
+    "analyze_cancel": "분석 취소",
+    "feed_heading": "이 브라우저의 최근 결과",
+    "feed_empty": "아직 이 탭에 남은 결과가 없습니다. 사진은 저장하지 않습니다.",
+    "feed_last": "최근 결과는 {animal} {score}%입니다.",
+    "feed_open": "결과 다시 보기",
+    "rank_bars_heading": "각 품종과의 유사도",
+    "save_card": "카드 이미지 저장",
+    "save_card_done": "카드 이미지를 저장했습니다.",
+    "save_card_fail": "카드 이미지를 저장하지 못했습니다. 다시 눌러 주세요.",
+    "back_label": "뒤로",
+    "compare_mine": "내 얼굴",
+    "photo_source": "강아지 사진은 품종마다 모아 둔 최대 100장 중에서 무작위로 고릅니다."
   },
   "en": {
     "page_title": "Animal Face Field Guide",
@@ -481,7 +606,7 @@
     "theme_light": "Light",
     "theme_dark": "Dark",
     "app_title": "Animal Face Field Guide",
-    "lead": "The comparison uses length ratios of the face, eyes, nose, mouth, and jaw, not hair or ears. The score is the distance from nine animal profiles. It is not a personality test or a scientific classification.",
+    "lead": "The comparison uses length ratios of the face, eyes, nose, mouth, and jaw, not hair or ears. The score is the distance from nine dog-breed profiles. It is not a personality test or a scientific classification.",
     "empty_message": "Use a front-facing photo. Eyes should be visible, and the picture should not be too dark.",
     "video_aria": "Camera preview",
     "stage_aria": "Face preview",
@@ -494,8 +619,8 @@
     "ready": "Ready. Take a photo or upload one.",
     "guide_pc": "Wheel to zoom · Drag to choose a face · Hold to move",
     "guide_mobile": "The page scrolls over the photo. Tap the draw button, then drag a face box.",
-    "button_camera": "Use camera",
-    "button_upload": "Upload photo",
+    "button_camera": "Take a photo now",
+    "button_upload": "Choose from gallery",
     "button_shutter": "Capture",
     "button_close_camera": "Close camera",
     "button_analyze": "Analyze every chosen face",
@@ -506,9 +631,9 @@
     "flip_to_front_aria": "Switch to the front camera",
     "side_front": "Front",
     "side_back": "Rear",
-    "camera_prompt": "When your face is inside the circle, press Capture.",
-    "camera_switched": "{side} camera. When your face is inside the circle, press Capture.",
-    "captured_circle": "Captured the area inside the circle.",
+    "camera_prompt": "When your face is inside the oval, press Capture.",
+    "camera_switched": "{side} camera. When your face is inside the oval, press Capture.",
+    "captured_circle": "Captured the area inside the oval.",
     "captured_wait": "Captured the area inside the circle. Press analyze when the guide is ready.",
     "selection_picked": "{count} face area(s) selected. Drag another, or press analyze.",
     "selection_left": "{count} face area(s) left.",
@@ -557,8 +682,8 @@
     "nav_contact": "Contact",
     "contact_teaser_title": "Contact",
     "contact_teaser": "Questions about partnerships, errors, or privacy go on the contact page. The reply is sent to the email you enter. Face photos are not included in the message.",
-    "atlas_help": "Select an animal name to read its profile. You can browse the guide without a face photo.",
-    "atlas_heading": "Animals in the guide",
+    "atlas_help": "Select a breed name to read its baseline. You can browse the guide without a face photo.",
+    "atlas_heading": "Breeds in the guide",
     "crop_title": "Face {index}",
     "crop_remove_aria": "Remove face area {index}",
     "crop_pending": "Not analyzed yet",
@@ -662,7 +787,44 @@
     "share_text": "{animal} {score}%\n{invite}\n{url}",
     "draw_arm": "Draw a face box",
     "draw_armed": "Drawing · tap again to scroll",
-    "draw_hint": "Drag on the photo now. When you lift your finger, the page scrolls again."
+    "draw_hint": "Drag on the photo now. When you lift your finger, the page scrolls again.",
+    "pose_hint": "Glasses off and facing forward fits better. You can still measure with glasses on.",
+    "brand_name": "Animal Face AI",
+    "home_kicker": "From a single photo",
+    "home_headline": "The animal in your face",
+    "home_camera_help": "Fit your face in the oval, then capture.",
+    "home_gallery_help": "Pick a photo from your album.",
+    "tab_home": "Home",
+    "tab_test": "Test",
+    "tab_feed": "Feed",
+    "tab_my": "Me",
+    "mode_selfie": "Selfie",
+    "mode_friends": "With friends",
+    "mode_pet": "Pet compare",
+    "mode_pet_notice": "Only human face-length ratios are compared. Pet photos are not used as a baseline.",
+    "mode_group": "Capture mode",
+    "tab_label": "Switch screen",
+    "brightness_ok": "The light is enough.",
+    "brightness_dim": "A little more light, please.",
+    "instant_analyze": "Analyze now",
+    "analyze_title": "Comparing eye, nose, mouth, and jaw ratios",
+    "analyze_wait": "Please wait. The distance to nine dog-breed baselines is being calculated.",
+    "step_model": "Prepare the measuring tool",
+    "step_points": "Find face points",
+    "step_ratios": "Eye, nose, mouth, jaw ratios",
+    "step_animals": "Compare with nine dog breeds",
+    "analyze_cancel": "Cancel",
+    "feed_heading": "Latest result in this browser",
+    "feed_empty": "No result is saved in this tab yet. Photos are not stored.",
+    "feed_last": "Latest result: {animal} {score}%.",
+    "feed_open": "See the result again",
+    "rank_bars_heading": "Similarity with each animal",
+    "save_card": "Save card image",
+    "save_card_done": "The card image was saved.",
+    "save_card_fail": "The card image could not be saved. Please try again.",
+    "back_label": "Back",
+    "compare_mine": "My face",
+    "photo_source": "Each breed photo is chosen at random from up to 100 pictures."
   },
   "ja": {
     "page_title": "動物顔図鑑",
@@ -672,7 +834,7 @@
     "theme_light": "ライト",
     "theme_dark": "ダーク",
     "app_title": "動物顔図鑑",
-    "lead": "比べる値は髪や耳ではなく、顔の縦横と目、鼻、口、顎の長さの比率です。点数は9種の動物基準との距離であり、性格テストや科学的な判定ではありません。",
+    "lead": "比べる値は髪や耳ではなく、顔の縦横と目、鼻、口、顎の長さの比率です。点数は9つの犬種基準との距離であり、性格テストや科学的な判定ではありません。",
     "empty_message": "正面の顔を用意してください。目がよく見え、暗すぎない写真が向いています。",
     "video_aria": "カメラプレビュー",
     "stage_aria": "顔のプレビュー",
@@ -685,8 +847,8 @@
     "ready": "準備できました。カメラで撮るか、写真を読み込んでください。",
     "guide_pc": "ホイールで拡大 · ドラッグで顔を指定 · 長押しで移動",
     "guide_mobile": "写真の上ではページがスクロールします。枠は描くボタンを押してからドラッグしてください。",
-    "button_camera": "カメラで撮る",
-    "button_upload": "写真を読み込む",
+    "button_camera": "カメラですぐ撮る",
+    "button_upload": "ギャラリーから選ぶ",
     "button_shutter": "撮影",
     "button_close_camera": "カメラを閉じる",
     "button_analyze": "選んだ顔をすべて分析",
@@ -697,9 +859,9 @@
     "flip_to_front_aria": "前面カメラに切り替える",
     "side_front": "前面",
     "side_back": "背面",
-    "camera_prompt": "顔が円の中に入ったら撮影を押してください。",
-    "camera_switched": "{side}カメラです。顔が円の中に入ったら撮影を押してください。",
-    "captured_circle": "円の中を撮影しました。",
+    "camera_prompt": "顔が楕円の中に入ったら撮影を押してください。",
+    "camera_switched": "{side}カメラです。顔が楕円の中に入ったら撮影を押してください。",
+    "captured_circle": "楕円の中を撮影しました。",
     "captured_wait": "円の中を撮影しました。図鑑の準備ができたら分析を押してください。",
     "selection_picked": "顔の範囲を{count}か所選びました。さらにドラッグするか、分析を押してください。",
     "selection_left": "顔の範囲が{count}か所残っています。",
@@ -853,7 +1015,44 @@
     "share_text": "{animal} {score}%\n{invite}\n{url}",
     "draw_arm": "顔の枠を描く",
     "draw_armed": "描き中 · もう一度押すとスクロール",
-    "draw_hint": "今、写真の上をドラッグしてください。指を離すと再びスクロールできます。"
+    "draw_hint": "今、写真の上をドラッグしてください。指を離すと再びスクロールできます。",
+    "pose_hint": "眼鏡を外して正面を向くと合いやすいです。かけたままでも測れます。",
+    "brand_name": "動物顔 AI",
+    "home_kicker": "写真1枚で見る",
+    "home_headline": "顔の中の動物顔",
+    "home_camera_help": "楕円の中に顔を合わせて撮影します。",
+    "home_gallery_help": "アルバムから写真を選びます。",
+    "tab_home": "ホーム",
+    "tab_test": "テスト",
+    "tab_feed": "フィード",
+    "tab_my": "マイ",
+    "mode_selfie": "自分撮り",
+    "mode_friends": "友達と一緒",
+    "mode_pet": "ペット比較",
+    "mode_pet_notice": "人の顔の長さの比率だけを比べます。ペットの写真は基準にしません。",
+    "mode_group": "撮影モード",
+    "tab_label": "画面移動",
+    "brightness_ok": "明るさは十分です。",
+    "brightness_dim": "もう少し明るくしてください。",
+    "instant_analyze": "すぐ分析",
+    "analyze_title": "目・鼻・口・顎の比率を比べています",
+    "analyze_wait": "少々お待ちください。9種の動物基準との距離を計算します。",
+    "step_model": "測定ツールの準備",
+    "step_points": "顔の点を探す",
+    "step_ratios": "目・鼻・口・顎の比率",
+    "step_animals": "9種の動物と比べる",
+    "analyze_cancel": "分析をやめる",
+    "feed_heading": "このブラウザの最新結果",
+    "feed_empty": "このタブに残った結果はまだありません。写真は保存しません。",
+    "feed_last": "最新の結果は {animal} {score}% です。",
+    "feed_open": "結果をもう一度見る",
+    "rank_bars_heading": "各動物との近さ",
+    "save_card": "カード画像を保存",
+    "save_card_done": "カード画像を保存しました。",
+    "save_card_fail": "カード画像を保存できませんでした。もう一度押してください。",
+    "back_label": "戻る",
+    "compare_mine": "自分の顔",
+    "photo_source": "犬の写真は犬種ごとに最大100枚から無作為に選びます。"
   },
   "zh": {
     "page_title": "动物面相图鉴",
@@ -863,7 +1062,7 @@
     "theme_light": "浅色",
     "theme_dark": "深色",
     "app_title": "动物面相图鉴",
-    "lead": "比较用的是脸的宽高，以及眼、鼻、嘴、下颌的长度比例，不是头发或耳朵。分数是和九种动物基准的距离，不是性格测试，也不是科学鉴定。",
+    "lead": "比较用的是脸的宽高，以及眼、鼻、嘴、下颌的长度比例，不是头发或耳朵。分数是和九个犬种基准的距离，不是性格测试，也不是科学鉴定。",
     "empty_message": "请准备一张正面脸的照片。眼睛要清楚，画面不要太暗。",
     "video_aria": "相机预览",
     "stage_aria": "脸部预览",
@@ -876,8 +1075,8 @@
     "ready": "准备好了。可以拍照，也可以上传照片。",
     "guide_pc": "滚轮放大 · 拖动选脸 · 按住可移动",
     "guide_mobile": "在照片上滑动会滚动页面。请先按绘制按钮，再拖动选择脸部。",
-    "button_camera": "用相机拍",
-    "button_upload": "上传照片",
+    "button_camera": "用相机马上拍",
+    "button_upload": "从相册选照片",
     "button_shutter": "拍摄",
     "button_close_camera": "关闭相机",
     "button_analyze": "分析所有选中的脸",
@@ -888,9 +1087,9 @@
     "flip_to_front_aria": "切换到前置相机",
     "side_front": "前置",
     "side_back": "后置",
-    "camera_prompt": "脸进入圆圈后，请按拍摄。",
-    "camera_switched": "已切换到{side}相机。脸进入圆圈后，请按拍摄。",
-    "captured_circle": "已拍下圆圈里的区域。",
+    "camera_prompt": "脸进入椭圆后，请按拍摄。",
+    "camera_switched": "已切换到{side}相机。脸进入椭圆后，请按拍摄。",
+    "captured_circle": "已拍下椭圆里的区域。",
     "captured_wait": "已拍下圆圈里的区域。图鉴准备好后请按分析。",
     "selection_picked": "已选 {count} 个脸部区域。可以再拖一个，或按分析。",
     "selection_left": "还剩 {count} 个脸部区域。",
@@ -1044,7 +1243,44 @@
     "share_text": "{animal} {score}%\n{invite}\n{url}",
     "draw_arm": "画脸部选框",
     "draw_armed": "绘制中 · 再按即可滚动",
-    "draw_hint": "现在请在照片上拖动。松手后可以再次滚动页面。"
+    "draw_hint": "现在请在照片上拖动。松手后可以再次滚动页面。",
+    "pose_hint": "摘下眼镜并正对镜头会更准。戴着眼镜也可以测。",
+    "brand_name": "动物相 AI",
+    "home_kicker": "用一张照片看看",
+    "home_headline": "我脸上的动物相",
+    "home_camera_help": "把脸放进椭圆里再拍摄。",
+    "home_gallery_help": "从相册里选一张照片。",
+    "tab_home": "首页",
+    "tab_test": "测试",
+    "tab_feed": "动态",
+    "tab_my": "我的",
+    "mode_selfie": "自拍",
+    "mode_friends": "和朋友一起",
+    "mode_pet": "宠物对比",
+    "mode_pet_notice": "只比较人脸的长度比例。宠物照片不用作基准。",
+    "mode_group": "拍摄模式",
+    "tab_label": "切换画面",
+    "brightness_ok": "亮度足够。",
+    "brightness_dim": "请再亮一点。",
+    "instant_analyze": "立即分析",
+    "analyze_title": "正在比较眼、鼻、嘴、下巴的比例",
+    "analyze_wait": "请稍等。正在计算与九种动物基准的距离。",
+    "step_model": "准备测量工具",
+    "step_points": "寻找脸部点",
+    "step_ratios": "眼、鼻、嘴、下巴比例",
+    "step_animals": "与九种动物比较",
+    "analyze_cancel": "取消分析",
+    "feed_heading": "这个浏览器里的最近结果",
+    "feed_empty": "这个标签页还没有留下结果。照片不会被保存。",
+    "feed_last": "最近结果是 {animal} {score}%。",
+    "feed_open": "再看一次结果",
+    "rank_bars_heading": "与每种动物的相似度",
+    "save_card": "保存卡片图片",
+    "save_card_done": "卡片图片已保存。",
+    "save_card_fail": "卡片图片没有保存成功。请再按一次。",
+    "back_label": "返回",
+    "compare_mine": "我的脸",
+    "photo_source": "狗的照片是从每个犬种最多100张里随机选的。"
   },
   "hi": {
     "page_title": "पशु चेहरा गाइड",
@@ -1054,7 +1290,7 @@
     "theme_light": "हल्का",
     "theme_dark": "गहरा",
     "app_title": "पशु चेहरा गाइड",
-    "lead": "तुलना बाल या कान से नहीं, चेहरे की चौड़ाई-लंबाई और आँख, नाक, मुँह, जबड़े के लंबाई अनुपात से होती है। अंक नौ पशु मानकों से दूरी है। यह व्यक्तित्व परीक्षा या वैज्ञानिक पहचान नहीं है।",
+    "lead": "तुलना बाल या कान से नहीं, चेहरे की चौड़ाई-लंबाई और आँख, नाक, मुँह, जबड़े के लंबाई अनुपात से होती है। अंक नौ कुत्ते की नस्लों के मानकों से दूरी है। यह व्यक्तित्व परीक्षा या वैज्ञानिक पहचान नहीं है।",
     "empty_message": "सामने का चेहरा तैयार रखें। आँखें साफ़ दिखें, और फ़ोटो बहुत अँधेरी न हो।",
     "video_aria": "कैमरा पूर्वावलोकन",
     "stage_aria": "चेहरे का पूर्वावलोकन",
@@ -1067,8 +1303,8 @@
     "ready": "तैयार है। फ़ोटो लें या अपलोड करें।",
     "guide_pc": "पहिया: बड़ा करें · घसीटें: चेहरा चुनें · दबाए रखें: हिलाएँ",
     "guide_mobile": "फ़ोटो पर सरकाने से पेज स्क्रॉल होता है। बटन दबाकर फिर चेहरा चुनें।",
-    "button_camera": "कैमरा खोलें",
-    "button_upload": "फ़ोटो अपलोड",
+    "button_camera": "कैमरे से अभी लें",
+    "button_upload": "गैलरी से फ़ोटो चुनें",
     "button_shutter": "लें",
     "button_close_camera": "कैमरा बंद",
     "button_analyze": "चुने सभी चेहरे जाँचें",
@@ -1079,9 +1315,9 @@
     "flip_to_front_aria": "आगे के कैमरे पर जाएँ",
     "side_front": "आगे",
     "side_back": "पीछे",
-    "camera_prompt": "चेहरा गोले के अंदर आए, तब लेने का बटन दबाएँ।",
-    "camera_switched": "{side} का कैमरा। चेहरा गोले के अंदर आए, तब लेने का बटन दबाएँ।",
-    "captured_circle": "गोले के अंदर का हिस्सा ले लिया गया।",
+    "camera_prompt": "चेहरा अंडाकार के अंदर आए, तब लेने का बटन दबाएँ।",
+    "camera_switched": "{side} का कैमरा। चेहरा अंडाकार के अंदर आए, तब लेने का बटन दबाएँ।",
+    "captured_circle": "अंडाकार के अंदर का हिस्सा ले लिया गया।",
     "captured_wait": "गोले के अंदर का हिस्सा ले लिया गया। गाइड तैयार हो तो जाँच दबाएँ।",
     "selection_picked": "{count} चेहरे के क्षेत्र चुने गए। एक और घसीटें, या जाँच दबाएँ।",
     "selection_left": "{count} चेहरे के क्षेत्र बचे हैं।",
@@ -1235,7 +1471,44 @@
     "share_text": "{animal} {score}%\n{invite}\n{url}",
     "draw_arm": "चेहरा बॉक्स बनाएँ",
     "draw_armed": "बना रहे हैं · फिर दबाएँ तो स्क्रॉल",
-    "draw_hint": "अब फ़ोटो पर घसीटें। उँगली हटाते ही पेज फिर स्क्रॉल होगा।"
+    "draw_hint": "अब फ़ोटो पर घसीटें। उँगली हटाते ही पेज फिर स्क्रॉल होगा।",
+    "pose_hint": "चश्मा उतारकर सामने देखें तो बेहतर मिलता है। चश्मे के साथ भी नाप सकते हैं।",
+    "brand_name": "पशु चेहरा AI",
+    "home_kicker": "एक फ़ोटो से देखें",
+    "home_headline": "मेरे चेहरे का पशु रूप",
+    "home_camera_help": "चेहरे को अंडाकार में रखकर फ़ोटो लें।",
+    "home_gallery_help": "एल्बम से एक फ़ोटो चुनें।",
+    "tab_home": "होम",
+    "tab_test": "टेस्ट",
+    "tab_feed": "फ़ीड",
+    "tab_my": "मेरा",
+    "mode_selfie": "सेल्फ़ी",
+    "mode_friends": "दोस्तों के साथ",
+    "mode_pet": "पालतू तुलना",
+    "mode_pet_notice": "केवल इंसान के चेहरे की लंबाई के अनुपात की तुलना होती है। पालतू फ़ोटो आधार नहीं बनती।",
+    "mode_group": "कैप्चर मोड",
+    "tab_label": "स्क्रीन बदलें",
+    "brightness_ok": "रोशनी पर्याप्त है।",
+    "brightness_dim": "कृपया थोड़ी और रोशनी करें।",
+    "instant_analyze": "अभी जाँचें",
+    "analyze_title": "आँख, नाक, मुँह और जबड़े के अनुपात की तुलना हो रही है",
+    "analyze_wait": "कृपया रुकें। नौ पशु आधारों से दूरी गिनी जा रही है।",
+    "step_model": "मापने का उपकरण तैयार",
+    "step_points": "चेहरे के बिंदु खोजें",
+    "step_ratios": "आँख, नाक, मुँह, जबड़ा",
+    "step_animals": "नौ पशुओं से तुलना",
+    "analyze_cancel": "रद्द करें",
+    "feed_heading": "इस ब्राउज़र का हाल का परिणाम",
+    "feed_empty": "इस टैब में अभी कोई परिणाम नहीं बचा। फ़ोटो सहेजी नहीं जाती।",
+    "feed_last": "हाल का परिणाम {animal} {score}% है।",
+    "feed_open": "परिणाम फिर देखें",
+    "rank_bars_heading": "हर पशु से समानता",
+    "save_card": "कार्ड चित्र सहेजें",
+    "save_card_done": "कार्ड चित्र सहेजा गया।",
+    "save_card_fail": "कार्ड चित्र सहेजा नहीं जा सका। फिर से दबाएँ।",
+    "back_label": "पीछे",
+    "compare_mine": "मेरा चेहरा",
+    "photo_source": "कुत्ते की तस्वीर हर नस्ल की अधिकतम 100 तस्वीरों में से बेतरतीब चुनी जाती है।"
   },
   "zh-Hant": {
     "page_title": "動物面相圖鑑",
@@ -1245,7 +1518,7 @@
     "theme_light": "淺色",
     "theme_dark": "深色",
     "app_title": "動物面相圖鑑",
-    "lead": "比較用的是臉的寬高，以及眼、鼻、嘴、下頜的長度比例，不是頭髮或耳朵。分數是和九種動物基準的距離，不是性格測試，也不是科學鑑定。",
+    "lead": "比較用的是臉的寬高，以及眼、鼻、嘴、下頜的長度比例，不是頭髮或耳朵。分數是和九個犬種基準的距離，不是性格測試，也不是科學鑑定。",
     "empty_message": "請準備一張正面臉的照片。眼睛要清楚，畫面不要太暗。",
     "video_aria": "相機預覽",
     "stage_aria": "臉部預覽",
@@ -1258,8 +1531,8 @@
     "ready": "準備好了。可以拍照，也可以上傳照片。",
     "guide_pc": "滾輪放大 · 拖動選臉 · 按住可移動",
     "guide_mobile": "在照片上滑動會捲動頁面。請先按繪製按鈕，再拖動選擇臉部。",
-    "button_camera": "用相機拍",
-    "button_upload": "上傳照片",
+    "button_camera": "用相機馬上拍",
+    "button_upload": "從相簿選照片",
     "button_shutter": "拍攝",
     "button_close_camera": "關閉相機",
     "button_analyze": "分析所有選中的臉",
@@ -1270,9 +1543,9 @@
     "flip_to_front_aria": "切換到前置相機",
     "side_front": "前置",
     "side_back": "後置",
-    "camera_prompt": "臉進入圓圈後，請按拍攝。",
-    "camera_switched": "已切換到{side}相機。臉進入圓圈後，請按拍攝。",
-    "captured_circle": "已拍下圓圈裡的區域。",
+    "camera_prompt": "臉進入橢圓後，請按拍攝。",
+    "camera_switched": "已切換到{side}相機。臉進入橢圓後，請按拍攝。",
+    "captured_circle": "已拍下橢圓裡的區域。",
     "captured_wait": "已拍下圓圈裡的區域。圖鑑準備好後請按分析。",
     "selection_picked": "已選 {count} 個臉部區域。可以再拖一個，或按分析。",
     "selection_left": "還剩 {count} 個臉部區域。",
@@ -1426,7 +1699,44 @@
     "share_text": "{animal} {score}%\n{invite}\n{url}",
     "draw_arm": "畫臉部選框",
     "draw_armed": "繪製中 · 再按即可捲動",
-    "draw_hint": "現在請在照片上拖動。鬆手後可以再次捲動頁面。"
+    "draw_hint": "現在請在照片上拖動。鬆手後可以再次捲動頁面。",
+    "pose_hint": "摘下眼鏡並正對鏡頭會更準。戴著眼鏡也可以測。",
+    "brand_name": "動物相 AI",
+    "home_kicker": "用一張照片看看",
+    "home_headline": "我臉上的動物相",
+    "home_camera_help": "把臉放進橢圓裡再拍攝。",
+    "home_gallery_help": "從相簿裡選一張照片。",
+    "tab_home": "首頁",
+    "tab_test": "測試",
+    "tab_feed": "動態",
+    "tab_my": "我的",
+    "mode_selfie": "自拍",
+    "mode_friends": "和朋友一起",
+    "mode_pet": "寵物對比",
+    "mode_pet_notice": "只比較人臉的長度比例。寵物照片不用作基準。",
+    "mode_group": "拍攝模式",
+    "tab_label": "切換畫面",
+    "brightness_ok": "亮度足夠。",
+    "brightness_dim": "請再亮一點。",
+    "instant_analyze": "立即分析",
+    "analyze_title": "正在比較眼、鼻、嘴、下巴的比例",
+    "analyze_wait": "請稍等。正在計算與九種動物基準的距離。",
+    "step_model": "準備測量工具",
+    "step_points": "尋找臉部點",
+    "step_ratios": "眼、鼻、嘴、下巴比例",
+    "step_animals": "與九種動物比較",
+    "analyze_cancel": "取消分析",
+    "feed_heading": "這個瀏覽器裡的最近結果",
+    "feed_empty": "這個分頁還沒有留下結果。照片不會被保存。",
+    "feed_last": "最近結果是 {animal} {score}%。",
+    "feed_open": "再看一次結果",
+    "rank_bars_heading": "與每種動物的相似度",
+    "save_card": "儲存卡片圖片",
+    "save_card_done": "卡片圖片已儲存。",
+    "save_card_fail": "卡片圖片沒有儲存成功。請再按一次。",
+    "back_label": "返回",
+    "compare_mine": "我的臉",
+    "photo_source": "狗的照片是從每個犬種最多100張裡隨機選的。"
   },
   "es": {
     "page_title": "Guía de rostros animales",
@@ -1436,7 +1746,7 @@
     "theme_light": "Claro",
     "theme_dark": "Oscuro",
     "app_title": "Guía de rostros animales",
-    "lead": "La comparación usa proporciones de longitud del rostro, los ojos, la nariz, la boca y la mandíbula, no el pelo ni las orejas. La puntuación es la distancia respecto a nueve perfiles de animales. No es un test de personalidad ni una clasificación científica.",
+    "lead": "La comparación usa proporciones de longitud del rostro, los ojos, la nariz, la boca y la mandíbula, no el pelo ni las orejas. La puntuación es la distancia respecto a nueve razas de perro. No es un test de personalidad ni una clasificación científica.",
     "empty_message": "Usa una foto de frente. Los ojos deben verse y la imagen no debe estar demasiado oscura.",
     "video_aria": "Vista previa de la cámara",
     "stage_aria": "Vista previa del rostro",
@@ -1449,8 +1759,8 @@
     "ready": "Listo. Haz una foto o sube una.",
     "guide_pc": "Rueda para ampliar · Arrastra para elegir un rostro · Mantén para mover",
     "guide_mobile": "Sobre la foto la página se desplaza. Pulsa el botón y luego arrastra un recuadro.",
-    "button_camera": "Usar cámara",
-    "button_upload": "Subir foto",
+    "button_camera": "Hacer una foto ahora",
+    "button_upload": "Elegir de la galería",
     "button_shutter": "Capturar",
     "button_close_camera": "Cerrar cámara",
     "button_analyze": "Analizar todos los rostros elegidos",
@@ -1461,9 +1771,9 @@
     "flip_to_front_aria": "Cambiar a la cámara frontal",
     "side_front": "Frontal",
     "side_back": "Trasera",
-    "camera_prompt": "Cuando el rostro esté dentro del círculo, pulsa Capturar.",
-    "camera_switched": "Cámara {side}. Cuando el rostro esté dentro del círculo, pulsa Capturar.",
-    "captured_circle": "Se capturó la zona de dentro del círculo.",
+    "camera_prompt": "Cuando el rostro esté dentro del óvalo, pulsa Capturar.",
+    "camera_switched": "Cámara {side}. Cuando el rostro esté dentro del óvalo, pulsa Capturar.",
+    "captured_circle": "Se capturó la zona de dentro del óvalo.",
     "captured_wait": "Se capturó la zona de dentro del círculo. Pulsa analizar cuando la guía esté lista.",
     "selection_picked": "{count} zona(s) de rostro seleccionada(s). Arrastra otra o pulsa analizar.",
     "selection_left": "Quedan {count} zona(s) de rostro.",
@@ -1617,7 +1927,44 @@
     "share_text": "{animal} {score}%\n{invite}\n{url}",
     "draw_arm": "Dibujar un recuadro",
     "draw_armed": "Dibujando · toca otra vez para desplazar",
-    "draw_hint": "Ahora arrastra sobre la foto. Al soltar, la página vuelve a desplazarse."
+    "draw_hint": "Ahora arrastra sobre la foto. Al soltar, la página vuelve a desplazarse.",
+    "pose_hint": "Sin gafas y de frente encaja mejor. También puedes medirte con gafas.",
+    "brand_name": "Animal Face AI",
+    "home_kicker": "Con una sola foto",
+    "home_headline": "El animal en tu cara",
+    "home_camera_help": "Coloca la cara en el óvalo y captura.",
+    "home_gallery_help": "Elige una foto del álbum.",
+    "tab_home": "Inicio",
+    "tab_test": "Prueba",
+    "tab_feed": "Feed",
+    "tab_my": "Yo",
+    "mode_selfie": "Selfie",
+    "mode_friends": "Con amigos",
+    "mode_pet": "Mascota",
+    "mode_pet_notice": "Solo se comparan proporciones de un rostro humano. Las fotos de mascotas no son la referencia.",
+    "mode_group": "Modo de captura",
+    "tab_label": "Cambiar pantalla",
+    "brightness_ok": "Hay luz suficiente.",
+    "brightness_dim": "Un poco más de luz, por favor.",
+    "instant_analyze": "Analizar ya",
+    "analyze_title": "Comparando las proporciones de ojos, nariz, boca y mandíbula",
+    "analyze_wait": "Espera un momento. Se calcula la distancia a nueve referencias animales.",
+    "step_model": "Preparar la herramienta",
+    "step_points": "Buscar puntos del rostro",
+    "step_ratios": "Ojos, nariz, boca y mandíbula",
+    "step_animals": "Comparar con nueve animales",
+    "analyze_cancel": "Cancelar",
+    "feed_heading": "Último resultado en este navegador",
+    "feed_empty": "Aún no hay un resultado en esta pestaña. Las fotos no se guardan.",
+    "feed_last": "El último resultado es {animal} {score}%.",
+    "feed_open": "Ver el resultado otra vez",
+    "rank_bars_heading": "Semejanza con cada animal",
+    "save_card": "Guardar imagen de tarjeta",
+    "save_card_done": "La imagen de la tarjeta se guardó.",
+    "save_card_fail": "No se pudo guardar la imagen. Vuelve a intentarlo.",
+    "back_label": "Atrás",
+    "compare_mine": "Mi cara",
+    "photo_source": "La foto del perro se elige al azar entre hasta 100 por raza."
   },
   "pt": {
     "page_title": "Guia de rostos de animais",
@@ -1627,7 +1974,7 @@
     "theme_light": "Claro",
     "theme_dark": "Escuro",
     "app_title": "Guia de rostos de animais",
-    "lead": "A comparação usa proporções de comprimento do rosto, dos olhos, do nariz, da boca e do maxilar, não o cabelo nem as orelhas. A pontuação é a distância em relação a nove perfis de animais. Não é um teste de personalidade nem uma classificação científica.",
+    "lead": "A comparação usa proporções de comprimento do rosto, dos olhos, do nariz, da boca e do maxilar, não o cabelo nem as orelhas. A pontuação é a distância em relação a nove raças de cão. Não é um teste de personalidade nem uma classificação científica.",
     "empty_message": "Use uma foto de frente. Os olhos devem aparecer e a imagem não deve estar escura demais.",
     "video_aria": "Prévia da câmera",
     "stage_aria": "Prévia do rosto",
@@ -1640,8 +1987,8 @@
     "ready": "Pronto. Tire uma foto ou envie uma.",
     "guide_pc": "Roda para ampliar · Arraste para escolher um rosto · Segure para mover",
     "guide_mobile": "Sobre a foto a página rola. Toque no botão e depois arraste uma caixa.",
-    "button_camera": "Usar câmera",
-    "button_upload": "Enviar foto",
+    "button_camera": "Tirar uma foto agora",
+    "button_upload": "Escolher da galeria",
     "button_shutter": "Capturar",
     "button_close_camera": "Fechar câmera",
     "button_analyze": "Analisar todos os rostos escolhidos",
@@ -1652,9 +1999,9 @@
     "flip_to_front_aria": "Mudar para a câmera frontal",
     "side_front": "Frontal",
     "side_back": "Traseira",
-    "camera_prompt": "Quando o rosto estiver dentro do círculo, pressione Capturar.",
-    "camera_switched": "Câmera {side}. Quando o rosto estiver dentro do círculo, pressione Capturar.",
-    "captured_circle": "A área dentro do círculo foi capturada.",
+    "camera_prompt": "Quando o rosto estiver dentro da elipse, pressione Capturar.",
+    "camera_switched": "Câmera {side}. Quando o rosto estiver dentro da elipse, pressione Capturar.",
+    "captured_circle": "A área dentro da elipse foi capturada.",
     "captured_wait": "A área dentro do círculo foi capturada. Pressione analisar quando o guia estiver pronto.",
     "selection_picked": "{count} área(s) de rosto selecionada(s). Arraste outra ou pressione analisar.",
     "selection_left": "Restam {count} área(s) de rosto.",
@@ -1808,7 +2155,44 @@
     "share_text": "{animal} {score}%\n{invite}\n{url}",
     "draw_arm": "Desenhar uma caixa",
     "draw_armed": "Desenhando · toque de novo para rolar",
-    "draw_hint": "Agora arraste sobre a foto. Ao soltar, a página volta a rolar."
+    "draw_hint": "Agora arraste sobre a foto. Ao soltar, a página volta a rolar.",
+    "pose_hint": "Sem óculos e de frente combina melhor. Dá para medir com óculos também.",
+    "brand_name": "Animal Face AI",
+    "home_kicker": "Com uma só foto",
+    "home_headline": "O animal no seu rosto",
+    "home_camera_help": "Encaixe o rosto na elipse e capture.",
+    "home_gallery_help": "Escolha uma foto do álbum.",
+    "tab_home": "Início",
+    "tab_test": "Teste",
+    "tab_feed": "Feed",
+    "tab_my": "Eu",
+    "mode_selfie": "Selfie",
+    "mode_friends": "Com amigos",
+    "mode_pet": "Pet",
+    "mode_pet_notice": "Só comparamos proporções de um rosto humano. Fotos de pets não servem de base.",
+    "mode_group": "Modo de captura",
+    "tab_label": "Trocar tela",
+    "brightness_ok": "A luz está boa.",
+    "brightness_dim": "Um pouco mais de luz, por favor.",
+    "instant_analyze": "Analisar agora",
+    "analyze_title": "Comparando as proporções de olhos, nariz, boca e queixo",
+    "analyze_wait": "Espere um pouco. A distância até nove bases animais está sendo calculada.",
+    "step_model": "Preparar a ferramenta",
+    "step_points": "Achar pontos do rosto",
+    "step_ratios": "Olhos, nariz, boca e queixo",
+    "step_animals": "Comparar com nove animais",
+    "analyze_cancel": "Cancelar",
+    "feed_heading": "Último resultado neste navegador",
+    "feed_empty": "Ainda não há resultado nesta aba. As fotos não são guardadas.",
+    "feed_last": "O último resultado é {animal} {score}%.",
+    "feed_open": "Ver o resultado de novo",
+    "rank_bars_heading": "Semelhança com cada animal",
+    "save_card": "Salvar imagem do cartão",
+    "save_card_done": "A imagem do cartão foi salva.",
+    "save_card_fail": "A imagem do cartão não foi salva. Tente de novo.",
+    "back_label": "Voltar",
+    "compare_mine": "Meu rosto",
+    "photo_source": "A foto do cão é escolhida ao acaso entre até 100 de cada raça."
   },
   "ar": {
     "page_title": "دليل وجوه الحيوانات",
@@ -1818,7 +2202,7 @@
     "theme_light": "فاتح",
     "theme_dark": "داكن",
     "app_title": "دليل وجوه الحيوانات",
-    "lead": "المقارنة تستخدم نسب طول الوجه والعينين والأنف والفم والفك، لا الشعر ولا الأذنين. الدرجة هي المسافة إلى تسعة ملفات حيوانية. هذا ليس اختبار شخصية ولا تصنيفًا علميًا.",
+    "lead": "المقارنة تستخدم نسب طول الوجه والعينين والأنف والفم والفك، لا الشعر ولا الأذنين. الدرجة هي المسافة إلى تسع سلالات كلاب. هذا ليس اختبار شخصية ولا تصنيفًا علميًا.",
     "empty_message": "استخدم صورة من الأمام. يجب أن تظهر العينان وألا تكون الصورة شديدة الظلام.",
     "video_aria": "معاينة الكاميرا",
     "stage_aria": "معاينة الوجه",
@@ -1831,8 +2215,8 @@
     "ready": "جاهز. التقط صورة أو ارفع واحدة.",
     "guide_pc": "العجلة للتكبير · اسحب لتحديد الوجه · اضغط مطولًا للتحريك",
     "guide_mobile": "فوق الصورة تتحرك الصفحة. اضغط زر الرسم ثم اسحب مربع الوجه.",
-    "button_camera": "استخدم الكاميرا",
-    "button_upload": "رفع صورة",
+    "button_camera": "التصوير بالكاميرا الآن",
+    "button_upload": "اختيار صورة من المعرض",
     "button_shutter": "التقاط",
     "button_close_camera": "إغلاق الكاميرا",
     "button_analyze": "تحليل كل الوجوه المحددة",
@@ -1843,9 +2227,9 @@
     "flip_to_front_aria": "التبديل إلى الكاميرا الأمامية",
     "side_front": "الأمامية",
     "side_back": "الخلفية",
-    "camera_prompt": "عندما يدخل الوجه داخل الدائرة، اضغط على التقاط.",
-    "camera_switched": "الكاميرا {side}. عندما يدخل الوجه داخل الدائرة، اضغط على التقاط.",
-    "captured_circle": "تم التقاط المنطقة داخل الدائرة.",
+    "camera_prompt": "عندما يدخل الوجه داخل الشكل البيضاوي، اضغط على التقاط.",
+    "camera_switched": "الكاميرا {side}. عندما يدخل الوجه داخل الشكل البيضاوي، اضغط على التقاط.",
+    "captured_circle": "تم التقاط المنطقة داخل الشكل البيضاوي.",
     "captured_wait": "تم التقاط المنطقة داخل الدائرة. اضغط على التحليل عندما يصبح الدليل جاهزًا.",
     "selection_picked": "تم تحديد {count} من مناطق الوجه. اسحب منطقة أخرى، أو اضغط على التحليل.",
     "selection_left": "تبقّى {count} من مناطق الوجه.",
@@ -1999,7 +2383,44 @@
     "share_text": "{animal} {score}%\n{invite}\n{url}",
     "draw_arm": "ارسم مربع الوجه",
     "draw_armed": "الرسم جارٍ · اضغط مجددًا للتمرير",
-    "draw_hint": "الآن اسحب على الصورة. عند رفع الإصبع يعود التمرير."
+    "draw_hint": "الآن اسحب على الصورة. عند رفع الإصبع يعود التمرير.",
+    "pose_hint": "بدون نظارة وفي مواجهة الكاميرا يكون التطابق أفضل. يمكن القياس مع النظارة أيضًا.",
+    "brand_name": "وجه الحيوان AI",
+    "home_kicker": "من صورة واحدة",
+    "home_headline": "الحيوان في وجهك",
+    "home_camera_help": "ضع الوجه داخل الشكل البيضاوي ثم التقط.",
+    "home_gallery_help": "اختر صورة من الألبوم.",
+    "tab_home": "الرئيسية",
+    "tab_test": "اختبار",
+    "tab_feed": "السجل",
+    "tab_my": "حسابي",
+    "mode_selfie": "سيلفي",
+    "mode_friends": "مع الأصدقاء",
+    "mode_pet": "مقارنة حيوان",
+    "mode_pet_notice": "نقارن نسب طول الوجه البشري فقط. صور الحيوانات الأليفة ليست مرجعًا.",
+    "mode_group": "وضع الالتقاط",
+    "tab_label": "تبديل الشاشة",
+    "brightness_ok": "الإضاءة كافية.",
+    "brightness_dim": "نريد ضوءًا أكثر قليلًا.",
+    "instant_analyze": "حلّل الآن",
+    "analyze_title": "نقارن نسب العين والأنف والفم والفك",
+    "analyze_wait": "انتظر لحظة. تُحسب المسافة إلى تسعة مراجع حيوانية.",
+    "step_model": "تجهيز أداة القياس",
+    "step_points": "العثور على نقاط الوجه",
+    "step_ratios": "العين والأنف والفم والفك",
+    "step_animals": "المقارنة مع تسعة حيوانات",
+    "analyze_cancel": "إلغاء",
+    "feed_heading": "آخر نتيجة في هذا المتصفح",
+    "feed_empty": "لا توجد نتيجة محفوظة في هذا التبويب. الصور لا تُخزَّن.",
+    "feed_last": "آخر نتيجة هي {animal} {score}%.",
+    "feed_open": "عرض النتيجة مرة أخرى",
+    "rank_bars_heading": "التشابه مع كل حيوان",
+    "save_card": "حفظ صورة البطاقة",
+    "save_card_done": "تم حفظ صورة البطاقة.",
+    "save_card_fail": "تعذر حفظ صورة البطاقة. حاول مرة أخرى.",
+    "back_label": "رجوع",
+    "compare_mine": "وجهي",
+    "photo_source": "تُختار صورة الكلب عشوائيًا من 100 صورة كحد أقصى لكل سلالة."
   },
   "fr": {
     "page_title": "Guide des visages d'animaux",
@@ -2009,7 +2430,7 @@
     "theme_light": "Clair",
     "theme_dark": "Sombre",
     "app_title": "Guide des visages d'animaux",
-    "lead": "La comparaison utilise les rapports de longueur du visage, des yeux, du nez, de la bouche et de la mâchoire, pas les cheveux ni les oreilles. Le score est la distance par rapport à neuf profils d'animaux. Ce n'est ni un test de personnalité ni une classification scientifique.",
+    "lead": "La comparaison utilise les rapports de longueur du visage, des yeux, du nez, de la bouche et de la mâchoire, pas les cheveux ni les oreilles. Le score est la distance par rapport à neuf races de chien. Ce n'est ni un test de personnalité ni une classification scientifique.",
     "empty_message": "Utilisez une photo de face. Les yeux doivent être visibles et l'image ne doit pas être trop sombre.",
     "video_aria": "Aperçu de la caméra",
     "stage_aria": "Aperçu du visage",
@@ -2022,8 +2443,8 @@
     "ready": "Prêt. Prenez une photo ou importez-en une.",
     "guide_pc": "Molette pour zoomer · Glisser pour choisir un visage · Maintenir pour déplacer",
     "guide_mobile": "Sur la photo, la page défile. Appuyez sur le bouton, puis faites glisser un cadre.",
-    "button_camera": "Utiliser la caméra",
-    "button_upload": "Importer une photo",
+    "button_camera": "Prendre une photo maintenant",
+    "button_upload": "Choisir dans la galerie",
     "button_shutter": "Capturer",
     "button_close_camera": "Fermer la caméra",
     "button_analyze": "Analyser tous les visages choisis",
@@ -2034,9 +2455,9 @@
     "flip_to_front_aria": "Passer à la caméra avant",
     "side_front": "Avant",
     "side_back": "Arrière",
-    "camera_prompt": "Quand le visage est dans le cercle, appuyez sur Capturer.",
-    "camera_switched": "Caméra {side}. Quand le visage est dans le cercle, appuyez sur Capturer.",
-    "captured_circle": "La zone à l'intérieur du cercle a été capturée.",
+    "camera_prompt": "Quand le visage est dans l'ovale, appuyez sur Capturer.",
+    "camera_switched": "Caméra {side}. Quand le visage est dans l'ovale, appuyez sur Capturer.",
+    "captured_circle": "La zone à l'intérieur de l'ovale a été capturée.",
     "captured_wait": "La zone à l'intérieur du cercle a été capturée. Appuyez sur analyser quand le guide est prêt.",
     "selection_picked": "{count} zone(s) de visage sélectionnée(s). Faites-en glisser une autre, ou appuyez sur analyser.",
     "selection_left": "Il reste {count} zone(s) de visage.",
@@ -2190,7 +2611,44 @@
     "share_text": "{animal} {score}%\n{invite}\n{url}",
     "draw_arm": "Dessiner un cadre",
     "draw_armed": "Dessin · appuyez encore pour défiler",
-    "draw_hint": "Faites glisser sur la photo. Quand vous relâchez, la page défile à nouveau."
+    "draw_hint": "Faites glisser sur la photo. Quand vous relâchez, la page défile à nouveau.",
+    "pose_hint": "Sans lunettes et de face, la mesure colle mieux. Vous pouvez aussi mesurer avec des lunettes.",
+    "brand_name": "Animal Face AI",
+    "home_kicker": "Avec une seule photo",
+    "home_headline": "L'animal dans votre visage",
+    "home_camera_help": "Placez le visage dans l'ovale, puis capturez.",
+    "home_gallery_help": "Choisissez une photo de l'album.",
+    "tab_home": "Accueil",
+    "tab_test": "Test",
+    "tab_feed": "Fil",
+    "tab_my": "Moi",
+    "mode_selfie": "Selfie",
+    "mode_friends": "Avec des amis",
+    "mode_pet": "Animal",
+    "mode_pet_notice": "Seules les proportions d'un visage humain sont comparées. Une photo d'animal n'est pas la référence.",
+    "mode_group": "Mode de capture",
+    "tab_label": "Changer d'écran",
+    "brightness_ok": "La lumière suffit.",
+    "brightness_dim": "Un peu plus de lumière, s'il vous plaît.",
+    "instant_analyze": "Analyser",
+    "analyze_title": "Comparaison des proportions des yeux, du nez, de la bouche et de la mâchoire",
+    "analyze_wait": "Un instant. La distance avec neuf références animales est calculée.",
+    "step_model": "Préparer l'outil",
+    "step_points": "Trouver les points du visage",
+    "step_ratios": "Yeux, nez, bouche, mâchoire",
+    "step_animals": "Comparer à neuf animaux",
+    "analyze_cancel": "Annuler",
+    "feed_heading": "Dernier résultat dans ce navigateur",
+    "feed_empty": "Aucun résultat dans cet onglet. Les photos ne sont pas enregistrées.",
+    "feed_last": "Le dernier résultat est {animal} {score}%.",
+    "feed_open": "Revoir le résultat",
+    "rank_bars_heading": "Ressemblance avec chaque animal",
+    "save_card": "Enregistrer l'image",
+    "save_card_done": "L'image de la carte a été enregistrée.",
+    "save_card_fail": "L'image n'a pas pu être enregistrée. Réessayez.",
+    "back_label": "Retour",
+    "compare_mine": "Mon visage",
+    "photo_source": "La photo du chien est tirée au hasard parmi 100 au plus par race."
   },
   "id": {
     "page_title": "Panduan Wajah Hewan",
@@ -2200,7 +2658,7 @@
     "theme_light": "Terang",
     "theme_dark": "Gelap",
     "app_title": "Panduan Wajah Hewan",
-    "lead": "Perbandingan memakai rasio panjang wajah, mata, hidung, mulut, dan rahang, bukan rambut atau telinga. Skor adalah jarak ke sembilan profil hewan. Ini bukan tes kepribadian atau klasifikasi ilmiah.",
+    "lead": "Perbandingan memakai rasio panjang wajah, mata, hidung, mulut, dan rahang, bukan rambut atau telinga. Skor adalah jarak ke sembilan ras anjing. Ini bukan tes kepribadian atau klasifikasi ilmiah.",
     "empty_message": "Gunakan foto dari depan. Mata harus terlihat, dan gambar jangan terlalu gelap.",
     "video_aria": "Pratinjau kamera",
     "stage_aria": "Pratinjau wajah",
@@ -2213,8 +2671,8 @@
     "ready": "Siap. Ambil foto atau unggah satu.",
     "guide_pc": "Roda untuk memperbesar · Seret untuk memilih wajah · Tahan untuk menggeser",
     "guide_mobile": "Di atas foto, halaman bergulir. Ketuk tombol, lalu seret kotak wajah.",
-    "button_camera": "Pakai kamera",
-    "button_upload": "Unggah foto",
+    "button_camera": "Ambil foto sekarang",
+    "button_upload": "Pilih dari galeri",
     "button_shutter": "Ambil",
     "button_close_camera": "Tutup kamera",
     "button_analyze": "Analisis semua wajah yang dipilih",
@@ -2225,9 +2683,9 @@
     "flip_to_front_aria": "Beralih ke kamera depan",
     "side_front": "Depan",
     "side_back": "Belakang",
-    "camera_prompt": "Saat wajah berada di dalam lingkaran, tekan Ambil.",
-    "camera_switched": "Kamera {side}. Saat wajah berada di dalam lingkaran, tekan Ambil.",
-    "captured_circle": "Area di dalam lingkaran sudah diambil.",
+    "camera_prompt": "Saat wajah berada di dalam oval, tekan Ambil.",
+    "camera_switched": "Kamera {side}. Saat wajah berada di dalam oval, tekan Ambil.",
+    "captured_circle": "Area di dalam oval sudah diambil.",
     "captured_wait": "Area di dalam lingkaran sudah diambil. Tekan analisis saat panduan siap.",
     "selection_picked": "{count} area wajah dipilih. Seret satu lagi, atau tekan analisis.",
     "selection_left": "Tersisa {count} area wajah.",
@@ -2381,7 +2839,44 @@
     "share_text": "{animal} {score}%\n{invite}\n{url}",
     "draw_arm": "Gambar kotak wajah",
     "draw_armed": "Menggambar · ketuk lagi untuk gulir",
-    "draw_hint": "Sekarang seret di atas foto. Saat jari diangkat, halaman bisa digulir lagi."
+    "draw_hint": "Sekarang seret di atas foto. Saat jari diangkat, halaman bisa digulir lagi.",
+    "pose_hint": "Lepas kacamata dan menghadap depan lebih cocok. Dengan kacamata pun tetap bisa diukur.",
+    "brand_name": "Animal Face AI",
+    "home_kicker": "Dari satu foto",
+    "home_headline": "Hewan di wajahmu",
+    "home_camera_help": "Paskan wajah di dalam oval, lalu potret.",
+    "home_gallery_help": "Pilih foto dari album.",
+    "tab_home": "Beranda",
+    "tab_test": "Tes",
+    "tab_feed": "Umpan",
+    "tab_my": "Saya",
+    "mode_selfie": "Selfie",
+    "mode_friends": "Bersama teman",
+    "mode_pet": "Hewan peliharaan",
+    "mode_pet_notice": "Yang dibandingkan hanya rasio panjang wajah manusia. Foto hewan peliharaan tidak dijadikan patokan.",
+    "mode_group": "Mode potret",
+    "tab_label": "Pindah layar",
+    "brightness_ok": "Cahayanya cukup.",
+    "brightness_dim": "Tolong tambah sedikit cahaya.",
+    "instant_analyze": "Analisis sekarang",
+    "analyze_title": "Membandingkan rasio mata, hidung, mulut, dan rahang",
+    "analyze_wait": "Mohon tunggu. Jarak ke sembilan patokan hewan sedang dihitung.",
+    "step_model": "Siapkan alat ukur",
+    "step_points": "Cari titik wajah",
+    "step_ratios": "Mata, hidung, mulut, rahang",
+    "step_animals": "Bandingkan dengan sembilan hewan",
+    "analyze_cancel": "Batalkan",
+    "feed_heading": "Hasil terakhir di browser ini",
+    "feed_empty": "Belum ada hasil di tab ini. Foto tidak disimpan.",
+    "feed_last": "Hasil terakhir adalah {animal} {score}%.",
+    "feed_open": "Lihat hasil lagi",
+    "rank_bars_heading": "Kemiripan dengan tiap hewan",
+    "save_card": "Simpan gambar kartu",
+    "save_card_done": "Gambar kartu tersimpan.",
+    "save_card_fail": "Gambar kartu gagal disimpan. Coba lagi.",
+    "back_label": "Kembali",
+    "compare_mine": "Wajah saya",
+    "photo_source": "Foto anjing dipilih acak dari maksimal 100 foto tiap ras."
   },
   "de": {
     "page_title": "Tiergesichter-Atlas",
@@ -2391,7 +2886,7 @@
     "theme_light": "Hell",
     "theme_dark": "Dunkel",
     "app_title": "Tiergesichter-Atlas",
-    "lead": "Der Vergleich nutzt Längenverhältnisse von Gesicht, Augen, Nase, Mund und Kiefer, nicht Haare oder Ohren. Die Punktzahl ist der Abstand zu neun Tierprofilen. Es ist kein Persönlichkeitstest und keine wissenschaftliche Einstufung.",
+    "lead": "Der Vergleich nutzt Längenverhältnisse von Gesicht, Augen, Nase, Mund und Kiefer, nicht Haare oder Ohren. Die Punktzahl ist der Abstand zu neun Hunderassen. Es ist kein Persönlichkeitstest und keine wissenschaftliche Einstufung.",
     "empty_message": "Nutzen Sie ein Foto von vorn. Die Augen sollen sichtbar sein, und das Bild soll nicht zu dunkel sein.",
     "video_aria": "Kameravorschau",
     "stage_aria": "Gesichtsvorschau",
@@ -2404,8 +2899,8 @@
     "ready": "Bereit. Machen Sie ein Foto oder laden Sie eines hoch.",
     "guide_pc": "Rad zum Zoomen · Ziehen, um ein Gesicht zu wählen · Halten zum Verschieben",
     "guide_mobile": "Auf dem Foto scrollt die Seite. Tippen Sie die Taste und ziehen Sie dann ein Feld.",
-    "button_camera": "Kamera nutzen",
-    "button_upload": "Foto hochladen",
+    "button_camera": "Jetzt mit der Kamera aufnehmen",
+    "button_upload": "Aus der Galerie wählen",
     "button_shutter": "Aufnehmen",
     "button_close_camera": "Kamera schließen",
     "button_analyze": "Alle gewählten Gesichter analysieren",
@@ -2416,9 +2911,9 @@
     "flip_to_front_aria": "Zur Frontkamera wechseln",
     "side_front": "Front",
     "side_back": "Rück",
-    "camera_prompt": "Wenn das Gesicht im Kreis ist, drücken Sie Aufnehmen.",
-    "camera_switched": "Kamera {side}. Wenn das Gesicht im Kreis ist, drücken Sie Aufnehmen.",
-    "captured_circle": "Der Bereich im Kreis wurde aufgenommen.",
+    "camera_prompt": "Wenn das Gesicht im Oval ist, drücken Sie Aufnehmen.",
+    "camera_switched": "Kamera {side}. Wenn das Gesicht im Oval ist, drücken Sie Aufnehmen.",
+    "captured_circle": "Der Bereich im Oval wurde aufgenommen.",
     "captured_wait": "Der Bereich im Kreis wurde aufgenommen. Drücken Sie Analysieren, wenn der Atlas bereit ist.",
     "selection_picked": "{count} Gesichtsbereich(e) gewählt. Ziehen Sie einen weiteren oder drücken Sie Analysieren.",
     "selection_left": "Noch {count} Gesichtsbereich(e).",
@@ -2572,7 +3067,44 @@
     "share_text": "{animal} {score}%\n{invite}\n{url}",
     "draw_arm": "Gesichtsfeld zeichnen",
     "draw_armed": "Zeichnen · erneut tippen zum Scrollen",
-    "draw_hint": "Ziehen Sie jetzt auf dem Foto. Nach dem Loslassen scrollt die Seite wieder."
+    "draw_hint": "Ziehen Sie jetzt auf dem Foto. Nach dem Loslassen scrollt die Seite wieder.",
+    "pose_hint": "Ohne Brille und von vorn passt es besser. Mit Brille können Sie trotzdem messen.",
+    "brand_name": "Animal Face AI",
+    "home_kicker": "Mit einem Foto",
+    "home_headline": "Das Tier in deinem Gesicht",
+    "home_camera_help": "Lege das Gesicht in das Oval und nimm auf.",
+    "home_gallery_help": "Wähle ein Foto aus dem Album.",
+    "tab_home": "Start",
+    "tab_test": "Test",
+    "tab_feed": "Feed",
+    "tab_my": "Ich",
+    "mode_selfie": "Selfie",
+    "mode_friends": "Mit Freunden",
+    "mode_pet": "Haustier",
+    "mode_pet_notice": "Verglichen werden nur Längenverhältnisse eines menschlichen Gesichts. Haustierfotos sind keine Referenz.",
+    "mode_group": "Aufnahmemodus",
+    "tab_label": "Ansicht wechseln",
+    "brightness_ok": "Das Licht reicht.",
+    "brightness_dim": "Bitte etwas mehr Licht.",
+    "instant_analyze": "Sofort prüfen",
+    "analyze_title": "Augen-, Nasen-, Mund- und Kieferverhältnisse werden verglichen",
+    "analyze_wait": "Bitte warten. Der Abstand zu neun Tierreferenzen wird berechnet.",
+    "step_model": "Werkzeug vorbereiten",
+    "step_points": "Gesichtspunkte finden",
+    "step_ratios": "Augen, Nase, Mund, Kiefer",
+    "step_animals": "Mit neun Tieren vergleichen",
+    "analyze_cancel": "Abbrechen",
+    "feed_heading": "Letztes Ergebnis in diesem Browser",
+    "feed_empty": "In diesem Tab liegt noch kein Ergebnis. Fotos werden nicht gespeichert.",
+    "feed_last": "Das letzte Ergebnis ist {animal} {score}%.",
+    "feed_open": "Ergebnis noch einmal sehen",
+    "rank_bars_heading": "Ähnlichkeit mit jedem Tier",
+    "save_card": "Kartenbild speichern",
+    "save_card_done": "Das Kartenbild wurde gespeichert.",
+    "save_card_fail": "Das Kartenbild wurde nicht gespeichert. Bitte noch einmal versuchen.",
+    "back_label": "Zurück",
+    "compare_mine": "Mein Gesicht",
+    "photo_source": "Das Hundefoto wird zufällig aus bis zu 100 Bildern je Rasse gewählt."
   },
   "ru": {
     "page_title": "Атлас звериных лиц",
@@ -2582,7 +3114,7 @@
     "theme_light": "Свет",
     "theme_dark": "Тьма",
     "app_title": "Атлас звериных лиц",
-    "lead": "Сравнение использует отношения длины лица, глаз, носа, рта и челюсти, а не волосы или уши. Балл — это расстояние до девяти звериных профилей. Это не тест личности и не научная классификация.",
+    "lead": "Сравнение использует отношения длины лица, глаз, носа, рта и челюсти, а не волосы или уши. Балл — это расстояние до девяти пород собак. Это не тест личности и не научная классификация.",
     "empty_message": "Возьмите фото анфас. Глаза должны быть видны, а снимок не должен быть слишком тёмным.",
     "video_aria": "Предпросмотр камеры",
     "stage_aria": "Предпросмотр лица",
@@ -2595,8 +3127,8 @@
     "ready": "Готово. Сделайте фото или загрузите его.",
     "guide_pc": "Колесо — увеличить · Перетаскивание — выбрать лицо · Удержание — сдвинуть",
     "guide_mobile": "По фото страница прокручивается. Нажмите кнопку и затем проведите рамку.",
-    "button_camera": "Камера",
-    "button_upload": "Загрузить фото",
+    "button_camera": "Снять камерой сейчас",
+    "button_upload": "Выбрать из галереи",
     "button_shutter": "Снять",
     "button_close_camera": "Закрыть камеру",
     "button_analyze": "Разобрать все выбранные лица",
@@ -2607,9 +3139,9 @@
     "flip_to_front_aria": "Переключить на переднюю камеру",
     "side_front": "Передняя",
     "side_back": "Задняя",
-    "camera_prompt": "Когда лицо внутри круга, нажмите «Снять».",
-    "camera_switched": "Камера: {side}. Когда лицо внутри круга, нажмите «Снять».",
-    "captured_circle": "Область внутри круга снята.",
+    "camera_prompt": "Когда лицо внутри овала, нажмите «Снять».",
+    "camera_switched": "Камера: {side}. Когда лицо внутри овала, нажмите «Снять».",
+    "captured_circle": "Область внутри овала снята.",
     "captured_wait": "Область внутри круга снята. Нажмите анализ, когда атлас будет готов.",
     "selection_picked": "Выбрано областей лица: {count}. Перетащите ещё одну или нажмите анализ.",
     "selection_left": "Осталось областей лица: {count}.",
@@ -2763,7 +3295,44 @@
     "share_text": "{animal} {score}%\n{invite}\n{url}",
     "draw_arm": "Нарисовать рамку",
     "draw_armed": "Рисуете · нажмите снова для прокрутки",
-    "draw_hint": "Теперь проведите по фото. Когда отпустите палец, страница снова прокручивается."
+    "draw_hint": "Теперь проведите по фото. Когда отпустите палец, страница снова прокручивается.",
+    "pose_hint": "Без очков и анфас совпадение лучше. В очках тоже можно измерить.",
+    "brand_name": "Animal Face AI",
+    "home_kicker": "По одному фото",
+    "home_headline": "Животное в вашем лице",
+    "home_camera_help": "Поместите лицо в овал и снимите.",
+    "home_gallery_help": "Выберите фото из альбома.",
+    "tab_home": "Главная",
+    "tab_test": "Тест",
+    "tab_feed": "Лента",
+    "tab_my": "Моё",
+    "mode_selfie": "Селфи",
+    "mode_friends": "С друзьями",
+    "mode_pet": "Питомец",
+    "mode_pet_notice": "Сравниваются только пропорции человеческого лица. Фото питомца не является эталоном.",
+    "mode_group": "Режим съёмки",
+    "tab_label": "Смена экрана",
+    "brightness_ok": "Света достаточно.",
+    "brightness_dim": "Нужно немного больше света.",
+    "instant_analyze": "Сразу разобрать",
+    "analyze_title": "Сравниваем пропорции глаз, носа, рта и челюсти",
+    "analyze_wait": "Подождите. Считается расстояние до девяти животных эталонов.",
+    "step_model": "Подготовить инструмент",
+    "step_points": "Найти точки лица",
+    "step_ratios": "Глаза, нос, рот, челюсть",
+    "step_animals": "Сравнить с девятью животными",
+    "analyze_cancel": "Отмена",
+    "feed_heading": "Последний результат в этом браузере",
+    "feed_empty": "В этой вкладке ещё нет результата. Фото не сохраняются.",
+    "feed_last": "Последний результат: {animal} {score}%.",
+    "feed_open": "Открыть результат снова",
+    "rank_bars_heading": "Сходство с каждым животным",
+    "save_card": "Сохранить карточку",
+    "save_card_done": "Карточка сохранена.",
+    "save_card_fail": "Карточку не удалось сохранить. Нажмите ещё раз.",
+    "back_label": "Назад",
+    "compare_mine": "Моё лицо",
+    "photo_source": "Фото собаки выбирается случайно из не более чем 100 снимков породы."
   },
   "vi": {
     "page_title": "Sổ tay khuôn mặt động vật",
@@ -2773,7 +3342,7 @@
     "theme_light": "Sáng",
     "theme_dark": "Tối",
     "app_title": "Sổ tay khuôn mặt động vật",
-    "lead": "Phép so sánh dùng tỷ lệ chiều dài của khuôn mặt, mắt, mũi, miệng và hàm, không dùng tóc hay tai. Điểm số là khoảng cách tới chín hồ sơ động vật. Đây không phải bài kiểm tra tính cách hay phân loại khoa học.",
+    "lead": "Phép so sánh dùng tỷ lệ chiều dài của khuôn mặt, mắt, mũi, miệng và hàm, không dùng tóc hay tai. Điểm số là khoảng cách tới chín giống chó. Đây không phải bài kiểm tra tính cách hay phân loại khoa học.",
     "empty_message": "Dùng ảnh chụp chính diện. Mắt phải thấy rõ và ảnh không được quá tối.",
     "video_aria": "Xem trước camera",
     "stage_aria": "Xem trước khuôn mặt",
@@ -2786,8 +3355,8 @@
     "ready": "Sẵn sàng. Chụp ảnh hoặc tải một ảnh lên.",
     "guide_pc": "Con lăn để phóng to · Kéo để chọn mặt · Giữ để di chuyển",
     "guide_mobile": "Trên ảnh, trang sẽ cuộn. Chạm nút rồi kéo một khung mặt.",
-    "button_camera": "Dùng camera",
-    "button_upload": "Tải ảnh lên",
+    "button_camera": "Chụp bằng camera ngay",
+    "button_upload": "Chọn từ thư viện",
     "button_shutter": "Chụp",
     "button_close_camera": "Đóng camera",
     "button_analyze": "Phân tích mọi khuôn mặt đã chọn",
@@ -2798,9 +3367,9 @@
     "flip_to_front_aria": "Chuyển sang camera trước",
     "side_front": "Trước",
     "side_back": "Sau",
-    "camera_prompt": "Khi khuôn mặt nằm trong vòng tròn, hãy nhấn Chụp.",
-    "camera_switched": "Camera {side}. Khi khuôn mặt nằm trong vòng tròn, hãy nhấn Chụp.",
-    "captured_circle": "Đã chụp vùng bên trong vòng tròn.",
+    "camera_prompt": "Khi khuôn mặt nằm trong hình bầu dục, hãy nhấn Chụp.",
+    "camera_switched": "Camera {side}. Khi khuôn mặt nằm trong hình bầu dục, hãy nhấn Chụp.",
+    "captured_circle": "Đã chụp vùng bên trong hình bầu dục.",
     "captured_wait": "Đã chụp vùng bên trong vòng tròn. Nhấn phân tích khi sổ tay sẵn sàng.",
     "selection_picked": "Đã chọn {count} vùng mặt. Kéo thêm một vùng, hoặc nhấn phân tích.",
     "selection_left": "Còn {count} vùng mặt.",
@@ -2954,657 +3523,693 @@
     "share_text": "{animal} {score}%\n{invite}\n{url}",
     "draw_arm": "Vẽ khung mặt",
     "draw_armed": "Đang vẽ · chạm lại để cuộn",
-    "draw_hint": "Hãy kéo trên ảnh. Nhấc ngón tay thì trang cuộn lại được."
+    "draw_hint": "Hãy kéo trên ảnh. Nhấc ngón tay thì trang cuộn lại được.",
+    "pose_hint": "Tháo kính và nhìn thẳng sẽ khớp hơn. Đeo kính vẫn đo được.",
+    "brand_name": "Animal Face AI",
+    "home_kicker": "Từ một tấm ảnh",
+    "home_headline": "Loài vật trong khuôn mặt",
+    "home_camera_help": "Đặt mặt vào hình bầu dục rồi chụp.",
+    "home_gallery_help": "Chọn ảnh từ album.",
+    "tab_home": "Trang chủ",
+    "tab_test": "Thử",
+    "tab_feed": "Bảng tin",
+    "tab_my": "Tôi",
+    "mode_selfie": "Selfie",
+    "mode_friends": "Cùng bạn",
+    "mode_pet": "Thú cưng",
+    "mode_pet_notice": "Chỉ so tỷ lệ chiều dài khuôn mặt người. Ảnh thú cưng không được dùng làm mốc.",
+    "mode_group": "Chế độ chụp",
+    "tab_label": "Đổi màn hình",
+    "brightness_ok": "Đủ sáng.",
+    "brightness_dim": "Làm sáng thêm một chút.",
+    "instant_analyze": "Phân tích ngay",
+    "analyze_title": "Đang so tỷ lệ mắt, mũi, miệng và hàm",
+    "analyze_wait": "Xin chờ. Khoảng cách tới chín mốc động vật đang được tính.",
+    "step_model": "Chuẩn bị dụng cụ đo",
+    "step_points": "Tìm điểm trên mặt",
+    "step_ratios": "Mắt, mũi, miệng, hàm",
+    "step_animals": "So với chín loài",
+    "analyze_cancel": "Hủy",
+    "feed_heading": "Kết quả gần nhất trên trình duyệt này",
+    "feed_empty": "Tab này chưa có kết quả. Ảnh không được lưu.",
+    "feed_last": "Kết quả gần nhất là {animal} {score}%.",
+    "feed_open": "Xem lại kết quả",
+    "rank_bars_heading": "Mức giống từng loài",
+    "save_card": "Lưu ảnh thẻ",
+    "save_card_done": "Đã lưu ảnh thẻ.",
+    "save_card_fail": "Không lưu được ảnh thẻ. Hãy bấm lại.",
+    "back_label": "Quay lại",
+    "compare_mine": "Mặt của tôi",
+    "photo_source": "Ảnh chó được chọn ngẫu nhiên trong tối đa 100 ảnh của mỗi giống."
   }
 };
-
       var ANIMAL_TEXT = {
-  "cat": {
+  "poodle": {
     "ko": {
-      "name": "고양이상",
-      "short_name": "고양이",
+      "name": "푸들상",
+      "short_name": "푸들",
       "blurb": "눈이 또렷하고 코가 작아, 이목구비가 가운데로 모이는 인상입니다."
     },
     "en": {
-      "name": "Cat face",
-      "short_name": "cat",
+      "name": "Poodle face",
+      "short_name": "poodle",
       "blurb": "Clear eyes and a small nose gather the features toward the center."
     },
     "ja": {
-      "name": "猫顔",
-      "short_name": "猫",
-      "blurb": "目がはっきりして鼻が小さく、パーツが中央に集まる印象です。"
+      "name": "プードル顔",
+      "short_name": "プードル",
+      "blurb": "目、鼻、口、顎の長さの比率が、この犬種の基準に近い印象です。"
     },
     "zh": {
-      "name": "猫相",
-      "short_name": "猫",
-      "blurb": "眼睛清楚、鼻子小，五官往中间聚拢。"
+      "name": "贵宾犬相",
+      "short_name": "贵宾犬",
+      "blurb": "眼、鼻、嘴、下巴的长度比例接近这个犬种的基准。"
     },
     "hi": {
-      "name": "बिल्ली चेहरा",
-      "short_name": "बिल्ली",
-      "blurb": "साफ़ आँखें और छोटी नाक अंगों को बीच की ओर इकट्ठा करती हैं।"
+      "name": "पूडल चेहरा",
+      "short_name": "पूडल",
+      "blurb": "आँख, नाक, मुँह और जबड़े की लंबाई का अनुपात इस नस्ल के आधार के पास है।"
     },
     "zh-Hant": {
-      "name": "貓相",
-      "short_name": "貓",
-      "blurb": "眼睛清楚、鼻子小，五官往中間聚攏。"
+      "name": "貴賓犬相",
+      "short_name": "貴賓犬",
+      "blurb": "眼、鼻、嘴、下巴的長度比例接近這個犬種的基準。"
     },
     "es": {
-      "name": "Rostro de gato",
-      "short_name": "gato",
-      "blurb": "Unos ojos claros y una nariz pequeña reúnen los rasgos hacia el centro."
+      "name": "Cara de caniche",
+      "short_name": "caniche",
+      "blurb": "Las proporciones de ojos, nariz, boca y mandíbula quedan cerca de la base de esta raza."
     },
     "pt": {
-      "name": "Rosto de gato",
-      "short_name": "gato",
-      "blurb": "Olhos nítidos e um nariz pequeno reúnem os traços em direção ao centro."
+      "name": "Rosto de poodle",
+      "short_name": "poodle",
+      "blurb": "As proporções de olhos, nariz, boca e mandíbula ficam perto da base desta raça."
     },
     "ar": {
-      "name": "وجه قطة",
-      "short_name": "قطة",
-      "blurb": "عينان واضحتان وأنف صغير يجمعان ملامح الوجه نحو الوسط."
+      "name": "وجه بودل",
+      "short_name": "بودل",
+      "blurb": "نسب طول العين والأنف والفم والفك قريبة من أساس هذا الصنف."
     },
     "fr": {
-      "name": "Visage de chat",
-      "short_name": "chat",
-      "blurb": "Des yeux nets et un petit nez rassemblent les traits vers le centre."
+      "name": "Visage de caniche",
+      "short_name": "caniche",
+      "blurb": "Les proportions des yeux, du nez, de la bouche et de la mâchoire sont proches de cette race."
     },
     "id": {
-      "name": "Wajah kucing",
-      "short_name": "kucing",
-      "blurb": "Mata jernih dan hidung kecil mengumpulkan bagian wajah ke tengah."
+      "name": "Wajah pudel",
+      "short_name": "pudel",
+      "blurb": "Rasio panjang mata, hidung, mulut, dan rahang dekat dengan patokan ras ini."
     },
     "de": {
-      "name": "Katzengesicht",
-      "short_name": "Katze",
-      "blurb": "Klare Augen und eine kleine Nase sammeln die Züge zur Mitte."
+      "name": "Pudelgesicht",
+      "short_name": "Pudel",
+      "blurb": "Die Längenverhältnisse von Augen, Nase, Mund und Kiefer liegen nahe an dieser Rasse."
     },
     "ru": {
-      "name": "Кошачье лицо",
-      "short_name": "кошка",
-      "blurb": "Ясные глаза и небольшой нос собирают черты к центру."
+      "name": "Лицо пуделя",
+      "short_name": "пудель",
+      "blurb": "Пропорции глаз, носа, рта и челюсти близки к основе этой породы."
     },
     "vi": {
-      "name": "Mặt mèo",
-      "short_name": "mèo",
-      "blurb": "Mắt rõ và mũi nhỏ gom các phần mặt về giữa."
+      "name": "Mặt poodle",
+      "short_name": "poodle",
+      "blurb": "Tỷ lệ mắt, mũi, miệng và hàm nằm gần mốc của giống này."
     }
   },
-  "dog": {
+  "retriever": {
     "ko": {
-      "name": "강아지상",
-      "short_name": "강아지",
+      "name": "리트리버상",
+      "short_name": "리트리버",
       "blurb": "눈이 둥글고 입이 넓어, 표정이 순하고 친근해 보이는 인상입니다."
     },
     "en": {
-      "name": "Puppy face",
-      "short_name": "puppy",
+      "name": "Retriever face",
+      "short_name": "retriever",
       "blurb": "Round eyes and a wide mouth give a gentle, friendly look."
     },
     "ja": {
-      "name": "犬顔",
-      "short_name": "犬",
-      "blurb": "目が丸く口が広く、表情が穏やかで親しみやすく見える印象です。"
+      "name": "レトリバー顔",
+      "short_name": "レトリバー",
+      "blurb": "目、鼻、口、顎の長さの比率が、この犬種の基準に近い印象です。"
     },
     "zh": {
-      "name": "小狗相",
-      "short_name": "小狗",
-      "blurb": "眼睛圆、嘴巴宽，表情看起来温和亲切。"
+      "name": "寻回犬相",
+      "short_name": "寻回犬",
+      "blurb": "眼、鼻、嘴、下巴的长度比例接近这个犬种的基准。"
     },
     "hi": {
-      "name": "पिल्ला चेहरा",
-      "short_name": "पिल्ला",
-      "blurb": "गोल आँखें और चौड़ा मुँह कोमल, मैत्रीपूर्ण रूप देते हैं।"
+      "name": "रिट्रीवर चेहरा",
+      "short_name": "रिट्रीवर",
+      "blurb": "आँख, नाक, मुँह और जबड़े की लंबाई का अनुपात इस नस्ल के आधार के पास है।"
     },
     "zh-Hant": {
-      "name": "小狗相",
-      "short_name": "小狗",
-      "blurb": "眼睛圓、嘴巴寬，表情看起來溫和親切。"
+      "name": "尋回犬相",
+      "short_name": "尋回犬",
+      "blurb": "眼、鼻、嘴、下巴的長度比例接近這個犬種的基準。"
     },
     "es": {
-      "name": "Rostro de cachorro",
-      "short_name": "cachorro",
-      "blurb": "Unos ojos redondos y una boca ancha dan un aspecto suave y amistoso."
+      "name": "Cara de retriever",
+      "short_name": "retriever",
+      "blurb": "Las proporciones de ojos, nariz, boca y mandíbula quedan cerca de la base de esta raza."
     },
     "pt": {
-      "name": "Rosto de filhote",
-      "short_name": "filhote",
-      "blurb": "Olhos redondos e uma boca larga dão um aspecto gentil e amigável."
+      "name": "Rosto de retriever",
+      "short_name": "retriever",
+      "blurb": "As proporções de olhos, nariz, boca e mandíbula ficam perto da base desta raça."
     },
     "ar": {
-      "name": "وجه جرو",
-      "short_name": "جرو",
-      "blurb": "عينان مستديرتان وفم عريض يصنعان مظهرًا لطيفًا وودودًا."
+      "name": "وجه ريتريفر",
+      "short_name": "ريتريفر",
+      "blurb": "نسب طول العين والأنف والفم والفك قريبة من أساس هذا الصنف."
     },
     "fr": {
-      "name": "Visage de chiot",
-      "short_name": "chiot",
-      "blurb": "Des yeux ronds et une bouche large donnent un air doux et amical."
+      "name": "Visage de retriever",
+      "short_name": "retriever",
+      "blurb": "Les proportions des yeux, du nez, de la bouche et de la mâchoire sont proches de cette race."
     },
     "id": {
-      "name": "Wajah anak anjing",
-      "short_name": "anak anjing",
-      "blurb": "Mata bulat dan mulut lebar memberi tampilan lembut dan ramah."
+      "name": "Wajah retriever",
+      "short_name": "retriever",
+      "blurb": "Rasio panjang mata, hidung, mulut, dan rahang dekat dengan patokan ras ini."
     },
     "de": {
-      "name": "Welpengesicht",
-      "short_name": "Welpe",
-      "blurb": "Runde Augen und ein breiter Mund geben einen sanften, freundlichen Blick."
+      "name": "Retrievergesicht",
+      "short_name": "Retriever",
+      "blurb": "Die Längenverhältnisse von Augen, Nase, Mund und Kiefer liegen nahe an dieser Rasse."
     },
     "ru": {
-      "name": "Щенячье лицо",
-      "short_name": "щенок",
-      "blurb": "Круглые глаза и широкий рот дают мягкий дружелюбный вид."
+      "name": "Лицо ретривера",
+      "short_name": "ретривер",
+      "blurb": "Пропорции глаз, носа, рта и челюсти близки к основе этой породы."
     },
     "vi": {
-      "name": "Mặt cún",
-      "short_name": "cún",
-      "blurb": "Mắt tròn và miệng rộng tạo vẻ hiền, thân thiện."
+      "name": "Mặt retriever",
+      "short_name": "retriever",
+      "blurb": "Tỷ lệ mắt, mũi, miệng và hàm nằm gần mốc của giống này."
     }
   },
-  "fox": {
+  "shiba": {
     "ko": {
-      "name": "여우상",
-      "short_name": "여우",
+      "name": "시바상",
+      "short_name": "시바",
       "blurb": "얼굴선이 길고 턱끝이 가늘어, 눈매가 날렵해 보이는 인상입니다."
     },
     "en": {
-      "name": "Fox face",
-      "short_name": "fox",
-      "blurb": "A long face and a narrow chin make the eyes look sharp."
+      "name": "Shiba face",
+      "short_name": "shiba",
+      "blurb": "A longer face and a narrow chin make the eyes look sharp."
     },
     "ja": {
-      "name": "狐顔",
-      "short_name": "狐",
-      "blurb": "顔の線が長くあご先が細く、目元が鋭く見える印象です。"
+      "name": "柴犬顔",
+      "short_name": "柴犬",
+      "blurb": "目、鼻、口、顎の長さの比率が、この犬種の基準に近い印象です。"
     },
     "zh": {
-      "name": "狐相",
-      "short_name": "狐",
-      "blurb": "脸的线条长、下巴尖细，眼型看起来利落。"
+      "name": "柴犬相",
+      "short_name": "柴犬",
+      "blurb": "眼、鼻、嘴、下巴的长度比例接近这个犬种的基准。"
     },
     "hi": {
-      "name": "लोमड़ी चेहरा",
-      "short_name": "लोमड़ी",
-      "blurb": "लंबा चेहरा और पतली ठुड्डी आँखों को तीखा दिखाते हैं।"
+      "name": "शिबा चेहरा",
+      "short_name": "शिबा",
+      "blurb": "आँख, नाक, मुँह और जबड़े की लंबाई का अनुपात इस नस्ल के आधार के पास है।"
     },
     "zh-Hant": {
-      "name": "狐相",
-      "short_name": "狐",
-      "blurb": "臉的線條長、下巴尖細，眼型看起來利落。"
+      "name": "柴犬相",
+      "short_name": "柴犬",
+      "blurb": "眼、鼻、嘴、下巴的長度比例接近這個犬種的基準。"
     },
     "es": {
-      "name": "Rostro de zorro",
-      "short_name": "zorro",
-      "blurb": "Un rostro largo y un mentón estrecho hacen que los ojos se vean afilados."
+      "name": "Cara de shiba",
+      "short_name": "shiba",
+      "blurb": "Las proporciones de ojos, nariz, boca y mandíbula quedan cerca de la base de esta raza."
     },
     "pt": {
-      "name": "Rosto de raposa",
-      "short_name": "raposa",
-      "blurb": "Um rosto comprido e um queixo estreito deixam os olhos afilados."
+      "name": "Rosto de shiba",
+      "short_name": "shiba",
+      "blurb": "As proporções de olhos, nariz, boca e mandíbula ficam perto da base desta raça."
     },
     "ar": {
-      "name": "وجه ثعلب",
-      "short_name": "ثعلب",
-      "blurb": "وجه طويل وذقن ضيق يجعلان العينين تبدوان حادتين."
+      "name": "وجه شيبا",
+      "short_name": "شيبا",
+      "blurb": "نسب طول العين والأنف والفم والفك قريبة من أساس هذا الصنف."
     },
     "fr": {
-      "name": "Visage de renard",
-      "short_name": "renard",
-      "blurb": "Un visage long et un menton étroit rendent les yeux vifs."
+      "name": "Visage de shiba",
+      "short_name": "shiba",
+      "blurb": "Les proportions des yeux, du nez, de la bouche et de la mâchoire sont proches de cette race."
     },
     "id": {
-      "name": "Wajah rubah",
-      "short_name": "rubah",
-      "blurb": "Wajah panjang dan dagu sempit membuat mata tampak tajam."
+      "name": "Wajah shiba",
+      "short_name": "shiba",
+      "blurb": "Rasio panjang mata, hidung, mulut, dan rahang dekat dengan patokan ras ini."
     },
     "de": {
-      "name": "Fuchsgesicht",
-      "short_name": "Fuchs",
-      "blurb": "Ein langes Gesicht und ein schmales Kinn lassen die Augen scharf wirken."
+      "name": "Shiba-Gesicht",
+      "short_name": "Shiba",
+      "blurb": "Die Längenverhältnisse von Augen, Nase, Mund und Kiefer liegen nahe an dieser Rasse."
     },
     "ru": {
-      "name": "Лисье лицо",
-      "short_name": "лиса",
-      "blurb": "Длинное лицо и узкий подбородок делают глаза острыми."
+      "name": "Лицо сиба",
+      "short_name": "сиба",
+      "blurb": "Пропорции глаз, носа, рта и челюсти близки к основе этой породы."
     },
     "vi": {
-      "name": "Mặt cáo",
-      "short_name": "cáo",
-      "blurb": "Mặt dài và cằm hẹp khiến mắt trông sắc."
+      "name": "Mặt shiba",
+      "short_name": "shiba",
+      "blurb": "Tỷ lệ mắt, mũi, miệng và hàm nằm gần mốc của giống này."
     }
   },
-  "rabbit": {
+  "pomeranian": {
     "ko": {
-      "name": "토끼상",
-      "short_name": "토끼",
+      "name": "포메라니안상",
+      "short_name": "포메라니안",
       "blurb": "눈이 크고 코와 입이 작아, 인상이 동글고 부드러운 쪽입니다."
     },
     "en": {
-      "name": "Rabbit face",
-      "short_name": "rabbit",
-      "blurb": "Large eyes with a small nose and mouth give a round, soft look."
+      "name": "Pomeranian face",
+      "short_name": "pomeranian",
+      "blurb": "Large eyes and a small nose and mouth make the face look round and soft."
     },
     "ja": {
-      "name": "兎顔",
-      "short_name": "兎",
-      "blurb": "目が大きく鼻と口が小さく、印象が丸く柔らかいほうです。"
+      "name": "ポメラニアン顔",
+      "short_name": "ポメラニアン",
+      "blurb": "目、鼻、口、顎の長さの比率が、この犬種の基準に近い印象です。"
     },
     "zh": {
-      "name": "兔相",
-      "short_name": "兔",
-      "blurb": "眼睛大，鼻子和嘴巴小，印象圆而柔和。"
+      "name": "博美犬相",
+      "short_name": "博美犬",
+      "blurb": "眼、鼻、嘴、下巴的长度比例接近这个犬种的基准。"
     },
     "hi": {
-      "name": "खरगोश चेहरा",
-      "short_name": "खरगोश",
-      "blurb": "बड़ी आँखें और छोटी नाक-मुँह गोल, नरम रूप देते हैं।"
+      "name": "पोमेरेनियन चेहरा",
+      "short_name": "पोमेरेनियन",
+      "blurb": "आँख, नाक, मुँह और जबड़े की लंबाई का अनुपात इस नस्ल के आधार के पास है।"
     },
     "zh-Hant": {
-      "name": "兔相",
-      "short_name": "兔",
-      "blurb": "眼睛大，鼻子和嘴巴小，印象圓而柔和。"
+      "name": "博美犬相",
+      "short_name": "博美犬",
+      "blurb": "眼、鼻、嘴、下巴的長度比例接近這個犬種的基準。"
     },
     "es": {
-      "name": "Rostro de conejo",
-      "short_name": "conejo",
-      "blurb": "Unos ojos grandes con nariz y boca pequeñas dan un aspecto redondo y suave."
+      "name": "Cara de pomerania",
+      "short_name": "pomerania",
+      "blurb": "Las proporciones de ojos, nariz, boca y mandíbula quedan cerca de la base de esta raza."
     },
     "pt": {
-      "name": "Rosto de coelho",
-      "short_name": "coelho",
-      "blurb": "Olhos grandes com nariz e boca pequenos dão um aspecto redondo e suave."
+      "name": "Rosto de lulu",
+      "short_name": "lulu",
+      "blurb": "As proporções de olhos, nariz, boca e mandíbula ficam perto da base desta raça."
     },
     "ar": {
-      "name": "وجه أرنب",
-      "short_name": "أرنب",
-      "blurb": "عينان كبيرتان مع أنف وفم صغيرين يصنعان مظهرًا مستديرًا ناعمًا."
+      "name": "وجه بوميرانيان",
+      "short_name": "بوميرانيان",
+      "blurb": "نسب طول العين والأنف والفم والفك قريبة من أساس هذا الصنف."
     },
     "fr": {
-      "name": "Visage de lapin",
-      "short_name": "lapin",
-      "blurb": "De grands yeux avec un petit nez et une petite bouche donnent un air rond et doux."
+      "name": "Visage de poméranien",
+      "short_name": "poméranien",
+      "blurb": "Les proportions des yeux, du nez, de la bouche et de la mâchoire sont proches de cette race."
     },
     "id": {
-      "name": "Wajah kelinci",
-      "short_name": "kelinci",
-      "blurb": "Mata besar dengan hidung dan mulut kecil memberi tampilan bulat dan lembut."
+      "name": "Wajah pomeranian",
+      "short_name": "pomeranian",
+      "blurb": "Rasio panjang mata, hidung, mulut, dan rahang dekat dengan patokan ras ini."
     },
     "de": {
-      "name": "Hasengesicht",
-      "short_name": "Hase",
-      "blurb": "Große Augen mit kleiner Nase und kleinem Mund geben einen runden, weichen Blick."
+      "name": "Pomeraniangesicht",
+      "short_name": "Pomeranian",
+      "blurb": "Die Längenverhältnisse von Augen, Nase, Mund und Kiefer liegen nahe an dieser Rasse."
     },
     "ru": {
-      "name": "Кроличье лицо",
-      "short_name": "кролик",
-      "blurb": "Крупные глаза с небольшими носом и ртом дают круглый мягкий вид."
+      "name": "Лицо померана",
+      "short_name": "померан",
+      "blurb": "Пропорции глаз, носа, рта и челюсти близки к основе этой породы."
     },
     "vi": {
-      "name": "Mặt thỏ",
-      "short_name": "thỏ",
-      "blurb": "Mắt to với mũi và miệng nhỏ tạo vẻ tròn, mềm."
+      "name": "Mặt pomeranian",
+      "short_name": "pomeranian",
+      "blurb": "Tỷ lệ mắt, mũi, miệng và hàm nằm gần mốc của giống này."
     }
   },
-  "owl": {
+  "corgi": {
     "ko": {
-      "name": "부엉이상",
-      "short_name": "부엉이",
+      "name": "웰시코기상",
+      "short_name": "웰시코기",
       "blurb": "얼굴이 아주 둥글고 눈이 커서, 이목구비가 동그랗게 띄는 인상입니다."
     },
     "en": {
-      "name": "Owl face",
-      "short_name": "owl",
+      "name": "Corgi face",
+      "short_name": "corgi",
       "blurb": "A very round face and large eyes make the features look circular."
     },
     "ja": {
-      "name": "フクロウ顔",
-      "short_name": "フクロウ",
-      "blurb": "顔がとても丸く目が大きく、パーツが丸く目立つ印象です。"
+      "name": "コーギー顔",
+      "short_name": "コーギー",
+      "blurb": "目、鼻、口、顎の長さの比率が、この犬種の基準に近い印象です。"
     },
     "zh": {
-      "name": "猫头鹰相",
-      "short_name": "猫头鹰",
-      "blurb": "脸很圆、眼睛大，五官显得圆。"
+      "name": "柯基相",
+      "short_name": "柯基",
+      "blurb": "眼、鼻、嘴、下巴的长度比例接近这个犬种的基准。"
     },
     "hi": {
-      "name": "उल्लू चेहरा",
-      "short_name": "उल्लू",
-      "blurb": "बहुत गोल चेहरा और बड़ी आँखें अंगों को गोलाकार दिखाती हैं।"
+      "name": "कॉर्गी चेहरा",
+      "short_name": "कॉर्गी",
+      "blurb": "आँख, नाक, मुँह और जबड़े की लंबाई का अनुपात इस नस्ल के आधार के पास है।"
     },
     "zh-Hant": {
-      "name": "貓頭鷹相",
-      "short_name": "貓頭鷹",
-      "blurb": "臉很圓、眼睛大，五官顯得圓。"
+      "name": "柯基相",
+      "short_name": "柯基",
+      "blurb": "眼、鼻、嘴、下巴的長度比例接近這個犬種的基準。"
     },
     "es": {
-      "name": "Rostro de búho",
-      "short_name": "búho",
-      "blurb": "Un rostro muy redondo y unos ojos grandes hacen que los rasgos se vean circulares."
+      "name": "Cara de corgi",
+      "short_name": "corgi",
+      "blurb": "Las proporciones de ojos, nariz, boca y mandíbula quedan cerca de la base de esta raza."
     },
     "pt": {
-      "name": "Rosto de coruja",
-      "short_name": "coruja",
-      "blurb": "Um rosto muito redondo e olhos grandes deixam os traços circulares."
+      "name": "Rosto de corgi",
+      "short_name": "corgi",
+      "blurb": "As proporções de olhos, nariz, boca e mandíbula ficam perto da base desta raça."
     },
     "ar": {
-      "name": "وجه بومة",
-      "short_name": "بومة",
-      "blurb": "وجه شديد الاستدارة وعينان كبيرتان يجعلان الملامح تبدو مستديرة."
+      "name": "وجه كورجي",
+      "short_name": "كورجي",
+      "blurb": "نسب طول العين والأنف والفم والفك قريبة من أساس هذا الصنف."
     },
     "fr": {
-      "name": "Visage de hibou",
-      "short_name": "hibou",
-      "blurb": "Un visage très rond et de grands yeux rendent les traits circulaires."
+      "name": "Visage de corgi",
+      "short_name": "corgi",
+      "blurb": "Les proportions des yeux, du nez, de la bouche et de la mâchoire sont proches de cette race."
     },
     "id": {
-      "name": "Wajah burung hantu",
-      "short_name": "burung hantu",
-      "blurb": "Wajah sangat bulat dan mata besar membuat bagian wajah tampak melingkar."
+      "name": "Wajah corgi",
+      "short_name": "corgi",
+      "blurb": "Rasio panjang mata, hidung, mulut, dan rahang dekat dengan patokan ras ini."
     },
     "de": {
-      "name": "Eulengesicht",
-      "short_name": "Eule",
-      "blurb": "Ein sehr rundes Gesicht und große Augen lassen die Züge kreisförmig wirken."
+      "name": "Corgi-Gesicht",
+      "short_name": "Corgi",
+      "blurb": "Die Längenverhältnisse von Augen, Nase, Mund und Kiefer liegen nahe an dieser Rasse."
     },
     "ru": {
-      "name": "Совиное лицо",
-      "short_name": "сова",
-      "blurb": "Очень круглое лицо и крупные глаза делают черты круглыми."
+      "name": "Лицо корги",
+      "short_name": "корги",
+      "blurb": "Пропорции глаз, носа, рта и челюсти близки к основе этой породы."
     },
     "vi": {
-      "name": "Mặt cú",
-      "short_name": "cú",
-      "blurb": "Mặt rất tròn và mắt to khiến các phần mặt trông tròn."
+      "name": "Mặt corgi",
+      "short_name": "corgi",
+      "blurb": "Tỷ lệ mắt, mũi, miệng và hàm nằm gần mốc của giống này."
     }
   },
-  "bear": {
+  "bulldog": {
     "ko": {
-      "name": "곰상",
-      "short_name": "곰",
+      "name": "불독상",
+      "short_name": "불독",
       "blurb": "얼굴과 코, 턱이 넓고 눈은 작아, 든든하고 너그러운 인상입니다."
     },
     "en": {
-      "name": "Bear face",
-      "short_name": "bear",
-      "blurb": "A wide face, nose, and jaw with smaller eyes give a solid, easygoing look."
+      "name": "Bulldog face",
+      "short_name": "bulldog",
+      "blurb": "A wide face, nose, and jaw with smaller eyes look sturdy."
     },
     "ja": {
-      "name": "熊顔",
-      "short_name": "熊",
-      "blurb": "顔と鼻、顎が広く目は小さめなので、どっしりしておおらかな印象です。"
+      "name": "ブルドッグ顔",
+      "short_name": "ブルドッグ",
+      "blurb": "目、鼻、口、顎の長さの比率が、この犬種の基準に近い印象です。"
     },
     "zh": {
-      "name": "熊相",
-      "short_name": "熊",
-      "blurb": "脸、鼻子和下颌宽，眼睛较小，看起来稳重宽和。"
+      "name": "斗牛犬相",
+      "short_name": "斗牛犬",
+      "blurb": "眼、鼻、嘴、下巴的长度比例接近这个犬种的基准。"
     },
     "hi": {
-      "name": "भालू चेहरा",
-      "short_name": "भालू",
-      "blurb": "चौड़ा चेहरा, नाक और जबड़ा तथा छोटी आँखें ठोस, सहज रूप देते हैं।"
+      "name": "बुलडॉग चेहरा",
+      "short_name": "बुलडॉग",
+      "blurb": "आँख, नाक, मुँह और जबड़े की लंबाई का अनुपात इस नस्ल के आधार के पास है।"
     },
     "zh-Hant": {
-      "name": "熊相",
-      "short_name": "熊",
-      "blurb": "臉、鼻子和下頜寬，眼睛較小，看起來穩重寬和。"
+      "name": "鬥牛犬相",
+      "short_name": "鬥牛犬",
+      "blurb": "眼、鼻、嘴、下巴的長度比例接近這個犬種的基準。"
     },
     "es": {
-      "name": "Rostro de oso",
-      "short_name": "oso",
-      "blurb": "Un rostro, una nariz y una mandíbula anchos, con ojos más pequeños, dan un aspecto sólido y tranquilo."
+      "name": "Cara de bulldog",
+      "short_name": "bulldog",
+      "blurb": "Las proporciones de ojos, nariz, boca y mandíbula quedan cerca de la base de esta raza."
     },
     "pt": {
-      "name": "Rosto de urso",
-      "short_name": "urso",
-      "blurb": "Um rosto, um nariz e um maxilar largos, com olhos menores, dão um aspecto sólido e tranquilo."
+      "name": "Rosto de buldogue",
+      "short_name": "buldogue",
+      "blurb": "As proporções de olhos, nariz, boca e mandíbula ficam perto da base desta raça."
     },
     "ar": {
-      "name": "وجه دب",
-      "short_name": "دب",
-      "blurb": "وجه وأنف وفك عريضة مع عينين أصغر تصنع مظهرًا متينًا هادئًا."
+      "name": "وجه بولدوج",
+      "short_name": "بولدوج",
+      "blurb": "نسب طول العين والأنف والفم والفك قريبة من أساس هذا الصنف."
     },
     "fr": {
-      "name": "Visage d'ours",
-      "short_name": "ours",
-      "blurb": "Un visage, un nez et une mâchoire larges, avec des yeux plus petits, donnent un air solide et paisible."
+      "name": "Visage de bouledogue",
+      "short_name": "bouledogue",
+      "blurb": "Les proportions des yeux, du nez, de la bouche et de la mâchoire sont proches de cette race."
     },
     "id": {
-      "name": "Wajah beruang",
-      "short_name": "beruang",
-      "blurb": "Wajah, hidung, dan rahang lebar dengan mata lebih kecil memberi tampilan kokoh dan tenang."
+      "name": "Wajah bulldog",
+      "short_name": "bulldog",
+      "blurb": "Rasio panjang mata, hidung, mulut, dan rahang dekat dengan patokan ras ini."
     },
     "de": {
-      "name": "Bärengesicht",
-      "short_name": "Bär",
-      "blurb": "Ein breites Gesicht, eine breite Nase und ein breiter Kiefer mit kleineren Augen geben einen festen, gelassenen Blick."
+      "name": "Bulldoggengesicht",
+      "short_name": "Bulldogge",
+      "blurb": "Die Längenverhältnisse von Augen, Nase, Mund und Kiefer liegen nahe an dieser Rasse."
     },
     "ru": {
-      "name": "Медвежье лицо",
-      "short_name": "медведь",
-      "blurb": "Широкие лицо, нос и челюсть с меньшими глазами дают основательный спокойный вид."
+      "name": "Лицо бульдога",
+      "short_name": "бульдог",
+      "blurb": "Пропорции глаз, носа, рта и челюсти близки к основе этой породы."
     },
     "vi": {
-      "name": "Mặt gấu",
-      "short_name": "gấu",
-      "blurb": "Mặt, mũi và hàm rộng với mắt nhỏ hơn tạo vẻ chắc và điềm."
+      "name": "Mặt bulldog",
+      "short_name": "bulldog",
+      "blurb": "Tỷ lệ mắt, mũi, miệng và hàm nằm gần mốc của giống này."
     }
   },
-  "lion": {
+  "jindo": {
     "ko": {
-      "name": "사자상",
-      "short_name": "사자",
+      "name": "진돗개상",
+      "short_name": "진돗개",
       "blurb": "코와 입, 턱이 넓어 이목구비가 진하고 존재감이 커 보이는 인상입니다."
     },
     "en": {
-      "name": "Lion face",
-      "short_name": "lion",
-      "blurb": "A wide nose, mouth, and jaw make the features look strong and present."
+      "name": "Jindo face",
+      "short_name": "jindo",
+      "blurb": "A wide nose, mouth, and jaw make the features look strong."
     },
     "ja": {
-      "name": "ライオン顔",
-      "short_name": "ライオン",
-      "blurb": "鼻と口、顎が広く、パーツが濃く存在感が大きく見える印象です。"
+      "name": "珍島犬顔",
+      "short_name": "珍島犬",
+      "blurb": "目、鼻、口、顎の長さの比率が、この犬種の基準に近い印象です。"
     },
     "zh": {
-      "name": "狮相",
-      "short_name": "狮",
-      "blurb": "鼻子、嘴巴和下颌宽，五官有存在感。"
+      "name": "珍岛犬相",
+      "short_name": "珍岛犬",
+      "blurb": "眼、鼻、嘴、下巴的长度比例接近这个犬种的基准。"
     },
     "hi": {
-      "name": "शेर चेहरा",
-      "short_name": "शेर",
-      "blurb": "चौड़ी नाक, मुँह और जबड़ा अंगों को मज़बूत दिखाते हैं।"
+      "name": "जिंदो चेहरा",
+      "short_name": "जिंदो",
+      "blurb": "आँख, नाक, मुँह और जबड़े की लंबाई का अनुपात इस नस्ल के आधार के पास है।"
     },
     "zh-Hant": {
-      "name": "獅相",
-      "short_name": "獅",
-      "blurb": "鼻子、嘴巴和下頜寬，五官有存在感。"
+      "name": "珍島犬相",
+      "short_name": "珍島犬",
+      "blurb": "眼、鼻、嘴、下巴的長度比例接近這個犬種的基準。"
     },
     "es": {
-      "name": "Rostro de león",
-      "short_name": "león",
-      "blurb": "Una nariz, una boca y una mandíbula anchas hacen que los rasgos se vean fuertes."
+      "name": "Cara de jindo",
+      "short_name": "jindo",
+      "blurb": "Las proporciones de ojos, nariz, boca y mandíbula quedan cerca de la base de esta raza."
     },
     "pt": {
-      "name": "Rosto de leão",
-      "short_name": "leão",
-      "blurb": "Um nariz, uma boca e um maxilar largos deixam os traços fortes."
+      "name": "Rosto de jindo",
+      "short_name": "jindo",
+      "blurb": "As proporções de olhos, nariz, boca e mandíbula ficam perto da base desta raça."
     },
     "ar": {
-      "name": "وجه أسد",
-      "short_name": "أسد",
-      "blurb": "أنف وفم وفك عريضة تجعل ملامح الوجه تبدو قوية."
+      "name": "وجه جيندو",
+      "short_name": "جيندو",
+      "blurb": "نسب طول العين والأنف والفم والفك قريبة من أساس هذا الصنف."
     },
     "fr": {
-      "name": "Visage de lion",
-      "short_name": "lion",
-      "blurb": "Un nez, une bouche et une mâchoire larges rendent les traits forts."
+      "name": "Visage de jindo",
+      "short_name": "jindo",
+      "blurb": "Les proportions des yeux, du nez, de la bouche et de la mâchoire sont proches de cette race."
     },
     "id": {
-      "name": "Wajah singa",
-      "short_name": "singa",
-      "blurb": "Hidung, mulut, dan rahang lebar membuat bagian wajah tampak kuat."
+      "name": "Wajah jindo",
+      "short_name": "jindo",
+      "blurb": "Rasio panjang mata, hidung, mulut, dan rahang dekat dengan patokan ras ini."
     },
     "de": {
-      "name": "Löwengesicht",
-      "short_name": "Löwe",
-      "blurb": "Eine breite Nase, ein breiter Mund und ein breiter Kiefer lassen die Züge kräftig wirken."
+      "name": "Jindo-Gesicht",
+      "short_name": "Jindo",
+      "blurb": "Die Längenverhältnisse von Augen, Nase, Mund und Kiefer liegen nahe an dieser Rasse."
     },
     "ru": {
-      "name": "Львиное лицо",
-      "short_name": "лев",
-      "blurb": "Широкие нос, рот и челюсть делают черты сильными."
+      "name": "Лицо чиндо",
+      "short_name": "чиндо",
+      "blurb": "Пропорции глаз, носа, рта и челюсти близки к основе этой породы."
     },
     "vi": {
-      "name": "Mặt sư tử",
-      "short_name": "sư tử",
-      "blurb": "Mũi, miệng và hàm rộng khiến các phần mặt trông mạnh."
+      "name": "Mặt jindo",
+      "short_name": "jindo",
+      "blurb": "Tỷ lệ mắt, mũi, miệng và hàm nằm gần mốc của giống này."
     }
   },
-  "deer": {
+  "greyhound": {
     "ko": {
-      "name": "사슴상",
-      "short_name": "사슴",
+      "name": "그레이하운드상",
+      "short_name": "그레이하운드",
       "blurb": "얼굴이 길고 눈은 크며 턱이 가늘어, 선이 가늘고 순해 보이는 인상입니다."
     },
     "en": {
-      "name": "Deer face",
-      "short_name": "deer",
-      "blurb": "A long face, large eyes, and a narrow jaw give a fine, gentle look."
+      "name": "Greyhound face",
+      "short_name": "greyhound",
+      "blurb": "A long face, large eyes, and a narrow jaw look fine and gentle."
     },
     "ja": {
-      "name": "鹿顔",
-      "short_name": "鹿",
-      "blurb": "顔が長く目は大きく顎が細く、線が細く穏やかに見える印象です。"
+      "name": "グレーハウンド顔",
+      "short_name": "グレーハウンド",
+      "blurb": "目、鼻、口、顎の長さの比率が、この犬種の基準に近い印象です。"
     },
     "zh": {
-      "name": "鹿相",
-      "short_name": "鹿",
-      "blurb": "脸长、眼睛大、下颌细，线条细而温和。"
+      "name": "灵缇相",
+      "short_name": "灵缇",
+      "blurb": "眼、鼻、嘴、下巴的长度比例接近这个犬种的基准。"
     },
     "hi": {
-      "name": "हिरण चेहरा",
-      "short_name": "हिरण",
-      "blurb": "लंबा चेहरा, बड़ी आँखें और पतला जबड़ा महीन, कोमल रूप देते हैं।"
+      "name": "ग्रेहाउंड चेहरा",
+      "short_name": "ग्रेहाउंड",
+      "blurb": "आँख, नाक, मुँह और जबड़े की लंबाई का अनुपात इस नस्ल के आधार के पास है।"
     },
     "zh-Hant": {
-      "name": "鹿相",
-      "short_name": "鹿",
-      "blurb": "臉長、眼睛大、下頜細，線條細而溫和。"
+      "name": "靈緹相",
+      "short_name": "靈緹",
+      "blurb": "眼、鼻、嘴、下巴的長度比例接近這個犬種的基準。"
     },
     "es": {
-      "name": "Rostro de ciervo",
-      "short_name": "ciervo",
-      "blurb": "Un rostro largo, ojos grandes y una mandíbula estrecha dan un aspecto fino y suave."
+      "name": "Cara de galgo",
+      "short_name": "galgo",
+      "blurb": "Las proporciones de ojos, nariz, boca y mandíbula quedan cerca de la base de esta raza."
     },
     "pt": {
-      "name": "Rosto de cervo",
-      "short_name": "cervo",
-      "blurb": "Um rosto comprido, olhos grandes e um maxilar estreito dão um aspecto fino e suave."
+      "name": "Rosto de galgo",
+      "short_name": "galgo",
+      "blurb": "As proporções de olhos, nariz, boca e mandíbula ficam perto da base desta raça."
     },
     "ar": {
-      "name": "وجه غزال",
-      "short_name": "غزال",
-      "blurb": "وجه طويل وعينان كبيرتان وفك ضيق يصنعون مظهرًا رفيعًا لطيفًا."
+      "name": "وجه غريهاوند",
+      "short_name": "غريهاوند",
+      "blurb": "نسب طول العين والأنف والفم والفك قريبة من أساس هذا الصنف."
     },
     "fr": {
-      "name": "Visage de cerf",
-      "short_name": "cerf",
-      "blurb": "Un visage long, de grands yeux et une mâchoire étroite donnent un air fin et doux."
+      "name": "Visage de lévrier",
+      "short_name": "lévrier",
+      "blurb": "Les proportions des yeux, du nez, de la bouche et de la mâchoire sont proches de cette race."
     },
     "id": {
-      "name": "Wajah rusa",
-      "short_name": "rusa",
-      "blurb": "Wajah panjang, mata besar, dan rahang sempit memberi tampilan halus dan lembut."
+      "name": "Wajah greyhound",
+      "short_name": "greyhound",
+      "blurb": "Rasio panjang mata, hidung, mulut, dan rahang dekat dengan patokan ras ini."
     },
     "de": {
-      "name": "Hirschgesicht",
-      "short_name": "Hirsch",
-      "blurb": "Ein langes Gesicht, große Augen und ein schmaler Kiefer geben einen feinen, sanften Blick."
+      "name": "Greyhoundgesicht",
+      "short_name": "Greyhound",
+      "blurb": "Die Längenverhältnisse von Augen, Nase, Mund und Kiefer liegen nahe an dieser Rasse."
     },
     "ru": {
-      "name": "Оленье лицо",
-      "short_name": "олень",
-      "blurb": "Длинное лицо, крупные глаза и узкая челюсть дают тонкий мягкий вид."
+      "name": "Лицо грейхаунда",
+      "short_name": "грейхаунд",
+      "blurb": "Пропорции глаз, носа, рта и челюсти близки к основе этой породы."
     },
     "vi": {
-      "name": "Mặt hươu",
-      "short_name": "hươu",
-      "blurb": "Mặt dài, mắt to và hàm hẹp tạo vẻ thanh và hiền."
+      "name": "Mặt greyhound",
+      "short_name": "greyhound",
+      "blurb": "Tỷ lệ mắt, mũi, miệng và hàm nằm gần mốc của giống này."
     }
   },
-  "wolf": {
+  "husky": {
     "ko": {
-      "name": "늑대상",
-      "short_name": "늑대",
+      "name": "허스키상",
+      "short_name": "허스키",
       "blurb": "눈매가 가늘고 중안부가 길어, 얼굴선이 날카로워 보이는 인상입니다."
     },
     "en": {
-      "name": "Wolf face",
-      "short_name": "wolf",
+      "name": "Husky face",
+      "short_name": "husky",
       "blurb": "Narrow eyes and a long midface make the outline look sharp."
     },
     "ja": {
-      "name": "狼顔",
-      "short_name": "狼",
-      "blurb": "目元が細く中顔面が長く、顔の線が鋭く見える印象です。"
+      "name": "ハスキー顔",
+      "short_name": "ハスキー",
+      "blurb": "目、鼻、口、顎の長さの比率が、この犬種の基準に近い印象です。"
     },
     "zh": {
-      "name": "狼相",
-      "short_name": "狼",
-      "blurb": "眼睛细、中面部长，脸的线条看起来锐利。"
+      "name": "哈士奇相",
+      "short_name": "哈士奇",
+      "blurb": "眼、鼻、嘴、下巴的长度比例接近这个犬种的基准。"
     },
     "hi": {
-      "name": "भेड़िया चेहरा",
-      "short_name": "भेड़िया",
-      "blurb": "पतली आँखें और लंबा मध्य चेहरा रूपरेखा को तीखा दिखाते हैं।"
+      "name": "हस्की चेहरा",
+      "short_name": "हस्की",
+      "blurb": "आँख, नाक, मुँह और जबड़े की लंबाई का अनुपात इस नस्ल के आधार के पास है।"
     },
     "zh-Hant": {
-      "name": "狼相",
-      "short_name": "狼",
-      "blurb": "眼睛細、中面部長，臉的線條看起來銳利。"
+      "name": "哈士奇相",
+      "short_name": "哈士奇",
+      "blurb": "眼、鼻、嘴、下巴的長度比例接近這個犬種的基準。"
     },
     "es": {
-      "name": "Rostro de lobo",
-      "short_name": "lobo",
-      "blurb": "Unos ojos estrechos y una zona media larga hacen que el contorno se vea afilado."
+      "name": "Cara de husky",
+      "short_name": "husky",
+      "blurb": "Las proporciones de ojos, nariz, boca y mandíbula quedan cerca de la base de esta raza."
     },
     "pt": {
-      "name": "Rosto de lobo",
-      "short_name": "lobo",
-      "blurb": "Olhos estreitos e um meio do rosto longo deixam o contorno afilado."
+      "name": "Rosto de husky",
+      "short_name": "husky",
+      "blurb": "As proporções de olhos, nariz, boca e mandíbula ficam perto da base desta raça."
     },
     "ar": {
-      "name": "وجه ذئب",
-      "short_name": "ذئب",
-      "blurb": "عينان ضيقتان ومنتصف وجه طويل يجعلان الخط يبدو حادًا."
+      "name": "وجه هاسكي",
+      "short_name": "هاسكي",
+      "blurb": "نسب طول العين والأنف والفم والفك قريبة من أساس هذا الصنف."
     },
     "fr": {
-      "name": "Visage de loup",
-      "short_name": "loup",
-      "blurb": "Des yeux étroits et un milieu du visage long rendent le contour vif."
+      "name": "Visage de husky",
+      "short_name": "husky",
+      "blurb": "Les proportions des yeux, du nez, de la bouche et de la mâchoire sont proches de cette race."
     },
     "id": {
-      "name": "Wajah serigala",
-      "short_name": "serigala",
-      "blurb": "Mata sempit dan bagian tengah wajah yang panjang membuat garis luar tampak tajam."
+      "name": "Wajah husky",
+      "short_name": "husky",
+      "blurb": "Rasio panjang mata, hidung, mulut, dan rahang dekat dengan patokan ras ini."
     },
     "de": {
-      "name": "Wolfsgesicht",
-      "short_name": "Wolf",
-      "blurb": "Schmale Augen und ein langes Mittelgesicht lassen den Umriss scharf wirken."
+      "name": "Huskygesicht",
+      "short_name": "Husky",
+      "blurb": "Die Längenverhältnisse von Augen, Nase, Mund und Kiefer liegen nahe an dieser Rasse."
     },
     "ru": {
-      "name": "Волчье лицо",
-      "short_name": "волк",
-      "blurb": "Узкие глаза и длинная средняя часть делают контур острым."
+      "name": "Лицо хаски",
+      "short_name": "хаски",
+      "blurb": "Пропорции глаз, носа, рта и челюсти близки к основе этой породы."
     },
     "vi": {
-      "name": "Mặt sói",
-      "short_name": "sói",
-      "blurb": "Mắt hẹp và giữa mặt dài khiến đường nét trông sắc."
+      "name": "Mặt husky",
+      "short_name": "husky",
+      "blurb": "Tỷ lệ mắt, mũi, miệng và hàm nằm gần mốc của giống này."
     }
   }
 };
@@ -3859,102 +4464,102 @@
     const RAW_ANIMALS = [
       {
         order: 1,
-        id: "cat",
+        id: "poodle",
         no_label: "01",
-        name: "고양이상",
-        short_name: "고양이",
+        name: "푸들상",
+        short_name: "푸들",
         accent: "#e3a23a",
         blurb: "눈이 또렷하고 코가 작아, 이목구비가 가운데로 모이는 인상입니다.",
         deltas: { face_roundness: 0.8, eye_size: 1.3, eye_roundness: 1, eye_gap: 0.4, nose_width: -1, nose_length: -0.8, mouth_width: -0.8, jaw_width: -0.6, chin_width: 0.3, midface_ratio: -0.8 },
-        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><path fill="#f0c14d" d="M24 40 30 14 42 34z"/><path fill="#f0c14d" d="M64 40 58 14 46 34z"/><path fill="#e3a23a" d="M28 38 32 20 40 34z"/><path fill="#e3a23a" d="M60 38 56 20 48 34z"/><circle cx="44" cy="50" r="24" fill="#f0c14d"/><ellipse cx="34" cy="50" rx="4.5" ry="6" fill="#2c241c"/><ellipse cx="54" cy="50" rx="4.5" ry="6" fill="#2c241c"/><path fill="#e07b86" d="M44 55 40 61 48 61z"/><path d="M16 50h10M62 50h10M18 56h8M62 56h8" stroke="#2c241c" stroke-width="1.6" stroke-linecap="round"/></svg>'
+        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><circle cx="44" cy="40" r="10" fill="#f4e4c4"/><circle cx="44" cy="52" r="22" fill="#f7f1e4"/><ellipse cx="24" cy="50" rx="8" ry="12" fill="#f4e4c4"/><ellipse cx="64" cy="50" rx="8" ry="12" fill="#f4e4c4"/><circle cx="36" cy="50" r="3" fill="#2c241c"/><circle cx="52" cy="50" r="3" fill="#2c241c"/><ellipse cx="44" cy="58" rx="3" ry="2" fill="#2c241c"/></svg>'
       },
       {
         order: 2,
-        id: "dog",
+        id: "retriever",
         no_label: "02",
-        name: "강아지상",
-        short_name: "강아지",
+        name: "리트리버상",
+        short_name: "리트리버",
         accent: "#d0926a",
         blurb: "눈이 둥글고 입이 넓어, 표정이 순하고 친근해 보이는 인상입니다.",
         deltas: { face_roundness: 0.6, eye_size: 1, eye_roundness: 0.8, eye_gap: 0.5, nose_width: 0.2, nose_length: 0.2, mouth_width: 1.2, jaw_width: 0.2, chin_width: 0.4, midface_ratio: -0.2 },
-        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><ellipse cx="22" cy="50" rx="10" ry="16" fill="#e0b089"/><ellipse cx="66" cy="50" rx="10" ry="16" fill="#e0b089"/><circle cx="44" cy="48" r="24" fill="#f2c7a5"/><ellipse cx="34" cy="46" rx="5" ry="6" fill="#2c241c"/><ellipse cx="54" cy="46" rx="5" ry="6" fill="#2c241c"/><ellipse cx="44" cy="58" rx="6" ry="4.5" fill="#2c241c"/><path d="M34 64c4 5 16 5 20 0" fill="none" stroke="#2c241c" stroke-width="2" stroke-linecap="round"/></svg>'
+        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><ellipse cx="22" cy="54" rx="10" ry="16" fill="#e0b089"/><ellipse cx="66" cy="54" rx="10" ry="16" fill="#e0b089"/><circle cx="44" cy="48" r="24" fill="#f2c7a5"/><ellipse cx="34" cy="46" rx="5" ry="6" fill="#2c241c"/><ellipse cx="54" cy="46" rx="5" ry="6" fill="#2c241c"/><ellipse cx="44" cy="58" rx="6" ry="4.5" fill="#2c241c"/><path d="M34 64c4 5 16 5 20 0" fill="none" stroke="#2c241c" stroke-width="2" stroke-linecap="round"/></svg>'
       },
       {
         order: 3,
-        id: "fox",
+        id: "shiba",
         no_label: "03",
-        name: "여우상",
-        short_name: "여우",
+        name: "시바상",
+        short_name: "시바",
         accent: "#ef8b45",
         blurb: "얼굴선이 길고 턱끝이 가늘어, 눈매가 날렵해 보이는 인상입니다.",
         deltas: { face_roundness: -1, eye_size: 0.1, eye_roundness: -1.2, eye_gap: -0.6, nose_width: -1.1, nose_length: 0.8, mouth_width: -0.2, jaw_width: -0.8, chin_width: -1.3, midface_ratio: 1 },
-        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><path fill="#ef8b45" d="M20 42 30 10 42 36z"/><path fill="#ef8b45" d="M68 42 58 10 46 36z"/><ellipse cx="44" cy="52" rx="22" ry="26" fill="#f4a261"/><path fill="#f8e2cf" d="M44 48 32 72 56 72z"/><ellipse cx="34" cy="48" rx="4" ry="3" fill="#2c241c"/><ellipse cx="54" cy="48" rx="4" ry="3" fill="#2c241c"/><path fill="#2c241c" d="M44 58 40 64 48 64z"/></svg>'
+        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><path fill="#e3a23a" d="M26 40 34 14 42 36z"/><path fill="#e3a23a" d="M62 40 54 14 46 36z"/><circle cx="44" cy="52" r="22" fill="#f0c14d"/><path fill="#f8e7c3" d="M44 56 34 70 54 70z"/><ellipse cx="36" cy="50" rx="3" ry="4" fill="#2c241c"/><ellipse cx="52" cy="50" rx="3" ry="4" fill="#2c241c"/><ellipse cx="44" cy="60" rx="3" ry="2" fill="#2c241c"/></svg>'
       },
       {
         order: 4,
-        id: "rabbit",
+        id: "pomeranian",
         no_label: "04",
-        name: "토끼상",
-        short_name: "토끼",
+        name: "포메라니안상",
+        short_name: "포메라니안",
         accent: "#e09aab",
         blurb: "눈이 크고 코와 입이 작아, 인상이 동글고 부드러운 쪽입니다.",
         deltas: { face_roundness: 1.2, eye_size: 1.6, eye_roundness: 1.3, eye_gap: 1, nose_width: -1.4, nose_length: -1.2, mouth_width: -1.2, jaw_width: -0.3, chin_width: -0.2, midface_ratio: -1 },
-        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><ellipse cx="32" cy="24" rx="8" ry="18" fill="#f4d2dc"/><ellipse cx="56" cy="24" rx="8" ry="18" fill="#f4d2dc"/><ellipse cx="32" cy="24" rx="4" ry="12" fill="#f7e4ea"/><ellipse cx="56" cy="24" rx="4" ry="12" fill="#f7e4ea"/><circle cx="44" cy="54" r="24" fill="#f4d2dc"/><ellipse cx="33" cy="52" rx="5" ry="6.5" fill="#2c241c"/><ellipse cx="55" cy="52" rx="5" ry="6.5" fill="#2c241c"/><path fill="#e07b86" d="M44 60 41 64 47 64z"/></svg>'
+        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><circle cx="44" cy="48" r="28" fill="#f4d7a8"/><circle cx="30" cy="34" r="8" fill="#f8e7c8"/><circle cx="58" cy="34" r="8" fill="#f8e7c8"/><circle cx="44" cy="28" r="8" fill="#f8e7c8"/><circle cx="36" cy="48" r="3.2" fill="#2c241c"/><circle cx="52" cy="48" r="3.2" fill="#2c241c"/><ellipse cx="44" cy="56" rx="2.4" ry="1.8" fill="#2c241c"/></svg>'
       },
       {
         order: 5,
-        id: "owl",
+        id: "corgi",
         no_label: "05",
-        name: "부엉이상",
-        short_name: "부엉이",
+        name: "웰시코기상",
+        short_name: "웰시코기",
         accent: "#c9843f",
         blurb: "얼굴이 아주 둥글고 눈이 커서, 이목구비가 동그랗게 띄는 인상입니다.",
         deltas: { face_roundness: 1.8, eye_size: 1.5, eye_roundness: 1.6, eye_gap: 1.4, nose_width: -1.3, nose_length: -1.6, mouth_width: -1.4, jaw_width: 0.6, chin_width: 1, midface_ratio: -1.2 },
-        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><ellipse cx="44" cy="48" rx="28" ry="26" fill="#c9843f"/><circle cx="32" cy="46" r="12" fill="#f6edd9"/><circle cx="56" cy="46" r="12" fill="#f6edd9"/><circle cx="32" cy="46" r="6" fill="#2c241c"/><circle cx="56" cy="46" r="6" fill="#2c241c"/><path fill="#e0a15a" d="M44 54 38 64 50 64z"/></svg>'
+        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><ellipse cx="24" cy="46" rx="8" ry="10" fill="#e7c48a"/><ellipse cx="64" cy="46" rx="8" ry="10" fill="#e7c48a"/><circle cx="44" cy="50" r="26" fill="#f2d2a2"/><ellipse cx="34" cy="48" rx="5" ry="6" fill="#2c241c"/><ellipse cx="54" cy="48" rx="5" ry="6" fill="#2c241c"/><ellipse cx="44" cy="60" rx="5" ry="3.5" fill="#2c241c"/></svg>'
       },
       {
         order: 6,
-        id: "bear",
+        id: "bulldog",
         no_label: "06",
-        name: "곰상",
-        short_name: "곰",
+        name: "불독상",
+        short_name: "불독",
         accent: "#a56b49",
         blurb: "얼굴과 코, 턱이 넓고 눈은 작아, 든든하고 너그러운 인상입니다.",
         deltas: { face_roundness: 1, eye_size: -1, eye_roundness: -0.4, eye_gap: 0.1, nose_width: 1.5, nose_length: -0.2, mouth_width: 0.8, jaw_width: 1.4, chin_width: 1.2, midface_ratio: 0 },
-        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><circle cx="22" cy="28" r="10" fill="#8d5b3c"/><circle cx="66" cy="28" r="10" fill="#8d5b3c"/><circle cx="44" cy="50" r="26" fill="#a56b49"/><ellipse cx="44" cy="58" rx="12" ry="9" fill="#e6c2a4"/><circle cx="34" cy="46" r="3.2" fill="#2c241c"/><circle cx="54" cy="46" r="3.2" fill="#2c241c"/><ellipse cx="44" cy="56" rx="4" ry="3" fill="#2c241c"/></svg>'
+        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><ellipse cx="22" cy="40" rx="8" ry="10" fill="#d7b08a"/><ellipse cx="66" cy="40" rx="8" ry="10" fill="#d7b08a"/><ellipse cx="44" cy="50" rx="26" ry="22" fill="#e6c2a4"/><path d="M30 46h28" stroke="#c9a07a" stroke-width="2"/><circle cx="34" cy="44" r="2.4" fill="#2c241c"/><circle cx="54" cy="44" r="2.4" fill="#2c241c"/><ellipse cx="44" cy="58" rx="10" ry="7" fill="#f3d7be"/><ellipse cx="44" cy="56" rx="4" ry="3" fill="#2c241c"/></svg>'
       },
       {
         order: 7,
-        id: "lion",
+        id: "jindo",
         no_label: "07",
-        name: "사자상",
-        short_name: "사자",
+        name: "진돗개상",
+        short_name: "진돗개",
         accent: "#e2b15a",
         blurb: "코와 입, 턱이 넓어 이목구비가 진하고 존재감이 커 보이는 인상입니다.",
         deltas: { face_roundness: 0.4, eye_size: -0.3, eye_roundness: -0.2, eye_gap: -0.2, nose_width: 1.6, nose_length: 0.4, mouth_width: 1.3, jaw_width: 1.6, chin_width: 1, midface_ratio: 0.4 },
-        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><circle cx="44" cy="48" r="30" fill="#e2b15a"/><circle cx="44" cy="50" r="20" fill="#f0cb84"/><ellipse cx="34" cy="48" rx="3.4" ry="4" fill="#2c241c"/><ellipse cx="54" cy="48" rx="3.4" ry="4" fill="#2c241c"/><ellipse cx="44" cy="58" rx="7" ry="5" fill="#c9843f"/></svg>'
+        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><path fill="#c9843f" d="M28 38 34 12 44 34z"/><path fill="#c9843f" d="M60 38 54 12 44 34z"/><ellipse cx="44" cy="52" rx="20" ry="22" fill="#e0a15a"/><ellipse cx="36" cy="50" rx="3" ry="4" fill="#2c241c"/><ellipse cx="52" cy="50" rx="3" ry="4" fill="#2c241c"/><ellipse cx="44" cy="60" rx="4" ry="3" fill="#2c241c"/></svg>'
       },
       {
         order: 8,
-        id: "deer",
+        id: "greyhound",
         no_label: "08",
-        name: "사슴상",
-        short_name: "사슴",
+        name: "그레이하운드상",
+        short_name: "그레이하운드",
         accent: "#c4a27a",
         blurb: "얼굴이 길고 눈은 크며 턱이 가늘어, 선이 가늘고 순해 보이는 인상입니다.",
         deltas: { face_roundness: -1.4, eye_size: 0.9, eye_roundness: 0.4, eye_gap: 0.7, nose_width: -1.2, nose_length: 0.9, mouth_width: -0.8, jaw_width: -1.2, chin_width: -1.4, midface_ratio: 1.3 },
-        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><path stroke="#8d6a43" stroke-width="3" fill="none" stroke-linecap="round" d="M30 30c-6-10-4-18 2-22M26 24c-8 0-10-8-8-12M58 30c6-10 4-18-2-22M62 24c8 0 10-8 8-12"/><ellipse cx="44" cy="54" rx="18" ry="24" fill="#d8b48a"/><ellipse cx="34" cy="50" rx="4.5" ry="5.5" fill="#2c241c"/><ellipse cx="54" cy="50" rx="4.5" ry="5.5" fill="#2c241c"/><ellipse cx="44" cy="62" rx="4" ry="3" fill="#c9843f"/></svg>'
+        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><ellipse cx="30" cy="30" rx="6" ry="12" fill="#d8b48a"/><ellipse cx="58" cy="30" rx="6" ry="12" fill="#d8b48a"/><ellipse cx="44" cy="52" rx="16" ry="24" fill="#e6d0b0"/><ellipse cx="36" cy="48" rx="3" ry="4" fill="#2c241c"/><ellipse cx="52" cy="48" rx="3" ry="4" fill="#2c241c"/><ellipse cx="44" cy="66" rx="3" ry="5" fill="#c9843f"/></svg>'
       },
       {
         order: 9,
-        id: "wolf",
+        id: "husky",
         no_label: "09",
-        name: "늑대상",
-        short_name: "늑대",
+        name: "허스키상",
+        short_name: "허스키",
         accent: "#8ea0ae",
         blurb: "눈매가 가늘고 중안부가 길어, 얼굴선이 날카로워 보이는 인상입니다.",
         deltas: { face_roundness: -1.2, eye_size: -0.6, eye_roundness: -1.4, eye_gap: -1, nose_width: -0.4, nose_length: 1.2, mouth_width: 0, jaw_width: 0.6, chin_width: -1, midface_ratio: 1.2 },
-        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><path fill="#8ea0ae" d="M24 44 32 16 42 38z"/><path fill="#8ea0ae" d="M64 44 56 16 46 38z"/><ellipse cx="44" cy="52" rx="22" ry="24" fill="#a9b8c2"/><path fill="#d5dee4" d="M44 50 30 74 58 74z"/><ellipse cx="35" cy="48" rx="4" ry="2.6" fill="#2c241c"/><ellipse cx="53" cy="48" rx="4" ry="2.6" fill="#2c241c"/><ellipse cx="44" cy="62" rx="4" ry="3" fill="#2c241c"/></svg>'
+        svg: '<svg viewBox="0 0 88 88" aria-hidden="true" focusable="false"><path fill="#8ea0ae" d="M28 40 34 14 44 36z"/><path fill="#8ea0ae" d="M60 40 54 14 44 36z"/><circle cx="44" cy="52" r="22" fill="#c5d0d8"/><path fill="#f4f7f8" d="M44 48 32 70 56 70z"/><path fill="#2c241c" d="M30 46c6 4 10 4 14-2M44 44c4 6 8 6 14 2"/><ellipse cx="44" cy="60" rx="3" ry="2" fill="#2c241c"/></svg>'
       }
     ];
 
@@ -3981,7 +4586,10 @@
       view_x: 0,
       view_y: 0,
       analysis_generation: 0,
-      is_draw_armed: false
+      is_draw_armed: false,
+      capture_mode: "selfie",
+      view_name: "home",
+      brightness_timer: 0
     };
 
     let share_state = {
@@ -4003,11 +4611,24 @@
     const action_bar = require_element("action_bar");
     const button_camera = require_element("button_camera");
     const button_upload = require_element("button_upload");
+    const pose_hint = require_element("pose_hint");
     const button_draw_arm = require_element("button_draw_arm");
     const button_shutter = require_element("button_shutter");
     const button_flip_camera = require_element("button_flip_camera");
     const button_close_camera = require_element("button_close_camera");
     const button_analyze = require_element("button_analyze");
+    const button_instant = require_element("button_instant");
+    const brightness_text = require_element("brightness_text");
+    const result_face = require_element("result_face");
+    const result_dog = require_element("result_dog");
+    const result_dog_label = require_element("result_dog_label");
+    const button_save_card = require_element("button_save_card");
+    const button_cancel_analyze = require_element("button_cancel_analyze");
+    const button_back = require_element("button_back");
+    const button_open_my = require_element("button_open_my");
+    const button_home_scan = require_element("button_home_scan");
+    const button_home_upload = require_element("button_home_upload");
+    const button_feed_open = require_element("button_feed_open");
     const button_retake = require_element("button_retake");
     const photo_input = require_element("photo_input");
     const result_panel = require_element("result_panel");
@@ -4129,7 +4750,7 @@
 
     // 휴대폰에서는 그리기 버튼을 눌렀을 때만 사진이 스크롤을 가로챈다.
     function sync_draw_button() {
-      const can_draw = app_state.has_photo && !app_state.is_camera_on && !app_state.is_analyzing && is_touch_input();
+      const can_draw = app_state.has_photo && !app_state.is_camera_on && !app_state.is_analyzing && is_touch_input() && app_state.capture_mode === "friends";
       const is_armed = Boolean(app_state.is_draw_armed) && can_draw;
       app_state.is_draw_armed = is_armed;
       button_draw_arm.hidden = !can_draw;
@@ -4234,6 +4855,7 @@
       selection_layer.hidden = true;
       button_camera.hidden = false;
       button_upload.hidden = false;
+      pose_hint.hidden = false;
       button_shutter.hidden = true;
       button_flip_camera.hidden = true;
       button_close_camera.hidden = true;
@@ -4243,7 +4865,9 @@
       clear_selection_state();
       reset_photo_view();
       app_state.is_draw_armed = false;
+      stop_brightness_watch();
       sync_draw_button();
+      sync_instant_button();
       sync_analyze_button();
     }
 
@@ -4258,6 +4882,7 @@
       display_canvas.hidden = true;
       button_camera.hidden = true;
       button_upload.hidden = false;
+      pose_hint.hidden = false;
       button_shutter.hidden = false;
       button_flip_camera.hidden = false;
       button_close_camera.hidden = false;
@@ -4269,6 +4894,8 @@
       crop_panel.hidden = true;
       app_state.is_draw_armed = false;
       sync_draw_button();
+      sync_instant_button();
+      start_brightness_watch();
     }
 
     // 찍거나 고른 사진을 보여주고, 드래그로 영역을 고를 수 있게 한다.
@@ -4294,6 +4921,7 @@
       selection_draft.hidden = true;
       button_camera.hidden = true;
       button_upload.hidden = true;
+      pose_hint.hidden = true;
       button_shutter.hidden = true;
       button_flip_camera.hidden = true;
       button_close_camera.hidden = true;
@@ -4304,8 +4932,261 @@
       render_crop_cards();
       sync_selection_hint();
       app_state.is_draw_armed = false;
+      stop_brightness_watch();
       sync_draw_button();
+      sync_instant_button();
       sync_analyze_button();
+    }
+
+    // 네 장면은 한 스크롤 안에 둔다. 메뉴는 그 위치로 내리고, 분석 중일 때만 진행 칸을 연다.
+    function show_view(view_name) {
+      const anchors = {
+        home: "pane_home",
+        capture: "photo_stage",
+        analyze: "pane_analyze",
+        result: "result_panel",
+        feed: "pane_feed",
+        my: "pane_my"
+      };
+      const next_view = anchors[view_name] ? view_name : "home";
+      try {
+        app_state.view_name = next_view;
+        const analyze_pane = document.getElementById("pane_analyze");
+        if (analyze_pane) {
+          analyze_pane.hidden = next_view !== "analyze";
+        }
+        if (next_view === "result" && share_state.animal_id) {
+          result_panel.hidden = false;
+        }
+        if (next_view === "feed") {
+          render_feed_card();
+        }
+        const tab_name = next_view === "analyze" || next_view === "result" ? "capture" : next_view;
+        document.querySelectorAll(".tab_button").forEach((button) => {
+          const is_on = button.getAttribute("data-view") === tab_name;
+          button.classList.toggle("is_selected", is_on);
+          button.setAttribute("aria-pressed", is_on ? "true" : "false");
+        });
+        button_back.hidden = true;
+        const target = document.getElementById(anchors[next_view]);
+        if (target && next_view !== "home") {
+          const is_reduced_motion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          target.scrollIntoView({ behavior: is_reduced_motion ? "auto" : "smooth", block: "start" });
+        }
+      } catch (error) {
+        console.error("화면을 옮기지 못했습니다. 아래 메뉴를 다시 눌러 주세요.", error);
+      }
+    }
+
+    // 셀카, 친구, 반려동물 안내 중 하나를 고른다. 반려동물은 측정하지 않는다.
+    function set_capture_mode(mode_name) {
+      const allowed_modes = ["selfie", "friends", "pet"];
+      app_state.capture_mode = allowed_modes.indexOf(mode_name) >= 0 ? mode_name : "selfie";
+      document.querySelectorAll(".mode_button").forEach((button) => {
+        const is_on = button.getAttribute("data-mode") === app_state.capture_mode;
+        button.classList.toggle("is_selected", is_on);
+        button.setAttribute("aria-pressed", is_on ? "true" : "false");
+      });
+      sync_draw_button();
+      sync_instant_button();
+      if (app_state.capture_mode === "pet") {
+        show_status("mode_pet_notice", {}, false, false);
+      }
+    }
+
+    // 사진이 있고 카메라가 꺼져 있을 때만 가장 큰 얼굴을 바로 재는 버튼을 보여 준다.
+    function sync_instant_button() {
+      const can_instant = app_state.has_photo && !app_state.is_camera_on && !app_state.is_analyzing && app_state.capture_mode !== "pet";
+      button_instant.hidden = !can_instant;
+    }
+
+    // 분석 화면의 네 단계는 실제로 그 일을 하기 직전에만 현재 단계로 표시한다.
+    function set_analyze_step(step_name) {
+      const order = ["model", "points", "ratios", "animals"];
+      const current_index = order.indexOf(step_name);
+      document.querySelectorAll("#analyze_steps li").forEach((item) => {
+        const item_index = order.indexOf(item.getAttribute("data-step"));
+        item.classList.toggle("is_done", item_index >= 0 && item_index < current_index);
+        item.classList.toggle("is_current", item_index === current_index);
+      });
+    }
+
+    // 카메라 화면 한가운데를 작게 뽑아 평균 밝기를 본다. 실패하면 안내를 숨긴다.
+    function read_brightness() {
+      try {
+        if (!app_state.is_camera_on || !live_video.videoWidth) {
+          brightness_text.hidden = true;
+          return;
+        }
+        const sample = document.createElement("canvas");
+        sample.width = 32;
+        sample.height = 32;
+        const ctx = sample.getContext("2d", { willReadFrequently: true });
+        if (!ctx) {
+          brightness_text.hidden = true;
+          return;
+        }
+        ctx.drawImage(live_video, 0, 0, 32, 32);
+        const pixels = ctx.getImageData(0, 0, 32, 32).data;
+        let total = 0;
+        const pixel_count = pixels.length / 4;
+        for (let index = 0; index < pixels.length; index += 4) {
+          total += (pixels[index] + pixels[index + 1] + pixels[index + 2]) / 3;
+        }
+        const average = pixel_count > 0 ? total / pixel_count : 0;
+        brightness_text.hidden = false;
+        brightness_text.textContent = t(average < 60 ? "brightness_dim" : "brightness_ok");
+      } catch (error) {
+        console.error("밝기를 읽지 못했습니다. 안내만 숨깁니다.", error);
+        brightness_text.hidden = true;
+      }
+    }
+
+    // 카메라가 켜진 동안만 밝기를 다시 읽는다.
+    function start_brightness_watch() {
+      stop_brightness_watch();
+      read_brightness();
+      app_state.brightness_timer = window.setInterval(read_brightness, 1200);
+    }
+
+    // 카메라를 끄면 밝기 안내도 함께 끈다.
+    function stop_brightness_watch() {
+      if (app_state.brightness_timer) {
+        window.clearInterval(app_state.brightness_timer);
+        app_state.brightness_timer = 0;
+      }
+      brightness_text.hidden = true;
+    }
+
+    // 사진 전체에서 가장 큰 얼굴 하나만 골라 바로 분석한다.
+    async function analyze_largest_face() {
+      try {
+        if (app_state.capture_mode === "pet") {
+          show_status("mode_pet_notice", {}, false, false);
+          return;
+        }
+        if (!app_state.photo_canvas) {
+          show_user_error("selection_needed");
+          return;
+        }
+        if (!app_state.is_model_ready) {
+          show_status("loading", {}, false, true);
+          return;
+        }
+        const hits = face_hits_in_rect(app_state.photo_canvas, {
+          x: 0,
+          y: 0,
+          width: app_state.photo_canvas.width,
+          height: app_state.photo_canvas.height
+        });
+        const best_hit = pick_best_hit(hits);
+        if (!best_hit) {
+          show_view("capture");
+          show_user_error("no_face");
+          return;
+        }
+        clear_selection_state();
+        add_selection(best_hit.rect, "selection_ready");
+        const captured = app_state.selections[app_state.selections.length - 1];
+        if (!captured) {
+          show_user_error("selection_failed");
+          return;
+        }
+        await analyze_selections([captured]);
+      } catch (error) {
+        console.error("가장 큰 얼굴을 고르지 못했습니다. 칸을 그리거나 다른 사진을 골라 주세요.", error);
+        show_view("capture");
+        show_user_error(error_code(error, "analyze_failed"));
+      }
+    }
+
+    // 이 탭에 동물 이름과 점수만 남긴다. 사진은 넣지 않는다.
+    function store_last_result(animal_id, score) {
+      try {
+        sessionStorage.setItem("last_face_result", JSON.stringify({
+          animal_id: animal_id,
+          score: score
+        }));
+      } catch (error) {
+        console.error("최근 결과를 이 탭에 남기지 못했습니다.", error);
+      }
+      render_feed_card();
+    }
+
+    // 피드에는 이 브라우저 탭의 마지막 결과만 보여 준다.
+    function render_feed_card() {
+      const empty = document.getElementById("feed_empty");
+      const box = document.getElementById("feed_last");
+      const text = document.getElementById("feed_last_text");
+      if (!empty || !box || !text) {
+        return;
+      }
+      let stored = null;
+      try {
+        stored = JSON.parse(sessionStorage.getItem("last_face_result") || "null");
+      } catch (error) {
+        console.error("최근 결과를 읽지 못했습니다.", error);
+        stored = null;
+      }
+      if (!stored || !stored.animal_id || !Number.isFinite(Number(stored.score))) {
+        box.hidden = true;
+        empty.hidden = false;
+        return;
+      }
+      const animal = animal_list.find((item) => item.id === stored.animal_id);
+      const animal_name = animal ? localized_animal(animal).name : stored.animal_id;
+      empty.hidden = true;
+      box.hidden = false;
+      text.textContent = t("feed_last", { animal: animal_name, score: Math.round(Number(stored.score)) });
+    }
+
+    // 저장 버튼을 눌렀을 때만 얼굴이 들어간 카드 파일을 만든다.
+    function save_result_card() {
+      try {
+        if (!share_state.animal_name) {
+          set_share_status(t("share_need_result"), true);
+          return;
+        }
+        const card = document.createElement("canvas");
+        card.width = 900;
+        card.height = 900;
+        const ctx = card.getContext("2d");
+        if (!ctx) {
+          throw new Error("canvas_unavailable");
+        }
+        ctx.fillStyle = "#0a0e1a";
+        ctx.fillRect(0, 0, 900, 900);
+        const selection = app_state.selections.find((item) => item.id === app_state.active_selection_id);
+        const face = selection && (selection.preview_canvas || selection.crop_canvas);
+        if (face) {
+          ctx.drawImage(face, 70, 70, 360, 360);
+        }
+        ctx.fillStyle = "#7dd3fc";
+        ctx.font = "700 64px sans-serif";
+        ctx.fillText(share_state.animal_name, 70, 540);
+        ctx.fillStyle = "#e0e8f0";
+        ctx.font = "700 96px sans-serif";
+        ctx.fillText(String(share_state.score) + "%", 70, 660);
+        ctx.font = "32px sans-serif";
+        ctx.fillText(t("app_title"), 70, 760);
+        card.toBlob((blob) => {
+          if (!blob) {
+            console.error("카드 이미지 파일이 비어 있습니다.");
+            set_share_status(t("save_card_fail"), true);
+            return;
+          }
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = "animal-face-card.png";
+          link.click();
+          URL.revokeObjectURL(url);
+          set_share_status(t("save_card_done"), false);
+        }, "image/png");
+      } catch (error) {
+        console.error("카드 이미지를 저장하지 못했습니다. 다시 눌러 주세요.", error);
+        set_share_status(t("save_card_fail"), true);
+      }
     }
 
     // 분석용 원본은 그대로 두고, 화면에만 얼굴 테두리를 덧그린다.
@@ -4534,6 +5415,11 @@
 
     // 처음에는 전면 카메라를 연다. 없으면 기본 카메라로 한 번 더 시도한다.
     async function open_camera() {
+      if (app_state.capture_mode === "pet") {
+        show_status("mode_pet_notice", {}, false, false);
+        return;
+      }
+      show_view("capture");
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         show_user_error("camera_unsupported");
         return;
@@ -4595,33 +5481,34 @@
       }
     }
 
-    // 화면 위 원이 저장된 사진의 어느 칸인지 계산한다. 미리보기와 저장 사진이 모두 좌우로 뒤집혀 화면 위치와 맞는다.
-    function circle_to_canvas_rect(circle, canvas) {
+    // 화면 위 타원이 저장된 사진의 어느 칸인지 계산한다. 미리보기와 저장 사진이 모두 좌우로 뒤집혀 화면 위치와 맞는다.
+    function guide_to_canvas_rect(guide, canvas) {
       const video_width = live_video.videoWidth;
       const video_height = live_video.videoHeight;
       if (!video_width || !video_height || !canvas.width || !canvas.height) {
         throw Object.assign(new Error("camera_not_ready"), { code: "camera_not_ready" });
       }
-      const cover_scale = Math.max(circle.stage_width / video_width, circle.stage_height / video_height);
+      const cover_scale = Math.max(guide.stage_width / video_width, guide.stage_height / video_height);
       if (!Number.isFinite(cover_scale) || cover_scale <= 0) {
         throw Object.assign(new Error("selection_failed"), { code: "selection_failed" });
       }
-      const offset_x = (video_width * cover_scale - circle.stage_width) / 2;
-      const offset_y = (video_height * cover_scale - circle.stage_height) / 2;
+      const offset_x = (video_width * cover_scale - guide.stage_width) / 2;
+      const offset_y = (video_height * cover_scale - guide.stage_height) / 2;
       const fit_scale = canvas.width / video_width;
-      const x = (circle.left + offset_x) / cover_scale * fit_scale;
-      const y = (circle.top + offset_y) / cover_scale * fit_scale;
-      const size = circle.size / cover_scale * fit_scale;
-      return normalize_rect(x, y, x + size, y + size, canvas.width, canvas.height);
+      const x = (guide.left + offset_x) / cover_scale * fit_scale;
+      const y = (guide.top + offset_y) / cover_scale * fit_scale;
+      const width = guide.width / cover_scale * fit_scale;
+      const height = guide.height / cover_scale * fit_scale;
+      return normalize_rect(x, y, x + width, y + height, canvas.width, canvas.height);
     }
 
-    // 카메라 화면 한가운데 원의 화면 위치를 읽는다. 촬영 전에 불러야 원 크기가 유지된다.
-    function read_camera_circle() {
+    // 카메라 화면 한가운데 타원의 화면 위치를 읽는다. 촬영 전에 불러야 칸 크기가 유지된다.
+    function read_camera_guide() {
       const ring = camera_guide.querySelector(".camera_guide_ring");
       const stage_box = photo_stage.getBoundingClientRect();
       const ring_box = ring ? ring.getBoundingClientRect() : null;
-      if (!ring_box || ring_box.width < 8 || stage_box.width <= 0 || stage_box.height <= 0) {
-        console.error("카메라 원 위치를 읽지 못했습니다.");
+      if (!ring_box || ring_box.width < 8 || ring_box.height < 8 || stage_box.width <= 0 || stage_box.height <= 0) {
+        console.error("카메라 타원 위치를 읽지 못했습니다.");
         throw Object.assign(new Error("selection_failed"), { code: "selection_failed" });
       }
       return {
@@ -4629,21 +5516,26 @@
         stage_height: stage_box.height,
         left: ring_box.left - stage_box.left,
         top: ring_box.top - stage_box.top,
-        size: ring_box.width
+        width: ring_box.width,
+        height: ring_box.height
       };
     }
 
-    // 현재 카메라 화면을 멈춰, 원 안을 얼굴 영역으로 바로 분석한다.
+    // 현재 카메라 화면을 멈춰, 타원 안을 얼굴 영역으로 바로 분석한다.
     function capture_camera_frame() {
+      if (app_state.capture_mode === "pet") {
+        show_status("mode_pet_notice", {}, false, false);
+        return;
+      }
       if (!app_state.is_camera_on || !live_video.videoWidth) {
         show_user_error("camera_not_ready");
         return;
       }
       try {
-        const circle = read_camera_circle();
+        const guide = read_camera_guide();
         const is_front_camera = app_state.camera_facing !== "environment";
         const canvas = fit_to_canvas(live_video, is_front_camera);
-        const rect = circle_to_canvas_rect(circle, canvas);
+        const rect = guide_to_canvas_rect(guide, canvas);
         if (rect.width < MIN_SELECTION_EDGE || rect.height < MIN_SELECTION_EDGE) {
           show_user_error("selection_too_small");
           return;
@@ -4680,6 +5572,11 @@
           return;
         }
         show_photo_mode(canvas);
+        show_view("capture");
+        if (app_state.capture_mode === "selfie" && app_state.is_model_ready) {
+          analyze_largest_face();
+          return;
+        }
         show_status(app_state.is_model_ready ? select_guide_key() : "loading", {}, false, !app_state.is_model_ready);
       } catch (error) {
         console.error("사진을 불러오지 못했습니다.", error);
@@ -5272,6 +6169,7 @@
           url: url
         });
         share_state = { animal_id: animal.id, animal_name, score, text, url };
+        store_last_result(animal.id, score);
         paint_share_links();
         prepare_share_image(animal_name, score);
         set_share_status("", false);
@@ -5348,10 +6246,96 @@
     }
 
     // 1등 동물, 순위 막대, 측정 미터, 원본 비율을 한 번에 그린다.
+    // 결과 칸 왼쪽에는 이번에 잰 얼굴만 작게 붙인다.
+    function paint_result_face() {
+      try {
+        const selection = app_state.selections.find((item) => item.id === app_state.active_selection_id);
+        const face = selection && (selection.preview_canvas || selection.crop_canvas);
+        const ctx = result_face.getContext("2d");
+        if (!face || !ctx) {
+          result_face.hidden = true;
+          return;
+        }
+        result_face.width = 320;
+        result_face.height = 320;
+        const side = Math.min(face.width, face.height);
+        const source_x = (face.width - side) / 2;
+        const source_y = (face.height - side) / 2;
+        ctx.drawImage(face, source_x, source_y, side, side, 0, 0, 320, 320);
+        result_face.hidden = false;
+      } catch (error) {
+        console.error("결과 옆 얼굴을 그리지 못했습니다.", error);
+        result_face.hidden = true;
+      }
+    }
+
+    // 품종 폴더에 실제로 저장한 장수. 없는 번호를 고르면 사진이 빈다.
+    const BREED_PHOTO_COUNT = {
+      poodle: 100,
+      retriever: 100,
+      shiba: 100,
+      pomeranian: 100,
+      corgi: 100,
+      bulldog: 100,
+      jindo: 89,
+      greyhound: 100,
+      husky: 100
+    };
+
+    // 품종 폴더의 01부터 저장된 마지막 번호 중에서 고른다. 같은 결과에서는 번호를 유지한다.
+    function breed_photo_src(breed_id, photo_index) {
+      const photo_count = BREED_PHOTO_COUNT[breed_id] || 1;
+      const safe_index = Math.min(photo_count, Math.max(1, Math.round(photo_index || 1)));
+      return "images/dogs/" + breed_id + "/" + String(safe_index).padStart(2, "0") + ".jpg";
+    }
+
+    // 분석이 끝난 뒤에 한 번만 품종별 사진 번호를 뽑는다.
+    function breed_photo_picks_for(ranked) {
+      const selection = app_state.selections.find((item) => item.id === app_state.active_selection_id);
+      const store = selection && selection.result ? selection.result : null;
+      if (store && !store.breed_photos) {
+        store.breed_photos = {};
+      }
+      const picks = store ? store.breed_photos : {};
+      for (const animal of ranked) {
+        if (!picks[animal.id]) {
+          const photo_count = BREED_PHOTO_COUNT[animal.id] || 1;
+          picks[animal.id] = 1 + Math.floor(Math.random() * photo_count);
+        }
+      }
+      return picks;
+    }
+
+    // 강아지 사진이 없으면 그림 아이콘을 대신 보여 준다.
+    function show_breed_photo(image, breed_id, photo_index, fallback_node) {
+      const next_src = breed_photo_src(breed_id, photo_index);
+      const reveal = () => {
+        image.hidden = false;
+        if (fallback_node) fallback_node.hidden = true;
+      };
+      image.onload = reveal;
+      image.onerror = () => {
+        console.error("강아지 사진을 열지 못했습니다. 그림으로 대신 보여 줍니다.", breed_id);
+        image.hidden = true;
+        if (fallback_node) fallback_node.hidden = false;
+      };
+      if (image.getAttribute("src") === next_src && image.complete && image.naturalWidth > 0) {
+        reveal();
+        return;
+      }
+      image.src = next_src;
+    }
+
     function render_result(ranked, user_z, ratios, notes, should_scroll) {
       const winner = ranked[0];
       const winner_copy = localized_animal(winner);
+      const photo_picks = breed_photo_picks_for(ranked);
+      paint_result_face();
       set_svg(result_icon, winner.svg);
+      result_icon.hidden = true;
+      result_dog.alt = winner_copy.name;
+      result_dog_label.textContent = winner_copy.name;
+      show_breed_photo(result_dog, winner.id, photo_picks[winner.id], result_icon);
       result_name.textContent = winner_copy.name;
       result_score.textContent = String(winner.score);
       result_blurb.textContent = winner_copy.blurb;
@@ -5376,8 +6360,25 @@
         rank_index.className = "rank_index";
         rank_index.textContent = String(index + 1);
 
-        const icon = document.createElement("div");
-        set_svg(icon, animal.svg);
+        const pair = document.createElement("div");
+        pair.className = "rank_pair";
+        const mine = document.createElement("img");
+        mine.className = "rank_face";
+        mine.alt = t("compare_mine");
+        try {
+          mine.src = result_face.toDataURL("image/jpeg", 0.82);
+        } catch (error) {
+          console.error("순위용 내 얼굴을 만들지 못했습니다.", error);
+        }
+        const dog = document.createElement("img");
+        dog.className = "rank_face";
+        dog.alt = localized_animal(animal).name;
+        const fallback = document.createElement("div");
+        fallback.className = "rank_face";
+        set_svg(fallback, animal.svg);
+        fallback.hidden = true;
+        show_breed_photo(dog, animal.id, photo_picks[animal.id], fallback);
+        pair.append(mine, dog, fallback);
 
         const main = document.createElement("div");
         const name_row = document.createElement("div");
@@ -5396,7 +6397,7 @@
         fill.style.background = animal.accent;
         track.append(fill);
         main.append(name_row, track);
-        item.append(rank_index, icon, main);
+        item.append(rank_index, pair, main);
         result_list.append(item);
 
         const score_width = animal.score + "%";
@@ -6429,20 +7430,59 @@
       app_state.is_analyzing = true;
       app_state.is_draw_armed = false;
       sync_draw_button();
+      sync_instant_button();
       sync_analyze_button();
       render_crop_cards();
+      show_view("analyze");
+      set_analyze_step("model");
       let success_count = 0;
       let first_success = null;
       try {
         for (let index = 0; index < selections.length; index += 1) {
           const selection = selections[index];
           show_status("analyze_progress", { current: index + 1, total: selections.length }, false, true);
+          set_analyze_step("points");
           await wait_next_frame();
           if (generation !== app_state.analysis_generation) {
             return;
           }
           try {
-            run_selection_analysis(selection);
+            const located = locate_face_for_analysis(selection.crop_canvas);
+            set_analyze_step("ratios");
+            await wait_next_frame();
+            if (generation !== app_state.analysis_generation) {
+              return;
+            }
+            const measured = measure_features(located.landmarks, located.canvas.width, located.canvas.height);
+            const face_box = face_box_from_landmarks(located.landmarks, located.canvas.width, located.canvas.height);
+            refresh_selection_preview(selection, face_box, located.canvas);
+            set_analyze_step("animals");
+            await wait_next_frame();
+            if (generation !== app_state.analysis_generation) {
+              return;
+            }
+            const ranked_result = rank_animals(measured.ratios);
+            const notes = [];
+            if (located.did_zoom) {
+              notes.push("zoom");
+            }
+            if (located.face_count > 1) {
+              notes.push("many");
+            }
+            if (!measured.is_frontal) {
+              notes.push("angle");
+            }
+            const distance_gap = ranked_result.ranked[1].distance - ranked_result.ranked[0].distance;
+            if (distance_gap < 0.12) {
+              notes.push("close");
+            }
+            selection.result = {
+              is_ok: true,
+              ranked: ranked_result.ranked,
+              user_z: ranked_result.user_z,
+              ratios: measured.ratios,
+              notes: notes
+            };
             success_count += 1;
             if (!first_success) {
               first_success = selection;
@@ -6495,15 +7535,18 @@
         } else {
           show_status("analyze_partial", { total: selections.length, count: success_count }, false, false);
         }
+        show_view(first_success ? "result" : "capture");
       } catch (error) {
         console.error("얼굴 분석을 마치지 못했습니다.", error);
         if (generation === app_state.analysis_generation) {
+          show_view("capture");
           show_user_error("analyze_failed");
         }
       } finally {
         if (generation === app_state.analysis_generation) {
           app_state.is_analyzing = false;
           sync_analyze_button();
+          sync_instant_button();
           sync_draw_button();
           try {
             render_crop_cards();
@@ -6660,6 +7703,7 @@
     async function init() {
       try {
         apply_theme(current_theme());
+        show_view("home");
         button_share_native.hidden = typeof navigator.share !== "function";
         render_shared_banner();
         button_theme_light.addEventListener("click", () => {
@@ -6669,6 +7713,60 @@
           choose_theme("dark");
         });
         render_guide();
+        button_home_scan.addEventListener("click", () => {
+          set_capture_mode("selfie");
+          show_view("capture");
+          open_camera();
+        });
+        button_home_upload.addEventListener("click", () => {
+          set_capture_mode("selfie");
+          show_view("capture");
+          photo_input.click();
+        });
+        button_open_my.addEventListener("click", () => {
+          show_view("my");
+        });
+        button_back.addEventListener("click", () => {
+          if (app_state.view_name === "analyze") {
+            cancel_running_analysis();
+            show_view("capture");
+            show_status(app_state.is_model_ready ? "ready" : "loading", {}, false, app_state.is_model_loading);
+            return;
+          }
+          show_view(app_state.view_name === "result" ? "home" : "home");
+        });
+        document.querySelectorAll(".tab_button").forEach((button) => {
+          button.addEventListener("click", () => {
+            show_view(button.getAttribute("data-view") || "home");
+          });
+        });
+        document.querySelectorAll(".mode_button").forEach((button) => {
+          button.addEventListener("click", () => {
+            set_capture_mode(button.getAttribute("data-mode") || "selfie");
+          });
+        });
+        button_instant.addEventListener("click", () => {
+          analyze_largest_face();
+        });
+        button_cancel_analyze.addEventListener("click", () => {
+          cancel_running_analysis();
+          show_view("capture");
+          show_status(app_state.is_model_ready ? "ready" : "loading", {}, false, app_state.is_model_loading);
+        });
+        button_save_card.addEventListener("click", () => {
+          save_result_card();
+        });
+        button_feed_open.addEventListener("click", () => {
+          show_view("result");
+        });
+        const shared_try = document.getElementById("shared_result_try");
+        if (shared_try) {
+          shared_try.addEventListener("click", (event) => {
+            event.preventDefault();
+            set_capture_mode("selfie");
+            show_view("capture");
+          });
+        }
         button_camera.addEventListener("click", () => {
           open_camera();
         });
@@ -6687,12 +7785,16 @@
         });
         button_close_camera.addEventListener("click", () => {
           show_idle_mode();
+          show_view("capture");
           show_status(app_state.is_model_ready ? "ready" : "loading", {}, false, app_state.is_model_loading);
         });
-        button_retake.addEventListener("click", () => {
+        const return_home = () => {
           show_idle_mode();
+          show_view("home");
           show_status(app_state.is_model_ready ? "ready" : "loading", {}, false, app_state.is_model_loading);
-        });
+        };
+        button_retake.addEventListener("click", return_home);
+        require_element("button_result_again").addEventListener("click", return_home);
         button_share_copy.addEventListener("click", async () => {
           if (!share_state.text) {
             set_share_status(t("share_need_result"), true);
@@ -6758,6 +7860,8 @@
         if (!status_state.is_error) {
           if (app_state.has_photo && app_state.selections.length > 0) {
             show_status("selection_ready", { count: app_state.selections.length }, false, false);
+          } else if (app_state.capture_mode === "selfie" && app_state.has_photo && app_state.selections.length === 0) {
+            analyze_largest_face();
           } else if (app_state.has_photo) {
             show_status(select_guide_key(), {}, false, false);
           } else {
@@ -6807,6 +7911,7 @@
         render_guide();
         render_crop_cards();
         render_shared_banner();
+        render_feed_card();
         sync_draw_button();
         refresh_result_target();
         const active_selection = app_state.selections.find((item) => item.id === app_state.active_selection_id);

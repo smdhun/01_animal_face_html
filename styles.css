@@ -1,14 +1,18 @@
 :root,
     html[data-theme="light"] {
-      --bg: #f4f1ea;
-      --bg-glow-a: #e4efe4;
-      --bg-glow-b: #f8efe4;
-      --paper: #ffffff;
-      --paper-sheen: rgba(255, 255, 255, 0.8);
-      --ink: #1c1915;
-      --muted: #5e564c;
-      --leaf: #234e36;
-      --on-leaf: #f7f3ea;
+      --bg: #e7eef6;
+      --bg-glow-a: #d5e8f8;
+      --bg-glow-b: #efe4f8;
+      --paper: rgba(255, 255, 255, 0.82);
+      --paper-sheen: rgba(255, 255, 255, 0.92);
+      --ink: #0a1624;
+      --muted: #3e5366;
+      --leaf: #0a6d96;
+      --on-leaf: #f4fbff;
+      --amber: #0e7490;
+      --on-amber: #f4fbff;
+      --amber-wash: rgba(14, 116, 144, 0.12);
+      --amber-line: rgba(14, 116, 144, 0.35);
       --berry: #9c2f24;
       --line: rgba(28, 25, 21, 0.1);
       --stage: #efe6d6;
@@ -26,15 +30,19 @@
     }
 
     html[data-theme="dark"] {
-      --bg: #101c16;
-      --bg-glow-a: #2a4636;
-      --bg-glow-b: #3a3220;
-      --paper: #1b2621;
-      --paper-sheen: rgba(255, 255, 255, 0.04);
-      --ink: #f3ead7;
-      --muted: #c9bfae;
-      --leaf: #9dceb0;
-      --on-leaf: #102018;
+      --bg: #0a0e1a;
+      --bg-glow-a: #123044;
+      --bg-glow-b: #241838;
+      --paper: rgba(15, 21, 36, 0.72);
+      --paper-sheen: rgba(125, 211, 252, 0.08);
+      --ink: #e0e8f0;
+      --muted: #a0b4c4;
+      --leaf: #7dd3fc;
+      --on-leaf: #001f2e;
+      --amber: #7dd3fc;
+      --on-amber: #001f2e;
+      --amber-wash: rgba(125, 211, 252, 0.14);
+      --amber-line: rgba(125, 211, 252, 0.38);
       --berry: #f0a098;
       --line: rgba(243, 234, 215, 0.14);
       --stage: #2a3530;
@@ -75,7 +83,9 @@
         linear-gradient(180deg, var(--paper-sheen), transparent 120px),
         var(--paper);
       border-radius: 28px;
+      border: 1px solid var(--amber-line);
       box-shadow: 0 24px 60px var(--shadow);
+      backdrop-filter: blur(16px);
     }
 
     /* 언어는 위쪽 두 줄, 화면 모드는 그 아래 메뉴 가운데에 둔다. */
@@ -189,6 +199,33 @@
     .lead {
       max-width: 38em;
       margin: 12px auto 0;
+    }
+
+    /* 처음 행동은 사진 칸보다 앞에 둔다. 카메라는 따뜻한 버튼, 갤러리는 테두리 버튼이다. */
+    .start_actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .start_actions:not(:has(:not([hidden]))) {
+      display: none;
+    }
+
+    .start_actions .button_wide {
+      width: min(100%, 320px);
+      flex-basis: auto;
+    }
+
+    .pose_hint {
+      max-width: 34em;
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+      text-align: center;
     }
 
     .stage {
@@ -419,14 +456,13 @@
       pointer-events: none;
     }
 
+    /* 얼굴 자리 안내. 둥근 50%가 가로보다 세로가 긴 상자 위에서 타원이 된다. */
     .camera_guide_ring {
-      width: min(72%, 300px);
-      aspect-ratio: 1;
-      border: 3px solid rgba(247, 243, 234, 0.95);
+      width: min(62%, 250px);
+      aspect-ratio: 3 / 4;
+      border: 3px dashed var(--leaf);
       border-radius: 50%;
-      box-shadow:
-        0 0 0 1px rgba(16, 28, 22, 0.45),
-        0 0 0 9999px rgba(16, 28, 22, 0.38);
+      box-shadow: 0 0 0 9999px rgba(10, 14, 26, 0.42);
     }
 
     #display_canvas { height: auto; }
@@ -502,7 +538,7 @@
 
     button:disabled { opacity: 0.55; cursor: wait; }
 
-    .button_primary { background: var(--leaf); color: var(--on-leaf); }
+    .button_primary { background: var(--amber); color: var(--on-amber); }
 
     .button_ghost {
       background: transparent;
@@ -526,13 +562,78 @@
     }
 
     .hero {
-      display: grid;
-      grid-template-columns: 96px 1fr;
-      gap: 14px;
-      align-items: center;
+      display: block;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: var(--amber-wash);
+      box-shadow: inset 0 0 0 1px var(--amber-line);
     }
 
     .hero svg { width: 96px; height: 96px; }
+
+    .face_pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .face_slot {
+      margin: 0;
+    }
+
+    .face_slot canvas,
+    .face_slot img,
+    .face_slot svg {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 18px;
+      background: var(--stage);
+    }
+
+    .face_slot figcaption,
+    .photo_source {
+      margin: 6px 0 0;
+      font-size: 12px;
+      line-height: 16px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .hero_text { margin-top: 12px; }
+
+    .rank_pair {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .rank_face,
+    .rank_pair svg {
+      flex: 0 0 48px;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: var(--stage);
+    }
+
+    #result_face {
+      width: 100%;
+      height: auto;
+      border-radius: 18px;
+      object-fit: cover;
+      background: var(--stage);
+    }
+
+    #result_face[hidden],
+    .pane[hidden] {
+      display: none !important;
+    }
+
+    .home_card {
+      padding: 16px 18px;
+    }
 
     .result_name {
       margin: 0;
@@ -584,8 +685,8 @@
       min-height: 48px;
       padding: 12px 18px;
       border-radius: 999px;
-      background: var(--leaf);
-      color: var(--on-leaf);
+      background: var(--amber);
+      color: var(--on-amber);
       text-decoration: none;
     }
 
@@ -684,7 +785,7 @@
 
     .rank_item {
       display: grid;
-      grid-template-columns: 1.4rem 2.4rem 1fr;
+      grid-template-columns: 1.4rem auto 1fr;
       gap: 8px;
       align-items: center;
       padding: 8px 4px;
@@ -798,20 +899,40 @@
 
     .guide_list {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
     }
 
     .guide_item {
+      flex: 0 0 160px;
+      width: 160px;
       display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 12px 4px 4px;
-      border-radius: 999px;
+      padding: 0;
+      border-radius: 16px;
       background: var(--card);
+      box-shadow: inset 0 0 0 1px var(--amber-line);
     }
 
-    .guide_item svg { width: 34px; height: 34px; }
+    .guide_item_link,
+    .guide_item {
+      align-items: center;
+    }
+
+    .guide_item_link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 16px;
+      text-align: center;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .guide_item svg { width: 56px; height: 56px; }
 
     .guide_no {
       color: var(--muted);
@@ -915,6 +1036,11 @@
         font-size: clamp(0.5rem, 2.35vw, 0.72rem);
         letter-spacing: -0.03em;
       }
+      .language_bar .language_switch {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+      }
       .theme_switch { gap: 2px; padding: 2px; }
       .theme_button {
         min-height: 28px;
@@ -922,7 +1048,7 @@
         font-size: 0.72rem;
       }
       .sheet::before { display: none; }
-      .hero { grid-template-columns: 72px 1fr; }
+      .face_pair { gap: 8px; }
       .hero svg { width: 72px; height: 72px; }
       .meter_list { grid-template-columns: 1fr; }
       .stage.is_camera { height: 360px; min-height: 360px; }
@@ -957,7 +1083,8 @@
     }
 
 
-    html[dir="rtl"] .theme_bar {
+    html[dir="rtl"] .theme_bar,
+    html[dir="rtl"] .language_bar {
       direction: ltr;
     }
 
@@ -985,6 +1112,288 @@
     html[data-language="ar"] .score_number,
     html[data-language="ar"] .piece_animal {
       font-family: "Noto Sans Arabic", "Noto Sans", "Gowun Batang", serif;
+    }
+
+    /* 휴대폰 앱처럼 가운데 한 줄. 네 장면은 창 안에서만 바뀐다. */
+    .app_shell {
+      width: min(480px, 100%);
+      min-height: 100vh;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app_top {
+      position: sticky;
+      top: 0;
+      z-index: 6;
+      background: var(--paper);
+      backdrop-filter: blur(16px);
+    }
+
+    .language_bar {
+      padding: 8px 8px 2px;
+    }
+
+    .language_bar .language_switch {
+      width: 100%;
+      margin: 0;
+    }
+
+    .app_bar,
+    .tab_bar {
+      position: sticky;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      background: var(--paper);
+      border-color: var(--amber-line);
+      backdrop-filter: blur(16px);
+    }
+
+    .app_top .app_bar {
+      position: static;
+      background: transparent;
+    }
+
+    .app_bar {
+      top: 0;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 56px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--amber-line);
+    }
+
+    .app_brand_row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .brand_mark {
+      width: 32px;
+      height: 32px;
+      color: var(--leaf);
+      flex: 0 0 32px;
+    }
+
+    .app_brand {
+      margin: 0;
+      font-size: 18px;
+      line-height: 24px;
+      font-weight: 600;
+    }
+
+    .icon_button {
+      min-height: 40px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink);
+      box-shadow: inset 0 0 0 1px var(--amber-line);
+    }
+
+    .app_shell .sheet {
+      width: 100%;
+      flex: 1;
+      margin: 0;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      padding-bottom: 96px;
+    }
+
+    .tab_bar {
+      bottom: 0;
+      justify-content: space-around;
+      gap: 4px;
+      height: 64px;
+      padding: 0 8px calc(env(safe-area-inset-bottom));
+      border-top: 1px solid var(--amber-line);
+    }
+
+    .tab_button {
+      flex: 0 0 64px;
+      width: 64px;
+      height: 48px;
+      min-height: 48px;
+      padding: 0;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .tab_button.is_selected {
+      background: var(--amber-wash);
+      color: var(--leaf);
+      box-shadow: inset 0 0 0 1px var(--amber-line);
+    }
+
+    .home_cards,
+    .mode_row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .mode_row {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .home_card,
+    .mode_button {
+      width: 100%;
+      text-align: left;
+      border-radius: 16px;
+      background: var(--card);
+      color: var(--ink);
+      box-shadow: inset 0 0 0 1px var(--amber-line);
+    }
+
+    .home_card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .home_card_copy { min-width: 0; flex: 1; }
+
+    .icon_badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(14, 77, 110, 0.85);
+      color: var(--leaf);
+      flex: 0 0 auto;
+    }
+
+    .icon_badge_lg { width: 56px; height: 56px; }
+    .icon_badge_md { width: 48px; height: 48px; }
+    .icon_badge_sm { width: 36px; height: 36px; background: rgba(125, 211, 252, 0.12); }
+
+    .app_shell h1,
+    .app_shell h2,
+    .app_shell .result_name,
+    .app_shell .score_number,
+    .app_shell .home_card_title,
+    .app_shell .section_title {
+      font-family: "Noto Sans KR", "Noto Sans SC", "Noto Sans", "Noto Sans Arabic", "Noto Sans Devanagari", sans-serif;
+    }
+
+    .app_shell h1,
+    .app_shell .result_name {
+      font-size: 28px;
+      line-height: 36px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .app_shell .eyebrow {
+      font-size: 11px;
+      line-height: 14px;
+      letter-spacing: 0.02em;
+      text-transform: none;
+      font-weight: 600;
+    }
+
+    .app_shell .home_card_title,
+    .app_shell .section_title,
+    .app_shell h2 {
+      font-size: 18px;
+      line-height: 24px;
+      font-weight: 700;
+    }
+
+    .app_shell .lead,
+    .app_shell .home_card_help,
+    .app_shell .meter_caption,
+    .app_shell .pose_hint {
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    .app_shell .start_actions { display: none; }
+
+    .app_shell .score_number {
+      font-size: 28px;
+      line-height: 36px;
+      font-weight: 800;
+    }
+
+    .home_card_title,
+    .home_card_help {
+      display: block;
+    }
+
+    .home_card_help,
+    .brightness_text,
+    .feed_empty {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .home_card_help {
+      margin-top: 4px;
+      font-size: 0.88rem;
+      font-weight: 400;
+    }
+
+    .mode_button {
+      width: auto;
+      border-radius: 999px;
+      padding: 8px 12px;
+      min-height: 40px;
+      font-size: 0.85rem;
+    }
+
+    .mode_button.is_selected {
+      background: var(--amber);
+      color: var(--on-amber);
+    }
+
+    .analyze_steps {
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .analyze_steps li {
+      margin-top: 8px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: var(--card);
+      box-shadow: inset 0 0 0 1px var(--amber-line);
+    }
+
+    .analyze_steps li.is_done {
+      color: var(--leaf);
+    }
+
+    .analyze_steps li.is_current {
+      box-shadow: inset 0 0 0 2px var(--leaf);
+    }
+
+    .feed_last {
+      margin-top: 8px;
+      padding: 14px;
+      border-radius: 16px;
+      background: var(--amber-wash);
+      box-shadow: inset 0 0 0 1px var(--amber-line);
     }
 
     @media (prefers-reduced-motion: reduce) {

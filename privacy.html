@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="light">
+<html lang="ko" data-theme="dark">
 <head>
   <script>
     // 첫 그림이 그려지기 전에 저장된 화면 모드와 언어를 적용한다.
     (function () {
       try {
         var saved_theme = localStorage.getItem("theme_mode");
-        document.documentElement.setAttribute("data-theme", saved_theme === "dark" ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", saved_theme === "light" ? "light" : "dark");
         var saved_language = localStorage.getItem("language_code") || "";
         var browser_language = (navigator.language || "").toLowerCase();
         var language_code = "ko";
@@ -44,7 +44,7 @@
         document.documentElement.setAttribute("data-language", language_code);
         document.documentElement.dir = language_code === "ar" ? "rtl" : "ltr";
       } catch (error) {
-        document.documentElement.setAttribute("data-theme", "light");
+        document.documentElement.setAttribute("data-theme", "dark");
         document.documentElement.lang = "ko";
         document.documentElement.setAttribute("data-language", "ko");
         document.documentElement.dir = "ltr";
