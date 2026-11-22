@@ -192,7 +192,7 @@
       line-height: 1.7;
     }
 
-    .lead, .footer_note, .status_text, .result_note, .result_reason, .result_blurb {
+    .lead, .footer_note, .status_text, .result_reason, .result_blurb {
       text-wrap: pretty;
     }
 
@@ -217,15 +217,6 @@
     .start_actions .button_wide {
       width: min(100%, 320px);
       flex-basis: auto;
-    }
-
-    .pose_hint {
-      max-width: 34em;
-      margin: 2px 0 0;
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.55;
-      text-align: center;
     }
 
     .stage {
@@ -447,18 +438,26 @@
       transform: scaleX(-1);
     }
 
+    /* 점선과 안내 문구를 세로로 쌓아, 문구가 타원 위에 겹치지 않게 한다. */
     .camera_guide {
       position: absolute;
       inset: 0;
       z-index: 3;
-      display: grid;
-      place-items: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
       pointer-events: none;
+      container-type: size;
     }
 
-    /* 얼굴 자리 안내. 둥근 50%가 가로보다 세로가 긴 상자 위에서 타원이 된다. */
+    /* 얼굴 자리 안내. 칸 높이에 늘어나지 않게 가로만 정하고 세로는 비율로 둔다. */
     .camera_guide_ring {
+      justify-self: center;
+      align-self: center;
       width: min(62%, 250px);
+      height: auto;
       aspect-ratio: 3 / 4;
       border: 3px dashed var(--leaf);
       border-radius: 50%;
@@ -655,14 +654,6 @@
     }
 
     .result_blurb, .result_reason { margin: 10px 0 0; line-height: 1.65; }
-
-    .result_note {
-      margin: 12px 0 0;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: var(--note);
-      line-height: 1.6;
-    }
 
     .shared_result {
       margin: 0 0 18px;
@@ -1284,6 +1275,8 @@
       display: flex;
       align-items: center;
       gap: 16px;
+      background: transparent;
+      box-shadow: none;
     }
 
     .home_card_copy { min-width: 0; flex: 1; }
@@ -1337,8 +1330,7 @@
 
     .app_shell .lead,
     .app_shell .home_card_help,
-    .app_shell .meter_caption,
-    .app_shell .pose_hint {
+    .app_shell .meter_caption {
       font-size: 12px;
       line-height: 16px;
     }
@@ -1364,9 +1356,13 @@
     }
 
     .home_card_help {
-      margin-top: 4px;
-      font-size: 0.88rem;
+      margin-top: 2px;
+      overflow: hidden;
+      font-size: 12px;
+      line-height: 16px;
       font-weight: 400;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     .app_tools {
@@ -1534,9 +1530,7 @@
       gap: 0;
       padding: 20px;
       overflow: hidden;
-      background:
-        linear-gradient(90deg, rgba(14, 77, 110, 0.28), transparent 72%),
-        var(--card);
+      background: transparent;
     }
 
     .home_card_row {
@@ -1544,7 +1538,15 @@
       align-items: center;
       gap: 16px;
       min-width: 0;
-      padding-right: 72px;
+    }
+
+    .home_card_main .home_card_copy { padding-right: 78px; }
+
+    .app_shell .home_card_main .home_card_title {
+      font-size: 16px;
+      line-height: 22px;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
     }
 
     .recommend_badge {
@@ -1679,8 +1681,7 @@
     }
 
     .capture_head {
-      display: grid;
-      grid-template-columns: 40px 1fr 40px;
+      display: flex;
       align-items: center;
     }
 
@@ -1692,62 +1693,6 @@
       border-radius: 50%;
       background: transparent;
       color: var(--ink);
-    }
-
-    .capture_tip {
-      background: rgba(125, 211, 252, 0.12);
-      color: var(--leaf);
-    }
-
-    .capture_tip[aria-pressed="false"] { opacity: 0.55; }
-
-    .capture_title {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin: 0;
-      font-size: 18px;
-      line-height: 24px;
-      font-weight: 700;
-    }
-
-    .capture_dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #0e4d6e;
-      box-shadow: 0 0 0 4px rgba(14, 77, 110, 0.35);
-    }
-
-    .capture_pane .pose_hint {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      max-width: none;
-      margin: 0;
-      padding: 12px;
-      border-radius: 16px;
-      background: #c8eaff;
-      color: #0d1f2b;
-      text-align: left;
-      font-size: 12px;
-      line-height: 16px;
-      font-weight: 600;
-    }
-
-    .capture_pane .pose_hint p { margin: 0; }
-
-    .pose_icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      flex: 0 0 auto;
-      border-radius: 50%;
-      background: #0e4d6e;
-      color: #c8eaff;
     }
 
     .capture_pane .stage {
@@ -1833,8 +1778,8 @@
 
     .capture_pane .camera_guide_ring {
       position: relative;
-      width: min(52%, 210px);
-      max-height: 68%;
+      width: min(52%, 210px, calc((100cqh - 44px) * 3 / 4));
+      max-height: none;
       border: 2.5px dashed #f5b942;
       box-shadow: 0 0 0 9999px rgba(8, 10, 16, 0.28);
     }
@@ -1860,26 +1805,12 @@
       opacity: 0.8;
     }
 
-    .guide_pill {
-      position: absolute;
-      bottom: 18px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(0, 0, 0, 0.6);
-      color: #c8eaff;
-      font-size: 11px;
-      line-height: 14px;
-      font-weight: 600;
-    }
-
+    /* 점선 타원 바로 아래에 둔다. 화면 바닥에 고정하면 화면이 짧을 때 원과 겹친다. */
     .finder_hint {
-      position: absolute;
-      left: 12px;
-      right: 12px;
-      bottom: 12px;
+      position: relative;
+      z-index: 1;
+      flex: 0 0 auto;
+      width: calc(100% - 24px);
       margin: 0;
       color: rgba(255, 255, 255, 0.9);
       font-size: 12px;
@@ -1923,44 +1854,107 @@
       padding: 0;
       border-radius: 16px;
       background: transparent;
-      color: var(--muted);
+      color: #9aa8bc;
       font-size: 11px;
       line-height: 14px;
       font-weight: 600;
     }
 
+    .deck_album,
     .deck_icon {
+      position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       width: 56px;
       height: 56px;
+      overflow: hidden;
       border-radius: 16px;
-      background: #202c42;
-      color: #c8eaff;
+      background: #1a2436;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
     }
 
-    .deck_icon_magic { color: #c8a0f0; }
-
-    .deck_shutter {
-      width: 76px;
-      height: 76px;
-      min-height: 76px;
-      padding: 5px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #7dd3fc, #0e4d6e);
-      box-shadow: 0 8px 20px rgba(125, 211, 252, 0.28);
+    .album_grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      width: 100%;
+      height: 100%;
+      padding: 4px;
     }
 
-    .deck_shutter_core {
+    .album_grid span {
+      border-radius: 3px;
+      background: #c4a574;
+    }
+
+    .album_grid span:nth-child(2) { background: #8f5b45; }
+    .album_grid span:nth-child(3) { background: #d9c4a0; }
+    .album_grid span:nth-child(4) { background: #6f8f86; }
+    .album_grid span:nth-child(5) { background: #e7d3b0; }
+    .album_grid span:nth-child(6) { background: #3d6f86; }
+
+    .album_badge {
+      position: absolute;
+      right: 3px;
+      bottom: 3px;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      height: 100%;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       background: #0e4d6e;
-      color: #c8eaff;
+      color: #d7f3ff;
+    }
+
+    .deck_icon_magic { color: #d7b4ff; }
+
+    #button_instant:disabled { opacity: 1; cursor: not-allowed; }
+
+    #button_instant:disabled > span:last-child { opacity: 0.55; }
+
+    .deck_shutter {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 88px;
+      height: 88px;
+      min-height: 88px;
+      padding: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(125, 211, 252, 0.22) 0 58%, transparent 62%);
+      box-shadow: 0 16px 22px rgba(255, 176, 64, 0.18);
+    }
+
+    .deck_shutter_ring {
+      position: absolute;
+      width: 76px;
+      height: 76px;
+      border: 5px solid #6ed4fb;
+      border-radius: 50%;
+      background: #0d1c30;
+      box-shadow: 0 0 16px rgba(110, 212, 251, 0.5), inset 0 0 0 5px #0d1c30;
+    }
+
+    .deck_shutter_core {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #102033;
+      color: #8fd8fb;
+    }
+
+    .capture_deck.is_live #button_shutter {
+      width: 88px;
+      min-height: 88px;
+      flex-basis: auto;
     }
 
     .capture_deck .button_wide,
@@ -1991,6 +1985,7 @@
       height: 100%;
     }
 
+    /* 바깥 점선은 천천히 돈다. 간격은 3칸 공백보다 촘촘한 2칸 선, 3칸 공백이다. */
     .scan_dash {
       color: #7dd3fc;
       animation: spin 16s linear infinite;
@@ -2002,7 +1997,7 @@
 
     .scan_face {
       position: absolute;
-      inset: 28px;
+      inset: 32px;
       overflow: hidden;
       border-radius: 50%;
       background: #0a0e1a;
@@ -2014,48 +2009,85 @@
       height: 100%;
     }
 
+    /* 가로선이 얼굴 위아래를 왕복한다. 원은 넘치는 선을 잘라 낸다. */
     .scan_beam {
       position: absolute;
       left: 0;
       right: 0;
-      height: 48px;
-      background: linear-gradient(to bottom, transparent, rgba(125, 211, 252, 0.45), transparent);
+      top: 50%;
+      height: 64px;
+      margin-top: -32px;
+      background: linear-gradient(to bottom, transparent, rgba(125, 211, 252, 0.28), transparent);
       animation: scanline 2.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .scan_beam_line {
+      display: block;
+      width: 100%;
+      height: 2px;
+      margin-top: 31px;
+      background: #d7f4ff;
+      box-shadow: 0 0 12px #7dd3fc;
     }
 
     @keyframes scanline {
-      0%, 100% { top: 8%; opacity: 0.25; }
-      50% { top: 58%; opacity: 0.95; }
+      0%, 100% { transform: translateY(-78px); opacity: 0.45; }
+      50% { transform: translateY(78px); opacity: 1; }
+    }
+
+    @keyframes scan_ping {
+      0% { box-shadow: 0 0 0 0 rgba(125, 211, 252, 0.7); }
+      80% { box-shadow: 0 0 0 8px rgba(125, 211, 252, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(125, 211, 252, 0); }
     }
 
     .scan_count {
       position: absolute;
       left: 50%;
-      bottom: -8px;
+      bottom: -12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       transform: translateX(-50%);
       margin: 0;
-      padding: 4px 14px;
+      padding: 6px 16px;
       border-radius: 999px;
-      background: #111828;
+      background: #0a0e1a;
       color: #e0e8f0;
       font-size: 18px;
       line-height: 24px;
-      font-weight: 700;
+      font-weight: 600;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    }
+
+    .scan_count_dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #7dd3fc;
+      animation: scan_ping 1.2s ease-out infinite;
     }
 
     .app_shell .analyze_heading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       margin: 22px 0 0;
       text-align: center;
       font-size: 24px;
       line-height: 32px;
       font-weight: 700;
       letter-spacing: -0.01em;
-      color: var(--leaf);
+      color: #e8f1f8;
     }
+
+    .analyze_accent { color: #7dd3fc; }
 
     .analyze_pane .lead {
       margin-top: 8px;
       text-align: center;
+      color: #a0b4c4;
     }
 
     .analyze_pane .analyze_steps {
@@ -2135,17 +2167,60 @@
     }
 
     .step_name {
+      overflow: hidden;
       font-size: 14px;
       line-height: 18px;
       font-weight: 700;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     .step_detail {
+      overflow: hidden;
       color: var(--muted);
       font-size: 12px;
       line-height: 16px;
       font-weight: 400;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
+
+    .mark_hour,
+    .mark_sync { display: none; }
+
+    .analyze_pane .analyze_steps li:not(.is_done):not(.is_current) .mark_hour { display: block; }
+
+    .analyze_pane .analyze_steps li.is_current .mark_sync { display: block; }
+
+    .analyze_pane .analyze_steps li:not(.is_done):not(.is_current) .step_mark { color: #8ea0b0; }
+
+    .analyze_pane .analyze_steps li.is_current .step_mark { color: #c8eaff; }
+
+    .step_dots {
+      display: none;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .analyze_pane .analyze_steps li.is_current .step_dots { display: flex; }
+
+    .step_dots i {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #7dd3fc;
+      animation: step_bounce 0.9s ease-in-out infinite;
+    }
+
+    .step_dots i:nth-child(2) { animation-delay: 0.15s; }
+    .step_dots i:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes step_bounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+      40% { transform: translateY(-4px); opacity: 1; }
+    }
+
+    .analyze_pane .analyze_steps li.is_done .step_label { color: #7dd3fc; }
 
     .step_state {
       flex: 0 0 auto;
@@ -2155,10 +2230,44 @@
       font-weight: 700;
     }
 
-    .analyze_pane .analyze_steps li.is_current .step_state::before {
-      content: "● ● ●";
-      letter-spacing: 0.15em;
+    .analyze_pane .analyze_steps li.is_current .step_label { display: none; }
+
+    .analyze_trivia {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(17, 24, 40, 0.92);
+    }
+
+    .trivia_icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: rgba(14, 77, 110, 0.45);
       color: #7dd3fc;
+    }
+
+    .trivia_kicker {
+      margin: 0;
+      color: #7dd3fc;
+      font-size: 11px;
+      line-height: 14px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+
+    .trivia_text {
+      margin: 4px 0 0;
+      color: #e0e8f0;
+      font-size: 12px;
+      line-height: 18px;
     }
 
     .analyze_cancel {
@@ -2476,6 +2585,7 @@
       gap: 10px;
       align-items: flex-start;
       margin-top: 16px;
+      margin-bottom: 36px;
       padding: 14px 16px;
       border-radius: 18px;
       background: var(--paper);
