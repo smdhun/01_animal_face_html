@@ -289,6 +289,7 @@
         <span id="result_target" data-i18n="result_target" data-i18n-live="true">분석 완료! 찰떡 매칭 동물은?</span>
       </p>
       <p class="result_mood" id="result_mood" hidden></p>
+      <div id="result_focus">
       <h2 class="result_title">
         <span class="result_name" id="result_name"></span>
         <span class="result_name_icon" id="result_name_icon" aria-hidden="true"></span>
@@ -324,6 +325,7 @@
         </div>
         <h2 class="section_title rank_heading" data-i18n="rank_heading">비교 순위</h2>
         <ol class="rank_list" id="result_list"></ol>
+      </div>
       </div>
 
       <section class="keyword_card" aria-labelledby="keyword_heading">
@@ -6254,7 +6256,36 @@
       sync_analyze_button();
     }
 
-    // 네 장면은 한 스크롤 안에 둔다. 메뉴는 그 위치로 내리고, 분석 중일 때만 진행 칸을 연다.
+    // 얼굴 비교와 분포 분석을 위 메뉴와 아래 탭 사이 한가운데로 내린다.
+    function scroll_result_focus() {
+      const focus = document.getElementById("result_focus");
+      if (!focus) {
+        console.error("결과 가운데 칸을 찾지 못했습니다. 화면을 새로고침한 뒤 다시 분석해 주세요.");
+        return;
+      }
+      window.requestAnimationFrame(() => {
+        try {
+          const is_reduced_motion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          const top_bar = document.querySelector(".app_top");
+          const tab_bar = document.querySelector(".tab_bar");
+          const top_height = top_bar ? top_bar.getBoundingClientRect().height : 0;
+          const tab_height = tab_bar ? tab_bar.getBoundingClientRect().height : 0;
+          const view_height = window.innerHeight - top_height - tab_height;
+          const focus_box = focus.getBoundingClientRect();
+          const next_top = focus_box.height < view_height
+            ? top_height + (view_height - focus_box.height) / 2
+            : top_height + 12;
+          window.scrollBy({
+            top: focus_box.top - next_top,
+            behavior: is_reduced_motion ? "auto" : "smooth"
+          });
+        } catch (error) {
+          console.error("결과 화면을 가운데로 맞추지 못했습니다. 아래로 내려 얼굴과 분포를 확인해 주세요.", error);
+        }
+      });
+    }
+
+    // 네 장면은 한 스크롤 안에 둔다. 메뉴는 그 위치로 내리고, 분석이 끝나면 얼굴 비교를 가운데에 둔다.
     function show_view(view_name) {
       const anchors = {
         home: "pane_home",
@@ -6288,11 +6319,14 @@
           button.setAttribute("aria-pressed", is_on ? "true" : "false");
         });
         button_back.hidden = true;
-        const scroll_id = next_view === "result" && app_state.keep_analyze_visible ? "pane_analyze" : anchors[next_view];
-        const target = document.getElementById(scroll_id);
-        if (target && next_view !== "home" && !target.hidden) {
-          const is_reduced_motion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-          target.scrollIntoView({ behavior: is_reduced_motion ? "auto" : "smooth", block: "start" });
+        if (next_view === "result" && app_state.keep_analyze_visible) {
+          scroll_result_focus();
+        } else {
+          const target = document.getElementById(anchors[next_view]);
+          if (target && next_view !== "home" && !target.hidden) {
+            const is_reduced_motion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            target.scrollIntoView({ behavior: is_reduced_motion ? "auto" : "smooth", block: "start" });
+          }
         }
       } catch (error) {
         console.error("화면을 옮기지 못했습니다. 아래 메뉴를 다시 눌러 주세요.", error);
@@ -7963,8 +7997,7 @@
       if (should_scroll === false) {
         return;
       }
-      const is_reduced_motion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      result_panel.scrollIntoView({ behavior: is_reduced_motion ? "auto" : "smooth", block: "nearest" });
+      scroll_result_focus();
     }
 
     // 홈의 품종 이름 목록은 빼 두었다. 칸이 있을 때만 카드를 채운다.
@@ -8926,7 +8959,7 @@
     }
 
     // 선택한 카드의 자세한 순위와 비율을 아래 결과 판에 연다.
-    function show_selection_detail(selection) {
+    function show_selection_detail(selection, should_scroll) {
       if (!selection.result || !selection.result.is_ok) {
         return;
       }
@@ -8938,7 +8971,7 @@
       result_view = { mode: "face", index: index + 1 };
       result_target.textContent = t("result_target_face", { index: index + 1 });
       render_crop_cards();
-      render_result(selection.result.ranked, selection.result.user_z, selection.result.ratios, selection.result.notes);
+      render_result(selection.result.ranked, selection.result.user_z, selection.result.ratios, selection.result.notes, should_scroll);
     }
 
     // 고른 얼굴 영역만 분석한다. 한 곳이 실패해도 나머지 영역은 계속 본다.
@@ -9032,7 +9065,7 @@
           }
           try {
             if (first_success && app_state.active_selection_id !== first_success.id) {
-              show_selection_detail(first_success);
+              show_selection_detail(first_success, false);
             } else {
               render_crop_cards();
             }
