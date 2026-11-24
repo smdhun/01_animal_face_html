@@ -152,15 +152,10 @@
       color: var(--on-leaf);
     }
 
+    /* 노트 제본처럼 그리던 왼쪽 세로 선은 화면에 두지 않는다. */
     .sheet::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 20px;
-      bottom: 20px;
-      width: 14px;
-      border-right: 2px solid var(--binding);
-      background: rgba(196, 92, 74, 0.08);
+      content: none;
+      display: none;
     }
 
     .header, .stage, .status_text, .actions { text-align: center; }
@@ -1125,18 +1120,14 @@
       padding: 6px 8px 0;
     }
 
-    .language_bar .language_switch::-webkit-scrollbar {
-      height: 0;
-      display: none;
-    }
-
+    /* 언어 이름은 한 줄에 잘리지 않고 다음 줄로 넘어가 전부 누를 수 있다. */
     .language_bar .language_switch {
       display: flex;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       justify-content: flex-start;
       width: 100%;
       margin: 0;
-      overflow-x: auto;
+      overflow: visible;
       gap: 4px;
     }
 
@@ -1209,7 +1200,7 @@
       border: 0;
       border-radius: 0;
       box-shadow: none;
-      padding-bottom: 96px;
+      padding-bottom: 28px;
     }
 
     .tab_bar {
