@@ -89,7 +89,6 @@
 </head>
 <body>
   <div class="app_shell">
-    <div class="app_top">
     <div class="language_bar">
       <div class="language_switch theme_switch" role="group" data-i18n-aria="language_group" aria-label="언어">
         <button type="button" class="theme_button" id="button_language_ko" data-language="ko">한국어</button>
@@ -108,6 +107,7 @@
         <button type="button" class="theme_button" id="button_language_vi" data-language="vi">Tiếng Việt</button>
       </div>
     </div>
+    <div class="app_top">
     <header class="app_bar">
       <button type="button" class="icon_button" id="button_back" data-i18n="back_label" hidden>뒤로</button>
       <div class="app_brand_row"><svg class="brand_mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="18" r="8" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="10" r="3" fill="currentColor"/><circle cx="16" cy="7" r="3" fill="currentColor"/><circle cx="24" cy="10" r="3" fill="currentColor"/></svg><span class="app_brand" data-i18n="brand_name">동물상 AI</span></div>
@@ -206,6 +206,7 @@
           <div id="selection_draft" class="selection_draft" hidden></div>
         </div>
       </div>
+      <p class="box_hint" id="box_hint" data-i18n="box_adjust" hidden>칸을 끌어 옮기고, 모서리를 끌어 크기를 맞춘 뒤 즉시 분석을 눌러 주세요.</p>
       <p class="brightness_text" id="brightness_text" hidden></p>
     </div>
 
@@ -290,6 +291,8 @@
       </p>
       <p class="result_mood" id="result_mood" hidden></p>
       <div id="result_focus">
+      <div id="face_match_list" class="face_match_list">
+      <article class="face_match" id="face_match_top">
       <h2 class="result_title">
         <span class="result_name" id="result_name"></span>
         <span class="result_name_icon" id="result_name_icon" aria-hidden="true"></span>
@@ -313,6 +316,8 @@
           <p class="score_value"><span class="score_number" id="result_score">0</span><span class="score_unit">%</span></p>
         </div>
         <div class="score_track" aria-hidden="true"><div class="score_fill" id="result_score_bar"></div></div>
+      </div>
+      </article>
       </div>
 
       <div class="rank_card">
@@ -436,6 +441,7 @@
               "selection_picked": "얼굴을 골랐어요.",
               "selection_left": "얼굴 영역 {count}곳이 남았어요.",
               "selection_ready": "얼굴 영역 {count}곳을 골랐어요. 분석을 눌러 주세요.",
+              "box_adjust": "칸을 끌어 옮기고, 모서리를 끌어 크기를 맞춘 뒤 즉시 분석을 눌러 주세요.",
               "view_reset": "화면을 처음 크기로 되돌렸어요. 휠로 다시 확대할 수 있어요.",
               "zoom_failed": "화면을 확대하지 못했습니다. 사진 위에서 휠을 다시 돌려 주세요.",
               "pan_hold_failed": "화면을 움직이지 못했습니다. 왼쪽 버튼을 잠시 누른 뒤 다시 끌어 주세요.",
@@ -686,6 +692,7 @@
               "selection_picked": "A face is selected.",
               "selection_left": "{count} face area(s) left.",
               "selection_ready": "{count} face area(s) selected. Press analyze.",
+              "box_adjust": "Drag the box to move it, drag a corner to resize, then press Analyze now.",
               "view_reset": "The view is back to the original size. You can zoom with the wheel again.",
               "zoom_failed": "Could not zoom. Turn the wheel over the photo again.",
               "pan_hold_failed": "Could not move the photo. Hold the left button briefly, then drag again.",
@@ -936,6 +943,7 @@
               "selection_picked": "顔を選びました。",
               "selection_left": "顔の範囲が{count}か所残っています。",
               "selection_ready": "顔の範囲を{count}か所選びました。分析を押してください。",
+              "box_adjust": "枠をドラッグして位置を、角をドラッグして大きさを合わせ、すぐ分析を押してください。",
               "view_reset": "画面を最初の大きさに戻しました。ホイールでまた拡大できます。",
               "zoom_failed": "拡大できませんでした。写真の上でホイールをもう一度回してください。",
               "pan_hold_failed": "写真を動かせませんでした。左ボタンを少し押し続けてから、もう一度ドラッグしてください。",
@@ -1186,6 +1194,7 @@
               "selection_picked": "已选好一张脸。",
               "selection_left": "还剩 {count} 个脸部区域。",
               "selection_ready": "已选 {count} 个脸部区域。请按分析。",
+              "box_adjust": "拖动方框移动位置，拖动角调整大小，然后点立即分析。",
               "view_reset": "画面已回到原来的大小。可以再用滚轮放大。",
               "zoom_failed": "无法放大。请把光标放在照片上再转一次滚轮。",
               "pan_hold_failed": "照片没有移动。请按住左键稍停，然后再拖。",
@@ -1436,6 +1445,7 @@
               "selection_picked": "चेहरा चुन लिया गया।",
               "selection_left": "{count} चेहरे के क्षेत्र बचे हैं।",
               "selection_ready": "{count} चेहरे के क्षेत्र चुने गए। जाँच दबाएँ।",
+              "box_adjust": "बॉक्स खींचकर जगह बदलें, कोना खींचकर आकार बदलें, फिर अभी जाँचें दबाएँ।",
               "view_reset": "दृश्य मूल आकार पर लौट आया। पहिये से फिर बड़ा कर सकते हैं।",
               "zoom_failed": "बड़ा नहीं हो सका। फ़ोटो पर पहिया एक बार और घुमाएँ।",
               "pan_hold_failed": "फ़ोटो नहीं हिली। बायाँ बटन थोड़ी देर दबाएँ, फिर फिर घसीटें।",
@@ -1686,6 +1696,7 @@
               "selection_picked": "已選好一張臉。",
               "selection_left": "還剩 {count} 個臉部區域。",
               "selection_ready": "已選 {count} 個臉部區域。請按分析。",
+              "box_adjust": "拖動方框移動位置，拖動角調整大小，然後點立即分析。",
               "view_reset": "畫面已回到原來的大小。可以再用滾輪放大。",
               "zoom_failed": "無法放大。請把光標放在照片上再轉一次滾輪。",
               "pan_hold_failed": "照片沒有移動。請按住左鍵稍停，然後再拖。",
@@ -1936,6 +1947,7 @@
               "selection_picked": "Hay un rostro elegido.",
               "selection_left": "Quedan {count} zona(s) de rostro.",
               "selection_ready": "{count} zona(s) de rostro seleccionada(s). Pulsa analizar.",
+              "box_adjust": "Arrastra el cuadro para moverlo, una esquina para el tamaño y pulsa Analizar ya.",
               "view_reset": "La vista volvió al tamaño original. Puedes ampliar otra vez con la rueda.",
               "zoom_failed": "No se pudo ampliar. Gira la rueda sobre la foto otra vez.",
               "pan_hold_failed": "No se pudo mover la foto. Mantén el botón izquierdo un momento y vuelve a arrastrar.",
@@ -2186,6 +2198,7 @@
               "selection_picked": "Um rosto foi escolhido.",
               "selection_left": "Restam {count} área(s) de rosto.",
               "selection_ready": "{count} área(s) de rosto selecionada(s). Pressione analisar.",
+              "box_adjust": "Arraste a caixa para mover, um canto para o tamanho e toque em Analisar agora.",
               "view_reset": "A vista voltou ao tamanho original. Você pode ampliar de novo com a roda.",
               "zoom_failed": "Não foi possível ampliar. Gire a roda sobre a foto outra vez.",
               "pan_hold_failed": "Não foi possível mover a foto. Segure o botão esquerdo um instante e arraste de novo.",
@@ -2436,6 +2449,7 @@
               "selection_picked": "تم اختيار وجه.",
               "selection_left": "تبقّى {count} من مناطق الوجه.",
               "selection_ready": "تم تحديد {count} من مناطق الوجه. اضغط على التحليل.",
+              "box_adjust": "اسحب الإطار لتحريكه، واسحب زاوية لتغيير الحجم، ثم اضغط حلّل الآن.",
               "view_reset": "عادت المعاينة إلى الحجم الأصلي. يمكنك التكبير بالعجلة من جديد.",
               "zoom_failed": "تعذّر التكبير. حرّك العجلة فوق الصورة مرة أخرى.",
               "pan_hold_failed": "تعذّر تحريك الصورة. اضغط الزر الأيسر قليلًا ثم اسحب مرة أخرى.",
@@ -2686,6 +2700,7 @@
               "selection_picked": "Un visage est choisi.",
               "selection_left": "Il reste {count} zone(s) de visage.",
               "selection_ready": "{count} zone(s) de visage sélectionnée(s). Appuyez sur analyser.",
+              "box_adjust": "Faites glisser le cadre pour le déplacer, un coin pour la taille, puis Analyser.",
               "view_reset": "La vue est revenue à la taille d'origine. Vous pouvez zoomer de nouveau avec la molette.",
               "zoom_failed": "Impossible de zoomer. Tournez encore la molette au-dessus de la photo.",
               "pan_hold_failed": "Impossible de déplacer la photo. Maintenez brièvement le bouton gauche, puis faites glisser de nouveau.",
@@ -2936,6 +2951,7 @@
               "selection_picked": "Satu wajah sudah dipilih.",
               "selection_left": "Tersisa {count} area wajah.",
               "selection_ready": "{count} area wajah dipilih. Tekan analisis.",
+              "box_adjust": "Seret kotak untuk memindahkan, sudut untuk ukuran, lalu tekan Analisis sekarang.",
               "view_reset": "Tampilan kembali ke ukuran semula. Anda bisa memperbesar lagi dengan roda.",
               "zoom_failed": "Tidak bisa memperbesar. Putar roda di atas foto sekali lagi.",
               "pan_hold_failed": "Foto tidak bisa digeser. Tahan tombol kiri sebentar, lalu seret lagi.",
@@ -3186,6 +3202,7 @@
               "selection_picked": "Ein Gesicht ist gewählt.",
               "selection_left": "Noch {count} Gesichtsbereich(e).",
               "selection_ready": "{count} Gesichtsbereich(e) gewählt. Drücken Sie Analysieren.",
+              "box_adjust": "Ziehen Sie den Rahmen zum Verschieben, eine Ecke für die Größe, dann Sofort prüfen.",
               "view_reset": "Die Ansicht ist wieder in Originalgröße. Sie können erneut mit dem Rad zoomen.",
               "zoom_failed": "Zoomen nicht möglich. Drehen Sie das Rad noch einmal über dem Foto.",
               "pan_hold_failed": "Das Foto ließ sich nicht verschieben. Halten Sie die linke Taste kurz und ziehen Sie erneut.",
@@ -3436,6 +3453,7 @@
               "selection_picked": "Лицо выбрано.",
               "selection_left": "Осталось областей лица: {count}.",
               "selection_ready": "Выбрано областей лица: {count}. Нажмите анализ.",
+              "box_adjust": "Перетащите рамку, угол меняет размер, затем нажмите Сразу разобрать.",
               "view_reset": "Вид вернулся к исходному размеру. Можно снова увеличить колесом.",
               "zoom_failed": "Не удалось увеличить. Покрутите колесо над фото ещё раз.",
               "pan_hold_failed": "Не удалось сдвинуть фото. Коротко удерживайте левую кнопку и перетащите снова.",
@@ -3686,6 +3704,7 @@
               "selection_picked": "Đã chọn một khuôn mặt.",
               "selection_left": "Còn {count} vùng mặt.",
               "selection_ready": "Đã chọn {count} vùng mặt. Nhấn phân tích.",
+              "box_adjust": "Kéo khung để dịch, kéo góc để đổi cỡ, rồi bấm Phân tích ngay.",
               "view_reset": "Khung nhìn đã về kích thước gốc. Bạn có thể phóng to lại bằng con lăn.",
               "zoom_failed": "Không phóng to được. Xoay con lăn trên ảnh thêm lần nữa.",
               "pan_hold_failed": "Không di chuyển được ảnh. Giữ nút trái một lúc, rồi kéo lại.",
@@ -5933,6 +5952,7 @@
       view_name: "home",
       brightness_timer: 0,
       analyze_step: "",
+      box_edit: null,
       keep_analyze_visible: false
     };
 
@@ -5998,6 +6018,7 @@
     const raw_list = require_element("raw_list");
     const guide_list = document.getElementById("guide_list");
     const photo_view = require_element("photo_view");
+    const box_hint = document.getElementById("box_hint");
     const selection_layer = require_element("selection_layer");
     const selection_boxes = require_element("selection_boxes");
     const selection_draft = require_element("selection_draft");
@@ -6142,6 +6163,7 @@
       app_state.selections = [];
       app_state.active_selection_id = null;
       app_state.drag = null;
+      app_state.box_edit = null;
       selection_draft.hidden = true;
       render_selection_boxes();
       render_crop_cards();
@@ -6162,6 +6184,7 @@
       camera_guide.hidden = false;
       display_canvas.hidden = true;
       selection_layer.hidden = true;
+      if (box_hint) box_hint.hidden = true;
       button_camera.hidden = false;
       button_upload.hidden = false;
       button_shutter.hidden = false;
@@ -6190,6 +6213,7 @@
       live_video.hidden = false;
       camera_guide.hidden = false;
       display_canvas.hidden = true;
+      if (box_hint) box_hint.hidden = true;
       button_camera.hidden = true;
       button_upload.hidden = false;
       button_shutter.hidden = false;
@@ -6229,6 +6253,7 @@
       camera_guide.hidden = true;
       display_canvas.hidden = false;
       selection_layer.hidden = false;
+      if (box_hint) box_hint.hidden = false;
       selection_draft.hidden = true;
       button_camera.hidden = true;
       button_upload.hidden = false;
@@ -6260,7 +6285,7 @@
       window.requestAnimationFrame(() => {
         try {
           const is_reduced_motion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-          const top_bar = document.querySelector(".app_top");
+          const top_bar = document.querySelector(".app_bar");
           const tab_bar = document.querySelector(".tab_bar");
           const top_height = top_bar ? top_bar.getBoundingClientRect().height : 0;
           const tab_height = tab_bar ? tab_bar.getBoundingClientRect().height : 0;
@@ -7025,11 +7050,7 @@
         }
         show_photo_mode(canvas);
         show_view("capture");
-        if (app_state.capture_mode === "selfie" && app_state.is_model_ready) {
-          analyze_largest_face();
-          return;
-        }
-        show_status(app_state.is_model_ready ? select_guide_key() : "loading", {}, false, !app_state.is_model_ready);
+        place_analysis_box();
       } catch (error) {
         console.error("사진을 불러오지 못했습니다.", error);
         if (generation !== app_state.analysis_generation) {
@@ -7872,6 +7893,124 @@
       }
     }
 
+    // 분포 2·3위도 1위와 같은 얼굴 비교 칸으로 만든다. 내 얼굴 사진은 1위 칸을 복사한다.
+    function build_face_match_card(animal, photo_picks, face_src) {
+      const animal_copy = localized_animal(animal);
+      const card = document.createElement("article");
+      card.className = "face_match";
+
+      const title = document.createElement("h2");
+      title.className = "result_title";
+      const name = document.createElement("span");
+      name.className = "result_name";
+      name.textContent = animal_copy.name;
+      const name_icon = document.createElement("span");
+      name_icon.className = "result_name_icon";
+      name_icon.setAttribute("aria-hidden", "true");
+      name_icon.textContent = breed_mark_for(animal.id);
+      title.append(name, name_icon);
+
+      const pair = document.createElement("div");
+      pair.className = "face_pair";
+      const mine_slot = document.createElement("figure");
+      mine_slot.className = "face_slot";
+      const mine = document.createElement("img");
+      mine.alt = t("compare_mine");
+      if (face_src) {
+        mine.src = face_src;
+      } else {
+        mine.hidden = true;
+      }
+      const paw = document.createElement("span");
+      paw.className = "slot_paw";
+      paw.setAttribute("aria-hidden", "true");
+      paw.textContent = "🐾";
+      const mine_caption = document.createElement("figcaption");
+      mine_caption.textContent = t("compare_mine");
+      mine_slot.append(mine, paw, mine_caption);
+
+      const heart_source = document.querySelector("#face_match_top .pair_heart");
+      const heart = heart_source ? heart_source.cloneNode(true) : document.createElement("span");
+      heart.className = "pair_heart";
+      heart.setAttribute("aria-hidden", "true");
+
+      const dog_slot = document.createElement("figure");
+      dog_slot.className = "face_slot";
+      const dog = document.createElement("img");
+      dog.alt = animal_copy.name;
+      dog.hidden = true;
+      const fallback = document.createElement("div");
+      set_svg(fallback, animal.svg);
+      fallback.hidden = true;
+      const dog_caption = document.createElement("figcaption");
+      dog_caption.textContent = animal_copy.short_name || animal_copy.name;
+      dog_slot.append(dog, fallback, dog_caption);
+      show_breed_photo(dog, animal.id, photo_picks[animal.id], fallback);
+      pair.append(mine_slot, heart, dog_slot);
+
+      const score_card = document.createElement("div");
+      score_card.className = "score_card";
+      const score_head = document.createElement("div");
+      score_head.className = "score_head";
+      const score_label = document.createElement("span");
+      score_label.className = "score_label";
+      score_label.textContent = t("score_label");
+      const score_value = document.createElement("p");
+      score_value.className = "score_value";
+      const score_number = document.createElement("span");
+      score_number.className = "score_number";
+      score_number.textContent = String(animal.score);
+      const score_unit = document.createElement("span");
+      score_unit.className = "score_unit";
+      score_unit.textContent = "%";
+      score_value.append(score_number, score_unit);
+      score_head.append(score_label, score_value);
+      const score_track = document.createElement("div");
+      score_track.className = "score_track";
+      score_track.setAttribute("aria-hidden", "true");
+      const score_fill = document.createElement("div");
+      score_fill.className = "score_fill";
+      score_track.append(score_fill);
+      score_card.append(score_head, score_track);
+      card.append(title, pair, score_card);
+
+      const score_width = animal.score + "%";
+      window.requestAnimationFrame(() => {
+        score_fill.style.width = score_width;
+      });
+      return card;
+    }
+
+    // 분포 분석 상위 3개와 같은 순서, 같은 점수로 얼굴 비교를 위에서 아래로 쌓는다.
+    function paint_face_match_list(visible_ranked, photo_picks) {
+      const list = document.getElementById("face_match_list");
+      const top_card = document.getElementById("face_match_top");
+      if (!list || !top_card) {
+        console.error("얼굴 비교 칸을 찾지 못했습니다. 화면을 새로고침한 뒤 다시 분석해 주세요.");
+        return;
+      }
+      try {
+        list.querySelectorAll(".face_match").forEach((card) => {
+          if (card !== top_card) {
+            card.remove();
+          }
+        });
+        let face_src = "";
+        try {
+          if (!result_face.hidden && result_face.width > 0) {
+            face_src = result_face.toDataURL("image/jpeg", 0.82);
+          }
+        } catch (error) {
+          console.error("비교용 내 얼굴을 만들지 못했습니다. 화면을 새로고침한 뒤 다시 분석해 주세요.", error);
+        }
+        for (let index = 1; index < visible_ranked.length; index += 1) {
+          list.append(build_face_match_card(visible_ranked[index], photo_picks, face_src));
+        }
+      } catch (error) {
+        console.error("상위 얼굴 비교를 그리지 못했습니다. 화면을 새로고침한 뒤 다시 분석해 주세요.", error);
+      }
+    }
+
     function render_result(ranked, user_z, ratios, notes, should_scroll) {
       const winner = ranked[0];
       const winner_copy = localized_animal(winner);
@@ -7908,8 +8047,9 @@
       render_face_pieces(user_z);
 
       result_list.replaceChildren();
-      // 분포 막대는 가장 가까운 얼굴상 3개만 보여 준다. 나머지 점수는 이 칸에 넣지 않는다.
+      // 얼굴 비교와 분포 막대는 같은 상위 3개를 쓴다. 순서는 가까운 것부터다.
       const visible_ranked = ranked.slice(0, 3);
+      paint_face_match_list(visible_ranked, photo_picks);
       for (let index = 0; index < visible_ranked.length; index += 1) {
         const animal = visible_ranked[index];
         const item = document.createElement("li");
@@ -8367,20 +8507,262 @@
       selection.preview_canvas = preview;
     }
 
-    // 확정된 드래그 상자를 사진 위에 번호와 함께 그린다.
+    // 사진 가운데에 기본 분석 칸을 둔다. 얼굴이 없으면 이 칸을 직접 옮긴다.
+    function default_analysis_rect(source) {
+      const width = Math.round(Math.min(source.width * 0.62, source.height * 0.52));
+      const height = Math.round(Math.min(source.height * 0.72, width * 1.28));
+      return clamp_box_rect({
+        x: (source.width - width) / 2,
+        y: (source.height - height) / 2,
+        width: width,
+        height: height
+      }, source.width, source.height);
+    }
+
+    // 칸이 사진 밖으로 나가지 않게 하고, 너무 작아지면 최소 크기로 되돌린다.
+    function clamp_box_rect(rect, max_width, max_height) {
+      let width = Math.max(MIN_SELECTION_EDGE, Math.round(rect.width));
+      let height = Math.max(MIN_SELECTION_EDGE, Math.round(rect.height));
+      if (width > max_width) width = max_width;
+      if (height > max_height) height = max_height;
+      const x = clamp_number(Math.round(rect.x), 0, Math.max(0, max_width - width));
+      const y = clamp_number(Math.round(rect.y), 0, Math.max(0, max_height - height));
+      return { x, y, width, height };
+    }
+
+    // 자동으로 잡은 얼굴보다 조금 넓게 칸을 잡아, 이마와 턱이 잘리지 않게 한다.
+    function pad_face_rect(rect, source_width, source_height) {
+      const pad_x = rect.width * 0.16;
+      const pad_y = rect.height * 0.2;
+      return clamp_box_rect({
+        x: rect.x - pad_x,
+        y: rect.y - pad_y * 1.15,
+        width: rect.width + pad_x * 2,
+        height: rect.height + pad_y * 2
+      }, source_width, source_height);
+    }
+
+    // 지금 칸 위치대로 분석에 쓸 조각을 다시 잘라 둔다.
+    function refresh_selection_crop(selection) {
+      const rect = {
+        x: selection.x,
+        y: selection.y,
+        width: selection.width,
+        height: selection.height
+      };
+      selection.crop_canvas = crop_canvas_rect(app_state.photo_canvas, rect);
+      selection.preview_canvas = clone_canvas(selection.crop_canvas);
+    }
+
+    // 앨범 사진에는 분석 칸을 하나 올려 두고, 바로 분석은 시작하지 않는다.
+    function place_analysis_box() {
+      if (!app_state.photo_canvas) {
+        console.error("분석 칸을 올릴 사진이 없습니다. 앨범에서 사진을 다시 골라 주세요.");
+        show_user_error("selection_needed");
+        return;
+      }
+      try {
+        const source = app_state.photo_canvas;
+        let rect = default_analysis_rect(source);
+        if (app_state.is_model_ready) {
+          const hits = face_hits_in_rect(source, {
+            x: 0,
+            y: 0,
+            width: source.width,
+            height: source.height
+          });
+          const best_hit = pick_best_hit(hits);
+          if (best_hit) {
+            rect = pad_face_rect(best_hit.rect, source.width, source.height);
+          }
+        }
+        clear_selection_state();
+        add_selection(rect, "box_adjust");
+      } catch (error) {
+        console.error("분석 칸을 만들지 못했습니다. 사진을 다시 골라 주세요.", error);
+        show_user_error(error_code(error, "selection_failed"));
+      }
+    }
+
+    // 모델을 기다리는 동안 둔 기본 칸을, 아직 손으로 안 옮겼으면 얼굴 위치로 맞춘다.
+    function snap_untuned_box() {
+      const selection = app_state.selections[0];
+      if (!selection || selection.is_box_tuned || !app_state.is_model_ready || !app_state.photo_canvas) {
+        return;
+      }
+      try {
+        const source = app_state.photo_canvas;
+        const hits = face_hits_in_rect(source, {
+          x: 0,
+          y: 0,
+          width: source.width,
+          height: source.height
+        });
+        const best_hit = pick_best_hit(hits);
+        if (!best_hit) {
+          return;
+        }
+        const rect = pad_face_rect(best_hit.rect, source.width, source.height);
+        selection.x = rect.x;
+        selection.y = rect.y;
+        selection.width = rect.width;
+        selection.height = rect.height;
+        refresh_selection_crop(selection);
+        render_selection_boxes();
+      } catch (error) {
+        console.error("얼굴 위치로 칸을 맞추지 못했습니다. 칸을 직접 옮겨 주세요.", error);
+      }
+    }
+
+    // 맞춰 둔 칸이 있으면 그 칸만 분석하고, 없으면 사진에서 가장 큰 얼굴을 찾는다.
+    function analyze_current_box() {
+      if (!app_state.selections.length) {
+        analyze_largest_face();
+        return;
+      }
+      try {
+        for (let index = 0; index < app_state.selections.length; index += 1) {
+          refresh_selection_crop(app_state.selections[index]);
+        }
+        analyze_selections(app_state.selections.slice());
+      } catch (error) {
+        console.error("맞춘 칸을 분석하지 못했습니다. 칸을 조금 키운 뒤 다시 눌러 주세요.", error);
+        show_user_error(error_code(error, "selection_too_small"));
+      }
+    }
+
+    // 드래그 시작 칸에서 손의 이동만큼 위치나 크기를 바꾼다.
+    function rect_from_box_edit(edit, point) {
+      const dx = point.x - edit.start_point.x;
+      const dy = point.y - edit.start_point.y;
+      const source = app_state.photo_canvas;
+      let left = edit.origin_x;
+      let top = edit.origin_y;
+      let right = edit.origin_x + edit.origin_width;
+      let bottom = edit.origin_y + edit.origin_height;
+      const handle_name = edit.handle_name;
+      if (handle_name === "move") {
+        left += dx;
+        right += dx;
+        top += dy;
+        bottom += dy;
+      } else {
+        if (handle_name.indexOf("w") >= 0) left += dx;
+        if (handle_name.indexOf("e") >= 0) right += dx;
+        if (handle_name.indexOf("n") >= 0) top += dy;
+        if (handle_name.indexOf("s") >= 0) bottom += dy;
+      }
+      if (right - left < MIN_SELECTION_EDGE) {
+        if (handle_name.indexOf("w") >= 0) left = right - MIN_SELECTION_EDGE;
+        else right = left + MIN_SELECTION_EDGE;
+      }
+      if (bottom - top < MIN_SELECTION_EDGE) {
+        if (handle_name.indexOf("n") >= 0) top = bottom - MIN_SELECTION_EDGE;
+        else bottom = top + MIN_SELECTION_EDGE;
+      }
+      return clamp_box_rect({
+        x: left,
+        y: top,
+        width: right - left,
+        height: bottom - top
+      }, source.width, source.height);
+    }
+
+    // 칸 본체는 이동, 모서리와 변의 점은 크기 조절로 붙잡는다.
+    function start_box_edit(selection, handle_name, box_element, event) {
+      const point = pointer_to_canvas(event);
+      app_state.pointer_hold = null;
+      app_state.drag = null;
+      app_state.box_edit = {
+        selection_id: selection.id,
+        handle_name: handle_name,
+        box_element: box_element,
+        origin_x: selection.x,
+        origin_y: selection.y,
+        origin_width: selection.width,
+        origin_height: selection.height,
+        start_point: point
+      };
+      capture_selection_pointer(event);
+    }
+
+    // 손가락이 움직이는 동안 칸의 위치와 크기를 사진 안에 유지한다.
+    function move_box_edit(event) {
+      const edit = app_state.box_edit;
+      if (!edit || !app_state.photo_canvas) {
+        return;
+      }
+      const selection = app_state.selections.find((item) => item.id === edit.selection_id);
+      if (!selection) {
+        app_state.box_edit = null;
+        return;
+      }
+      const next_rect = rect_from_box_edit(edit, pointer_to_canvas(event));
+      selection.x = next_rect.x;
+      selection.y = next_rect.y;
+      selection.width = next_rect.width;
+      selection.height = next_rect.height;
+      selection.is_box_tuned = true;
+      if (edit.box_element) {
+        apply_layer_rect(edit.box_element, selection);
+      }
+    }
+
+    // 손을 떼면 바뀐 칸으로 분석용 조각을 다시 자른다.
+    function finish_box_edit() {
+      const edit = app_state.box_edit;
+      app_state.box_edit = null;
+      if (!edit) {
+        return;
+      }
+      const selection = app_state.selections.find((item) => item.id === edit.selection_id);
+      if (!selection || !app_state.photo_canvas) {
+        return;
+      }
+      try {
+        refresh_selection_crop(selection);
+      } catch (error) {
+        console.error("바꾼 칸을 저장하지 못했습니다. 칸을 조금 키운 뒤 다시 옮겨 주세요.", error);
+        show_user_error(error_code(error, "selection_too_small"));
+      }
+    }
+
+    // 확정된 분석 칸을 사진 위에 그리고, 옮기기와 크기 조절 점을 붙인다.
     function render_selection_boxes() {
       selection_boxes.replaceChildren();
+      const handle_names = ["nw", "n", "ne", "e", "se", "s", "sw", "w"];
       for (let index = 0; index < app_state.selections.length; index += 1) {
         const selection = app_state.selections[index];
         const box = document.createElement("div");
-        box.className = "selection_box";
+        box.className = "selection_box is_adjustable";
         box.style.borderColor = selection.color;
+        box.setAttribute("role", "group");
+        box.setAttribute("aria-label", t("box_adjust"));
         apply_layer_rect(box, selection);
-        const label = document.createElement("span");
-        label.className = "selection_box_label";
-        label.style.background = selection.color;
-        label.textContent = String(index + 1);
-        box.append(label);
+        for (let handle_index = 0; handle_index < handle_names.length; handle_index += 1) {
+          const handle_name = handle_names[handle_index];
+          const handle = document.createElement("span");
+          handle.className = "selection_handle selection_handle_" + handle_name;
+          handle.dataset.handle = handle_name;
+          handle.setAttribute("aria-hidden", "true");
+          box.append(handle);
+        }
+        box.addEventListener("pointerdown", (event) => {
+          if (app_state.is_analyzing || event.button !== 0) {
+            return;
+          }
+          event.stopPropagation();
+          event.preventDefault();
+          const handle = event.target.closest(".selection_handle");
+          const handle_name = handle ? handle.dataset.handle : "move";
+          try {
+            start_box_edit(selection, handle_name, box, event);
+          } catch (error) {
+            console.error("분석 칸을 움직이지 못했습니다. 칸을 다시 눌러 주세요.", error);
+            app_state.box_edit = null;
+            show_user_error("selection_failed");
+          }
+        });
         selection_boxes.append(box);
       }
     }
@@ -8517,7 +8899,8 @@
         color: SELECTION_COLORS[(app_state.selection_seq - 1) % SELECTION_COLORS.length],
         crop_canvas: crop_canvas,
         preview_canvas: clone_canvas(crop_canvas),
-        result: null
+        result: null,
+        is_box_tuned: false
       };
       app_state.selection_seq += 1;
       app_state.selections.push(selection);
@@ -8721,6 +9104,14 @@
 
     // 0.1초 안에 움직이면 영역을 그리고, 그 뒤에 움직이면 사진을 옮긴다.
     function on_photo_pointer_move(event) {
+      if (app_state.box_edit) {
+        try {
+          move_box_edit(event);
+        } catch (error) {
+          console.error("분석 칸을 움직이지 못했습니다. 손을 떼고 다시 끌어 주세요.", error);
+        }
+        return;
+      }
       if (app_state.pan) {
         try {
           app_state.view_x += event.clientX - app_state.pan.last_x;
@@ -8767,6 +9158,11 @@
     function on_photo_pointer_up(event) {
       clear_pan_timer();
       app_state.pointer_hold = null;
+      if (app_state.box_edit) {
+        finish_box_edit();
+        release_selection_pointer(event);
+        return;
+      }
       if (app_state.pan) {
         app_state.pan = null;
         selection_layer.classList.remove("is_panning");
@@ -8810,6 +9206,11 @@
     function cancel_selection_drag(event) {
       clear_pan_timer();
       app_state.pointer_hold = null;
+      if (app_state.box_edit) {
+        finish_box_edit();
+        release_selection_pointer(event);
+        return;
+      }
       if (app_state.pan) {
         app_state.pan = null;
         selection_layer.classList.remove("is_panning");
@@ -9322,7 +9723,7 @@
             capture_camera_frame();
             return;
           }
-          analyze_largest_face();
+          analyze_current_box();
         });
         button_cancel_analyze.addEventListener("click", () => {
           cancel_running_analysis();
@@ -9461,9 +9862,10 @@
         render_crop_cards();
         if (!status_state.is_error) {
           if (app_state.has_photo && app_state.selections.length > 0) {
-            show_status("selection_ready", { count: app_state.selections.length }, false, false);
-          } else if (app_state.capture_mode === "selfie" && app_state.has_photo && app_state.selections.length === 0) {
-            analyze_largest_face();
+            snap_untuned_box();
+            show_status("box_adjust", {}, false, false);
+          } else if (app_state.has_photo && app_state.selections.length === 0) {
+            place_analysis_box();
           } else if (app_state.has_photo) {
             show_status(select_guide_key(), {}, false, false);
           } else {

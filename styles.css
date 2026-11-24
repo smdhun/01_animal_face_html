@@ -282,16 +282,63 @@
       background: rgba(35, 78, 54, 0.16);
     }
 
+    .selection_box.is_adjustable {
+      pointer-events: auto;
+      cursor: move;
+      touch-action: none;
+    }
+
+    /* 보이는 동그라미는 22px의 1/4. 손가락이 잡을 투명 영역만 원래 크기를 유지한다. */
+    .selection_handle {
+      position: absolute;
+      width: 5.5px;
+      height: 5.5px;
+      border: 1px solid #f4fbff;
+      border-radius: 50%;
+      background: var(--leaf);
+      touch-action: none;
+      transform: translate(-50%, -50%);
+    }
+
+    .selection_handle::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 22px;
+      height: 22px;
+      transform: translate(-50%, -50%);
+    }
+
+    .selection_handle_nw { left: -2px; top: -2px; cursor: nwse-resize; }
+    .selection_handle_ne { left: calc(100% + 2px); top: -2px; cursor: nesw-resize; }
+    .selection_handle_sw { left: -2px; top: calc(100% + 2px); cursor: nesw-resize; }
+    .selection_handle_se { left: calc(100% + 2px); top: calc(100% + 2px); cursor: nwse-resize; }
+    .selection_handle_n { left: 50%; top: -2px; cursor: ns-resize; }
+    .selection_handle_s { left: 50%; top: calc(100% + 2px); cursor: ns-resize; }
+    .selection_handle_w { left: -2px; top: 50%; cursor: ew-resize; }
+    .selection_handle_e { left: calc(100% + 2px); top: 50%; cursor: ew-resize; }
+
     .selection_draft {
       border: 2px dashed var(--leaf);
       background: rgba(35, 78, 54, 0.2);
       pointer-events: none;
     }
 
+    .box_hint {
+      margin: 10px 16px 12px;
+      color: #d5e4ee;
+      font-size: 13px;
+      line-height: 18px;
+      text-align: center;
+    }
+
     .selection_box_label {
       position: absolute;
-      left: 4px;
-      top: 4px;
+      left: 50%;
+      bottom: 8px;
+      transform: translateX(-50%);
+      pointer-events: none;
       min-width: 1.5rem;
       height: 1.5rem;
       padding: 0 5px;
@@ -1108,6 +1155,7 @@
       flex-direction: column;
     }
 
+    /* 로고 줄만 위에 붙인다. 언어 줄은 이 상자 밖에 있어 스크롤하면 함께 올라간다. */
     .app_top {
       position: sticky;
       top: 0;
@@ -2314,6 +2362,26 @@
       line-height: 18px;
       font-weight: 700;
       text-align: center;
+    }
+
+    .face_match_list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      width: 100%;
+    }
+
+    .face_match {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .face_match + .face_match {
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
     }
 
     .result_sheet .result_title {
